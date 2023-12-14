@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "admin": true,
+      "id": 1,
+      "name": "Firas",
+      "createdAt": "2023-12-14T11:48:15.779Z"
+    }
+  ]
+}
