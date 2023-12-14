@@ -1,0 +1,22 @@
+{
+  "name": "images-db",
+  "version": "1.0.0",
+  "description": "An images API project.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fj17x/Images-DB-API.git"
+  },
+  "keywords": [
+    "images"
+  ],
+  "author": "Firas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fj17x/Images-DB-API/issues"
+  },
+  "homepage": "https://github.com/fj17x/Images-DB-API#readme"
+}
