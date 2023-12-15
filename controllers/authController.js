@@ -13,6 +13,7 @@ const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 const register = async (req, res) => {
   try {
     const secretKey = process.env.JWT_SECRET_KEY ?? "THISISFUN"
+    console.log("process.env.JWT_SECRET_KEY: ", process.env.JWT_SECRET_KEY)
     const { userName, password } = req.body
 
     if (!userName || !password) {

@@ -11,7 +11,7 @@ const getUserById = async (req, res) => {
     //Check if admin.
     if (!req.isAdmin) {
       return res.status(403).json({
-        error: "Only admins can access this!",
+        error: "Only the admin can see the users!",
       })
     }
 
@@ -41,12 +41,12 @@ const fetchBatchOfUsers = async (req, res) => {
     //Check if admin.
     if (!req.isAdmin) {
       return res.status(403).json({
-        error: "Only admins can access this!",
+        error: "Only the admin can see the users!",
       })
     }
 
     //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0, userId } = req.params
+    let { limit = 10, offset = 0 } = req.query
 
     limit = Number(limit)
     offset = Number(offset)

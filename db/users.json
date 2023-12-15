@@ -3,26 +3,24 @@
     {
       "isAdmin": true,
       "imageIds": [],
-      "id": 7,
+      "id": 1,
       "username": "admin",
       "password": "$2b$15$o739tKodb9GbVlu4Ro3t.e/m.u4qXroD3Fzem8jSm3HzN1GGZXCUS",
       "createdAt": "2023-12-15T08:52:53.633Z"
     },
     {
       "isAdmin": false,
-      "imageIds": [],
       "id": 2,
-      "username": "Thomas",
-      "password": "$2b$15$eokk23bD7bYV8MZiRPm9OOm0wYrVXnBp.iEq902F4wCMfp7juIDay",
-      "createdAt": "2023-12-15T08:53:47.292Z"
+      "username": "carl",
+      "password": "$2b$15$L7JdGe3EgcvitVwRFCNuKuFx6Y7zwX8Q7KFH7efHQVwOPRqh4/yf.",
+      "createdAt": "2023-12-15T12:39:50.491Z"
     },
     {
       "isAdmin": false,
-      "imageIds": [],
       "id": 3,
-      "username": "Jack",
-      "password": "$2b$15$Z53naSJFxybmM0jiZygKGOwKNVklxkHtJhgkpv0UyUQ14OJsgv6s6",
-      "createdAt": "2023-12-15T10:12:04.915Z"
+      "username": "thomas",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z"
     }
   ]
 }

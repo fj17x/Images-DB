@@ -22,6 +22,7 @@ const verifyToken = async (req, res, next) => {
     }
     let userId = jwt.verify(token, secretKey)
     userId = userId.userId
+    req.userId = userId
 
     //Check whether user is an admin. If yes, make req.isAdmin true.
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")

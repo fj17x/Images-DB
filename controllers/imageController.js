@@ -6,6 +6,7 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
+const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
 const createImage = async (req, res) => {
   try {
@@ -26,8 +27,9 @@ const createImage = async (req, res) => {
     }
 
     //Get username of user using given ID.
-    const allUsersJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
+    console.log("allUsersObject: ", allUsersObject)
     const user = allUsersObject.users.find((user) => user.id === userId)
     if (!user) {
       return res.status(404).json({
@@ -60,6 +62,7 @@ const getImageById = async (req, res) => {
     let { imageId } = req.params
     imageId = Number(imageId)
     const userId = req.userId
+    const isAdmin = req.isAdmin
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
@@ -67,16 +70,17 @@ const getImageById = async (req, res) => {
     //Get current JSON DB images as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
+    console.log("allImagesObject: ", allImagesObject)
 
     //Search for the image and check whether user has permission to access it.
     const foundImage = allImagesObject.images.find((image) => image.id === imageId)
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (foundImage.tagged) {
-      return res.status(400).json({ error: "This image has been tagged by the admin and cannot be accessed." })
+    if (foundImage.isFlagged) {
+      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (!req.isAdmin && foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
 
@@ -88,14 +92,14 @@ const getImageById = async (req, res) => {
   }
 }
 
-const fetchBatchOfImages = async (req, res) => {
+const getBatchOfImages = async (req, res) => {
   try {
     //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0, userId } = req.params
-
+    let { limit = 10, offset = 0 } = req.query
+    const userId = req.userId
+    const isAdmin = req.isAdmin
     limit = Number(limit)
     offset = Number(offset)
-    userId = Number(userId)
 
     //Get current JSON DB images as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
@@ -105,21 +109,19 @@ const fetchBatchOfImages = async (req, res) => {
     const startIndex = offset
     const endIndex = startIndex + limit
 
-    let userImages = allImagesObject.images.filter((image) => {
-      return !image.tagged && (req.isAdmin || image.userId === userId)
-    })
+    let userImages = allImagesObject.images.filter((image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId))
+    console.log("userImages: ", userImages)
 
-    if (!req.isAdmin && !userId) {
-      return res.status(400).json({ error: "Please provide userId." })
-    }
-
-    const batchOfUserImages = userImages.images.slice(startIndex, endIndex)
+    const batchOfUserImages = userImages.slice(startIndex, endIndex)
     if (!batchOfUserImages.length) {
-      return res.status(404).json({ error: "No images found." })
+      if (!isAdmin) {
+        return res.status(404).json({ error: `No images found for user with ID: ${userId} ` })
+      }
+      return res.status(404).json({ error: "No images found. " })
     }
     res.status(200).json({ images: batchOfUserImages })
   } catch (err) {
-    console.error("Error during fetching: ", err)
+    console.error("Error during fetching of images.: ", err)
     res.status(500).json({ error: "Failed to fetch images." })
   }
 }
@@ -127,7 +129,9 @@ const fetchBatchOfImages = async (req, res) => {
 const updateDescription = async (req, res) => {
   try {
     //Get the ID of the image to update along with description.
-    const { imageId, description } = req.body
+    const { description } = req.body
+    let { imageId } = req.params
+    imageId = Number(imageId)
     const userId = req.userId
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
@@ -137,7 +141,7 @@ const updateDescription = async (req, res) => {
     }
 
     //Fetch all the images from JSON DB as JS object.
-    const allImagesJSON = await readFile(imagesFilePath, "utf-8")
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
 
     //Find image and verify whether user has permissions to modify it.
@@ -145,11 +149,13 @@ const updateDescription = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Please provide a valid imageId." })
     }
-    if (foundImage.tagged) {
-      return res.status(400).json({ error: "This image has been tagged by the admin and cannot be accessed." })
+    if (foundImage.isFlagged) {
+      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
     if (foundImage.ownerId !== userId) {
-      return res.status(401).json({ error: "You can only modify images you have uploaded." })
+      return res.status(401).json({
+        error: `You can only modify images you have uploaded. This image was uploaded by user id: ${foundImage.ownerId}`,
+      })
     }
 
     //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
@@ -157,6 +163,7 @@ const updateDescription = async (req, res) => {
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     res.status(200).json({ message: "Image description updated successfully." })
   } catch (err) {
+    console.log("Failed to update the description: ", err)
     res.status(500).json({ error: "Failed to update image description." })
   }
 }
@@ -187,10 +194,10 @@ const updateTags = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (foundImage.tagged) {
-      return res.status(400).json({ error: "This image has been tagged by the admin and cannot be accessed." })
+    if (foundImage.isFlagged) {
+      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (foundImage.userId !== userId) {
+    if (foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update tags for this image." })
     }
 
@@ -238,4 +245,39 @@ const flagImage = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, fetchBatchOfImages, updateDescription, updateTags, flagImage }
+const getImagesByCommonTags = async (req, res) => {
+  try {
+    //Get tags, userId and check whether user is admin.
+    const { tags } = req.query
+    const userId = req.userId
+    const isAdmin = req.isAdmin
+
+    if (!tags) {
+      return res.status(400).json({ error: "Please provide tags for filtering." })
+    }
+
+    //Filter images based on tags.
+    const tagList = tags.split(",")
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allImagesObject = JSON.parse(allImagesJSON)
+    const filteredImages = allImagesObject.images.filter((image) => {
+      if (!image.isFlagged && tagList.every((tag) => image.tags.includes(tag))) {
+        if (isAdmin || image.ownerId === userId) {
+          return true
+        }
+      }
+      return false
+    })
+
+    if (!filteredImages.length) {
+      return res.status(404).json({ error: "No images found with given tags." })
+    }
+
+    res.status(200).json({ images: filteredImages })
+  } catch (err) {
+    console.error("Error while fetching images by common tags: ", err)
+    res.status(500).json({ error: "Failed to fetch images by these common tags." })
+  }
+}
+
+export { createImage, getImageById, getBatchOfImages, updateDescription, updateTags, flagImage, getImagesByCommonTags }
