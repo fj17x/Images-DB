@@ -1,6 +1,6 @@
 # How to run:
 
-Step 1: Install required dependancies using npm.
+Step 1: Install required dependencies using npm.
 ```bash
 npm i
 ```
