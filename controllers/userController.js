@@ -47,23 +47,19 @@ const fetchBatchOfUsers = async (req, res) => {
 
     //Get limit and offset and calculate start and end index.
     let { limit = 10, offset = 0 } = req.query
-
     limit = Number(limit)
     offset = Number(offset)
-
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
       return res.status(400).json({
         error: "Limit should be >= 1, and offset should be >= 0.",
       })
     }
+    const startIndex = offset
+    const endIndex = startIndex + limit
 
     //Get current JSON DB images as an object.
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
-
-    //Calculate start and end.
-    const startIndex = offset
-    const endIndex = startIndex + limit
 
     const batchOfUsers = allUsersObject.users.slice(startIndex, endIndex)
     if (!batchOfUsers.length) {

@@ -106,26 +106,24 @@ const getImageById = async (req, res) => {
 
 const getBatchOfImages = async (req, res) => {
   try {
-    //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0 } = req.query
     const userId = req.userId
     const isAdmin = req.isAdmin
+
+    //Get limit and offset and calculate start and end index.
+    let { limit = 10, offset = 0 } = req.query
     limit = Number(limit)
     offset = Number(offset)
-
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
       return res.status(400).json({
         error: "Limit should be >= 1, and offset should be >= 0.",
       })
     }
+    const startIndex = offset
+    const endIndex = startIndex + limit
 
     //Get current JSON DB images as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Calculate start and end
-    const startIndex = offset
-    const endIndex = startIndex + limit
 
     let userImages = allImagesObject.images.filter((image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId))
 
