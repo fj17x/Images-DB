@@ -7,8 +7,8 @@ const PORT = 4000
 app.use(express.json())
 app.use(express.json())
 
-app.use("/user", userRouter)
-app.use("/image", imageRouter)
+app.use("/users", userRouter)
+app.use("/images", imageRouter)
 
 app.listen(PORT, () => {
   console.log(`App running on Port: ${PORT}`)
