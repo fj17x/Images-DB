@@ -51,6 +51,12 @@ const fetchBatchOfUsers = async (req, res) => {
     limit = Number(limit)
     offset = Number(offset)
 
+    if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
+      return res.status(400).json({
+        error: "Limit should be >= 1, and offset should be >= 0.",
+      })
+    }
+
     //Get current JSON DB images as an object.
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
