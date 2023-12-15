@@ -6,7 +6,7 @@ const imageRouter = express.Router()
 // POST method to upload an image URL.
 imageRouter.post("/", verifyToken, imageController.createImage)
 
-// GET method to get fetch an image using ID.
+// GET method to get fetch an image using ID. (Uses Regex)
 imageRouter.get("/:imageId(\\d+)", verifyToken, imageController.getImageById)
 
 // GET method to fetch batch of images.
@@ -21,7 +21,7 @@ imageRouter.patch("/:imageId/description", verifyToken, imageController.updateDe
 // PATCH method to update the tags of an image.
 imageRouter.patch("/:imageId/tags", verifyToken, imageController.updateTags)
 
-// PATCH method to flag an image, only accessible by the admin.
+// PATCH method to flag an image, only accessible by the admin. (Uses Regex)
 imageRouter.patch("/flag/:imageId(\\d+)", verifyToken, imageController.flagImage)
 
 export default imageRouter

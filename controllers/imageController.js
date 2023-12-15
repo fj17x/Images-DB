@@ -130,6 +130,7 @@ const updateDescription = async (req, res) => {
     //Get the ID of the image to update along with description.
     const { description } = req.body
     let { imageId } = req.params
+    const isAdmin = req.isAdmin
     imageId = Number(imageId)
     const userId = req.userId
     if (!imageId) {
@@ -151,7 +152,7 @@ const updateDescription = async (req, res) => {
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(401).json({
         error: `You can only modify images you have uploaded. This image was uploaded by user id: ${foundImage.ownerId}`,
       })
