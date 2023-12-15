@@ -10,20 +10,4 @@ export default class Image {
     this.ownerUserName = ownerUserName
     this.tags = tags
   }
-
-  // setDescription(newDescription) {
-  //   this.description = newDescription
-  // }
-
-  // addTag(newTag) {
-  //   this.tags.push(newTag)
-  // }
-
-  // getFlagged() {
-  //   return this.isFlagged
-  // }
-
-  // setFlagged(value = true) {
-  //   this.flagged = value
-  // }
 }

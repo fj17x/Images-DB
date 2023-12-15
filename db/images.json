@@ -20,7 +20,10 @@
       "createdAt": "2023-12-15T06:49:07.308Z",
       "ownerId": 6,
       "ownerUserName": "Tomm",
-      "tags": []
+      "tags": [
+        "big",
+        "black"
+      ]
     },
     {
       "isFlagged": false,

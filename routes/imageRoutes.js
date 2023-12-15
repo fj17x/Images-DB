@@ -1,14 +1,13 @@
 import express from "express"
-import verifyToken from "../middleware/tokenAuth.js"
+import verifyToken from "../middleware/verifyToken.js"
 import * as imageController from "../controllers/imageController.js"
-import onlyAdmin from "../middleware/onlyAdmin.js"
 const imageRouter = express.Router()
 
 // POST method to upload an image URL.
 imageRouter.post("/", verifyToken, imageController.createImage)
 
 // GET method to get fetch an image using ID.
-imageRouter.get("/:imageId", verifyToken, imageController.getImageById)
+imageRouter.get("/:imageId(\\d+)", verifyToken, imageController.getImageById)
 
 // GET method to fetch batch of images.
 imageRouter.get("/", verifyToken, imageController.fetchBatchOfImages)
@@ -20,6 +19,6 @@ imageRouter.patch("/:imageId/description", verifyToken, imageController.updateDe
 imageRouter.patch("/:imageId/tags", verifyToken, imageController.updateTags)
 
 // PATCH method to flag an image, only accessible by the admin.
-imageRouter.patch("/flag/:imageId", verifyToken, onlyAdmin, imageController.flagImage)
+imageRouter.patch("/flag/:imageId(\\d+)", verifyToken, imageController.flagImage)
 
 export default imageRouter

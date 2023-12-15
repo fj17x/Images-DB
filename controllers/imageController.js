@@ -57,7 +57,8 @@ const createImage = async (req, res) => {
 const getImageById = async (req, res) => {
   try {
     //Get ID of image needed to be searched for.
-    const { imageId } = req.params
+    let { imageId } = req.params
+    imageId = Number(imageId)
     const userId = req.userId
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
@@ -75,8 +76,8 @@ const getImageById = async (req, res) => {
     if (foundImage.tagged) {
       return res.status(400).json({ error: "This image has been tagged by the admin and cannot be accessed." })
     }
-    if (foundImage.ownerId !== userId) {
-      return res.status(401).json({ error: "You can only access images you have uploaded." })
+    if (!req.isAdmin && foundImage.ownerId !== userId) {
+      return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
 
     //Return details of image.
@@ -90,13 +91,11 @@ const getImageById = async (req, res) => {
 const fetchBatchOfImages = async (req, res) => {
   try {
     //Get limit and offset and calculate start and end index.
-    let { limit, offset } = req.params
-    if (!limit) {
-      limit = 10
-    }
-    if (!offset) {
-      offset = 0
-    }
+    let { limit = 10, offset = 0, userId } = req.params
+
+    limit = Number(limit)
+    offset = Number(offset)
+    userId = Number(userId)
 
     //Get current JSON DB images as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
@@ -106,13 +105,15 @@ const fetchBatchOfImages = async (req, res) => {
     const startIndex = offset
     const endIndex = startIndex + limit
 
-    //Filter images to get user's images and non-tagged images.
-    const userImages = allImagesObject.images.filter((image) => {
-      return !image.tagged && image.userId === userId
+    let userImages = allImagesObject.images.filter((image) => {
+      return !image.tagged && (req.isAdmin || image.userId === userId)
     })
 
-    //Get batch of images and send back to user.
-    const batchOfUserImages = userImages.slice(startIndex, endIndex)
+    if (!req.isAdmin && !userId) {
+      return res.status(400).json({ error: "Please provide userId." })
+    }
+
+    const batchOfUserImages = userImages.images.slice(startIndex, endIndex)
     if (!batchOfUserImages.length) {
       return res.status(404).json({ error: "No images found." })
     }
@@ -162,7 +163,10 @@ const updateDescription = async (req, res) => {
 
 const updateTags = async (req, res) => {
   try {
-    const { imageId, tags } = req.body
+    //Get tags from request
+    const { tags } = req.body
+    let { imageId } = req.params
+    imageId = Number(imageId)
     const userId = req.userId
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
@@ -192,7 +196,7 @@ const updateTags = async (req, res) => {
 
     //Update the tags in the image and update JSON DB.
     foundImage.tags.push(...tags)
-    await fs.writeFile(imagesFilePath, JSON.stringify(imageData, null, 2))
+    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     res.status(200).json({ message: "Tags added successfully." })
   } catch (err) {
     console.error("Error during adding tags: ", err)
@@ -202,18 +206,18 @@ const updateTags = async (req, res) => {
 
 const flagImage = async (req, res) => {
   try {
-    //Get the ID of the image to update along with description.
+    //Get id of image needed to be flagged.
     let { imageId } = req.params
     imageId = Number(imageId)
-    //Write code to check using regex
-    // if (typeof imageId != "number") {
-    //   return res.status(400).json({ error: "Please provide a number." })
-    // }
+    if (!req.isAdmin) {
+      return res.status(403).json({
+        error: "Only admins can access this!",
+      })
+    }
 
     //Fetch all the images from JSON DB as JS object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
-    console.log("allImagesObject: ", allImagesObject)
 
     //Find image and verify whether user has permissions to modify it.
     const foundImage = allImagesObject.images.find((image) => image.id === imageId)
