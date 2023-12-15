@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import "dotenv/config"
 import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -12,7 +11,7 @@ const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 const verifyToken = async (req, res, next) => {
   try {
     //Verify JWT token and get back user Id.
-    const secretKey = process.env.JWT_SECRET ?? "THISISFUN"
+    const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
     if (!req.headers.authorization) {
       return res.status(400).json({ error: "Token not provided. Please provide token in Authorization header." })
     }

@@ -110,7 +110,6 @@ const getBatchOfImages = async (req, res) => {
     const endIndex = startIndex + limit
 
     let userImages = allImagesObject.images.filter((image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId))
-    console.log("userImages: ", userImages)
 
     const batchOfUserImages = userImages.slice(startIndex, endIndex)
     if (!batchOfUserImages.length) {

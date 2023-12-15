@@ -1,7 +1,7 @@
 {
   "images": [
     {
-      "isFlagged": true,
+      "isFlagged": false,
       "id": 1,
       "url": "https://th.bing.com/th/id/R.ac550965bc81d183c286cff303ae159f?rik=x7qweIDsCTBRQg&riu=http%3a%2f%2fjonknutson.co%2fwp-content%2fuploads%2f2016%2f05%2fRooster.jpg&ehk=ApnQL%2bC%2fB12MLvZ7iNGgSods0WCIYy6pqtJRYdeyU30%3d&risl=&pid=ImgRaw&r=0",
       "title": "Rooster",
@@ -76,6 +76,17 @@
       "ownerId": 2,
       "ownerUserName": "carl",
       "tags": ["fly", "bird", "myth", "friend"]
+    },
+    {
+      "isFlagged": false,
+      "id": 8,
+      "url": "https://th.bing.com/th/id/OIP.r_J2t-juNLkRZ2O289KBOwHaFj?w=3911&h=2933&rs=1&pid=ImgDetMain",
+      "title": "Beach.",
+      "description": "",
+      "createdAt": "2023-12-15T14:59:21.147Z",
+      "ownerId": 3,
+      "ownerUserName": "thomas",
+      "tags": ["beach", "fun", "bird"]
     }
   ]
 }
