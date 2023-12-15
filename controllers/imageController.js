@@ -14,7 +14,7 @@ const createImage = async (req, res) => {
     let { imageURL, title, description, tags } = req.body
     const userId = req.userId
 
-    if (!imageURL || typeof title !== "string") {
+    if (!imageURL || typeof imageURL !== "string") {
       return res.status(400).json({
         error: "Please provide the imageURL and ensure the type is a string.",
       })
@@ -148,8 +148,8 @@ const updateDescription = async (req, res) => {
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
-    if (!description) {
-      return res.status(400).json({ error: "Please provide description." })
+    if (!description || typeof description !== "string") {
+      return res.status(400).json({ error: "Please provide description and make sure its a string." })
     }
 
     //Fetch all the images from JSON DB as JS object.
