@@ -1,8 +1,14 @@
 export default class User {
   admin = false
-  constructor(id, name) {
+  imageIds = []
+  constructor(id, username, password) {
     this.id = id
-    this.name = name
+    this.username = username
+    this.password = password
     this.createdAt = new Date()
+  }
+
+  addImageId(id) {
+    this.imageIds.push(id)
   }
 }

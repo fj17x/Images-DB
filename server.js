@@ -11,5 +11,5 @@ app.use("/user", userRouter)
 app.use("/image", imageRouter)
 
 app.listen(PORT, () => {
-  console.log(`App running on PORT: ${PORT}`)
+  console.log(`App running on Port: ${PORT}`)
 })
