@@ -3,7 +3,12 @@ import jwt from "jsonwebtoken"
 import fs from "fs/promises"
 import bcrypt from "bcrypt"
 import User from "../models/user.js"
-const usersFilePath = "db/users.json"
+import path from "path"
+import { fileURLToPath } from "url"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
 const register = async (req, res) => {
   try {

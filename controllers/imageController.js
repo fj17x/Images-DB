@@ -1,6 +1,11 @@
 import fs from "fs/promises"
 import Image from "../models/image.js"
-const imagesFilePath = "db/images.json"
+import path from "path"
+import { fileURLToPath } from "url"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
 
 const createImage = async (req, res) => {
   try {
@@ -151,7 +156,6 @@ const updateDescription = async (req, res) => {
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     res.status(200).json({ message: "Image description updated successfully." })
   } catch (err) {
-    console.error("Error during updating: ", err)
     res.status(500).json({ error: "Failed to update image description." })
   }
 }
@@ -196,4 +200,38 @@ const updateTags = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, fetchBatchOfImages, updateDescription, updateTags }
+const flagImage = async (req, res) => {
+  try {
+    //Get the ID of the image to update along with description.
+    let { imageId } = req.params
+    imageId = Number(imageId)
+    //Write code to check using regex
+    // if (typeof imageId != "number") {
+    //   return res.status(400).json({ error: "Please provide a number." })
+    // }
+
+    //Fetch all the images from JSON DB as JS object.
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allImagesObject = JSON.parse(allImagesJSON)
+    console.log("allImagesObject: ", allImagesObject)
+
+    //Find image and verify whether user has permissions to modify it.
+    const foundImage = allImagesObject.images.find((image) => image.id === imageId)
+    if (!foundImage) {
+      return res.status(404).json({ error: "Please provide a valid imageId." })
+    }
+    if (foundImage.isFlagged) {
+      return res.status(400).json({ error: "This image has already been flagged!" })
+    }
+
+    //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
+    foundImage.isFlagged = true
+    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+    res.status(200).json({ message: "Image flagged successfully." })
+  } catch (err) {
+    console.error("Error during flagging: ", err)
+    res.status(500).json({ error: "Failed to flag image." })
+  }
+}
+
+export { createImage, getImageById, fetchBatchOfImages, updateDescription, updateTags, flagImage }

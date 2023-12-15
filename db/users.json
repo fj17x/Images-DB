@@ -1,47 +1,28 @@
 {
   "users": [
     {
-      "admin": true,
-      "id": 1,
-      "name": "Firas",
-      "createdAt": "2023-12-14T11:48:15.779Z"
+      "isAdmin": true,
+      "imageIds": [],
+      "id": 7,
+      "username": "admin",
+      "password": "$2b$15$o739tKodb9GbVlu4Ro3t.e/m.u4qXroD3Fzem8jSm3HzN1GGZXCUS",
+      "createdAt": "2023-12-15T08:52:53.633Z"
     },
     {
-      "admin": false,
+      "isAdmin": false,
       "imageIds": [],
       "id": 2,
-      "name": "Tom",
-      "createdAt": "2023-12-14T12:39:32.723Z"
+      "username": "Thomas",
+      "password": "$2b$15$eokk23bD7bYV8MZiRPm9OOm0wYrVXnBp.iEq902F4wCMfp7juIDay",
+      "createdAt": "2023-12-15T08:53:47.292Z"
     },
     {
-      "admin": false,
+      "isAdmin": false,
       "imageIds": [],
       "id": 3,
-      "name": "Tom",
-      "createdAt": "2023-12-14T12:39:50.153Z"
-    },
-    {
-      "admin": false,
-      "imageIds": [],
-      "id": 4,
-      "name": "Tom",
-      "createdAt": "2023-12-14T12:42:41.731Z"
-    },
-    {
-      "admin": false,
-      "imageIds": [],
-      "id": 5,
-      "username": "Tom",
-      "password": "$2b$15$5BVBFY6R1WZqlcxNpiguhOJmb6VBRvpDtswSWDybHYm18CBc2EpOS",
-      "createdAt": "2023-12-15T05:51:57.933Z"
-    },
-    {
-      "admin": false,
-      "imageIds": [],
-      "id": 6,
-      "username": "Tomm",
-      "password": "$2b$15$BypySEpOOVIXAoGvfdSMEet6jZ86xJjYFDaU28y.aEKcPlM4OcAnC",
-      "createdAt": "2023-12-15T05:53:33.862Z"
+      "username": "Jack",
+      "password": "$2b$15$Z53naSJFxybmM0jiZygKGOwKNVklxkHtJhgkpv0UyUQ14OJsgv6s6",
+      "createdAt": "2023-12-15T10:12:04.915Z"
     }
   ]
 }

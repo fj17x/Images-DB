@@ -1,5 +1,5 @@
 export default class Image {
-  flagged = false
+  isFlagged = false
   constructor(id, url, title, description = "", ownerId, ownerUserName, tags = []) {
     this.id = id
     this.url = url
@@ -11,19 +11,19 @@ export default class Image {
     this.tags = tags
   }
 
-  setDescription(newDescription) {
-    this.description = newDescription
-  }
+  // setDescription(newDescription) {
+  //   this.description = newDescription
+  // }
 
-  addTag(newTag) {
-    this.tags.push(newTag)
-  }
+  // addTag(newTag) {
+  //   this.tags.push(newTag)
+  // }
 
-  getFlagged() {
-    return this.flagged
-  }
+  // getFlagged() {
+  //   return this.isFlagged
+  // }
 
-  setFlagged(value = true) {
-    this.flagged = value
-  }
+  // setFlagged(value = true) {
+  //   this.flagged = value
+  // }
 }

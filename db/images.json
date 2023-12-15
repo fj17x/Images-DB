@@ -1,7 +1,7 @@
 {
   "images": [
     {
-      "flagged": false,
+      "isFlagged": true,
       "id": 1,
       "url": "https://th.bing.com/th/id/R.ac550965bc81d183c286cff303ae159f?rik=x7qweIDsCTBRQg&riu=http%3a%2f%2fjonknutson.co%2fwp-content%2fuploads%2f2016%2f05%2fRooster.jpg&ehk=ApnQL%2bC%2fB12MLvZ7iNGgSods0WCIYy6pqtJRYdeyU30%3d&risl=&pid=ImgRaw&r=0",
       "title": "Chicke2n",
@@ -12,7 +12,7 @@
       "tags": []
     },
     {
-      "flagged": false,
+      "isFlagged": false,
       "id": 2,
       "url": "https://th.bing.com/th/id/R.ac550965bc81d183c286cff303ae159f?rik=x7qweIDsCTBRQg&riu=http%3a%2f%2fjonknutson.co%2fwp-content%2fuploads%2f2016%2f05%2fRooster.jpg&ehk=ApnQL%2bC%2fB12MLvZ7iNGgSods0WCIYy6pqtJRYdeyU30%3d&risl=&pid=ImgRaw&r=0",
       "title": "Chic2222n",
@@ -23,7 +23,7 @@
       "tags": []
     },
     {
-      "flagged": false,
+      "isFlagged": false,
       "id": 3,
       "url": "https://th.bing.com/th/id/R.ac550965bc81d183c286cff303ae159f?rik=x7qweIDsCTBRQg&riu=http%3a%2f%2fjonknutson.co%2fwp-content%2fuploads%2f2016%2f05%2fRooster.jpg&ehk=ApnQL%2bC%2fB12MLvZ7iNGgSods0WCIYy6pqtJRYdeyU30%3d&risl=&pid=ImgRaw&r=0",
       "title": "C22hic2222n",

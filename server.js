@@ -1,13 +1,12 @@
 import express from "express"
 import imageRouter from "./routes/image.js"
-import userRouter from "./routes/user.js"
+import authRouter from "./routes/auth.js"
 
 const app = express()
 const PORT = 4000
 app.use(express.json())
-app.use(express.json())
 
-app.use("/users", userRouter)
+app.use("/auth", authRouter)
 app.use("/images", imageRouter)
 
 app.listen(PORT, () => {

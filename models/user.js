@@ -1,5 +1,5 @@
 export default class User {
-  admin = false
+  isAdmin = false
   imageIds = []
   constructor(id, username, password) {
     this.id = id
