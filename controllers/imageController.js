@@ -14,15 +14,27 @@ const createImage = async (req, res) => {
     let { imageURL, title, description, tags } = req.body
     const userId = req.userId
 
-    if (!imageURL) {
+    if (!imageURL || typeof title !== "string") {
       return res.status(400).json({
-        error: "Please provide the imageURL.",
+        error: "Please provide the imageURL and ensure the type is a string.",
       })
     }
 
-    if (!title) {
+    if (!title || typeof title !== "string") {
       return res.status(400).json({
-        error: "Please provide a title.",
+        error: "Please provide a title and ensure the type is a string.",
+      })
+    }
+
+    if (description && typeof description !== "string") {
+      return res.status(400).json({
+        error: "Description should be a string.",
+      })
+    }
+
+    if (tags && !Array.isArray(tags)) {
+      return res.status(400).json({
+        error: "Tags should be provided as an array.",
       })
     }
 
