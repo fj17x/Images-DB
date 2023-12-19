@@ -7,8 +7,8 @@
       "title": "Rooster",
       "description": "A chicken.",
       "createdAt": "2023-12-15T06:48:55.928Z",
-      "ownerId": 2,
-      "ownerUserName": "Tommy",
+      "ownerId": 3,
+      "ownerUserName": "thomas",
       "tags": ["bird", "fly", "rooster"]
     },
     {

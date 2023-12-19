@@ -2,7 +2,6 @@
   "users": [
     {
       "isAdmin": true,
-      "imageIds": [],
       "id": 1,
       "username": "admin",
       "password": "$2b$15$o739tKodb9GbVlu4Ro3t.e/m.u4qXroD3Fzem8jSm3HzN1GGZXCUS",
