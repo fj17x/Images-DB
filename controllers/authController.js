@@ -57,7 +57,7 @@ const register = async (req, res) => {
     console.log(`A new user has registered with ID = ${newUserId} & username = '${userName}'`)
     const response = {
       message: "Successfully registered!",
-      data: jwtToken,
+      jwtToken,
       links: authLinks,
     }
     res.status(201).json(response)
@@ -95,7 +95,7 @@ const login = async (req, res) => {
     console.log(`ID ${userId} requested for their token!`)
     const response = {
       message: "Successfully logged in!",
-      data: jwtToken,
+      jwtToken,
       links: authLinks,
     }
     res.status(200).json(response)
