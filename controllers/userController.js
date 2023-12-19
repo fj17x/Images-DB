@@ -105,7 +105,7 @@ const fetchBatchOfUsers = async (req, res) => {
     })
 
     const response = {
-      message: "Successfully fetched users!",
+      message: `Successfully fetched ${userData.length} users!`,
       data: userData,
       userLinks: userLinks,
     }

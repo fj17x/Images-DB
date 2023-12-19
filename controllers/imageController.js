@@ -197,7 +197,7 @@ const getBatchOfImages = async (req, res) => {
     })
 
     const response = {
-      message: "Successfully fetched images!",
+      message: `Successfully fetched ${batchOfUserImages.length} images!`,
       data: imageData,
       links: imageLinks,
     }
@@ -381,7 +381,7 @@ const getImagesByCommonTags = async (req, res) => {
       return res.status(404).json({ error: "No images found with given tags." })
     }
     const response = {
-      message: "Tags added successfully.",
+      message: `${filteredImages.length} Images with such tags found successfully.`,
       data: imageData,
       links: imageLinks,
     }
