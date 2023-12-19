@@ -10,6 +10,22 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
+//For HATEOS
+const authLinks = [
+  {
+    rel: "register",
+    method: "POST",
+    href: "/register",
+    description: "Register a new user",
+  },
+  {
+    rel: "login",
+    method: "POST",
+    href: "/login",
+    description: "Login with username and password",
+  },
+]
+
 const register = async (req, res) => {
   try {
     const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
@@ -39,7 +55,12 @@ const register = async (req, res) => {
 
     const jwtToken = jwt.sign({ userId: newUserId }, secretKey)
     console.log(`A new user has registered with ID = ${newUserId} & username = '${userName}'`)
-    res.status(201).json({ jwtToken, message: "Successfully registered!" })
+    const response = {
+      message: "Successfully registered!",
+      data: jwtToken,
+      links: authLinks,
+    }
+    res.status(201).json(response)
   } catch (err) {
     console.log("Error during registering: ", err)
     res.status(500).json({ error: "Failed to register." })
@@ -72,7 +93,12 @@ const login = async (req, res) => {
     const userId = user.id
     const jwtToken = jwt.sign({ userId }, secretKey)
     console.log(`ID ${userId} requested for their token!`)
-    res.status(200).json({ jwtToken, message: "Successfully logged in!" })
+    const response = {
+      message: "Successfully logged in!",
+      data: jwtToken,
+      links: authLinks,
+    }
+    res.status(200).json(response)
   } catch (err) {
     console.log("Error during logging in: ", err)
     res.status(500).json({ error: "Failed to login." })

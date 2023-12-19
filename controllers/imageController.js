@@ -8,11 +8,52 @@ const __dirname = path.dirname(__filename)
 const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
 const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
+//Function to create HATEOS links.
+const createImageLinks = (imageId, isAdmin) => {
+  const links = [
+    {
+      rel: "self",
+      method: "GET",
+      href: `/images/${imageId}`,
+      description: "Get details of this image",
+    },
+    {
+      rel: "update_description",
+      method: "PATCH",
+      href: `/images/${imageId}/description`,
+      description: "Update description of this image",
+    },
+    {
+      rel: "update_tags",
+      method: "PATCH",
+      href: `/images/${imageId}/tags`,
+      description: "Update tags of this image",
+    },
+    {
+      rel: "all_images",
+      method: "GET",
+      href: "/images",
+      description: "Get all images",
+    },
+  ]
+  if (isAdmin) {
+    links.push({
+      rel: "flag_image",
+      method: "PATCH",
+      href: `/images/${imageId}/flag`,
+      description: "Flag this image (Admin Only)",
+    })
+  }
+
+  return links
+}
+
 const createImage = async (req, res) => {
   try {
     //Get metadata provided in JSON and JWT.
     let { imageURL, title, description, tags } = req.body
     const userId = req.userId
+    const isAdmin = req.isAdmin
 
     if (!imageURL || typeof imageURL !== "string") {
       return res.status(400).json({
@@ -61,7 +102,13 @@ const createImage = async (req, res) => {
     //Push image into images object and write on JSON DB.
     allImagesObject.images.push(newImageObject)
     await fs.writeFile("db/images.json", JSON.stringify(allImagesObject, null, 2))
-    res.status(201).json({ message: `Sucessfully uploaded image! Image Id is : ${newImageId}` })
+
+    const response = {
+      message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
+      links: createImageLinks(newImageId, isAdmin),
+    }
+
+    res.status(201).json(response)
   } catch (err) {
     console.log("Error during uploading: ", err)
     res.status(500).json({ error: "Failed to upload. Must provide url and title." })
@@ -90,14 +137,19 @@ const getImageById = async (req, res) => {
       return res.status(404).json({ error: "Image not found." })
     }
     if (foundImage.isFlagged) {
-      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
+      return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
     if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
 
+    const response = {
+      message: "Successfully found image!",
+      data: { ...foundImage },
+      links: createImageLinks(imageId, isAdmin),
+    }
     //Return details of image.
-    res.status(200).json({ ...foundImage })
+    res.status(200).json(response)
   } catch (err) {
     console.log("Error while fetching.", err)
     res.status(500).json({ error: "Failed to fetch." })
@@ -134,7 +186,21 @@ const getBatchOfImages = async (req, res) => {
       }
       return res.status(404).json({ error: "No images found. " })
     }
-    res.status(200).json({ images: batchOfUserImages })
+
+    // Generate links for each image in the batch
+    const imagesWithLinks = batchOfUserImages.map((image) => {
+      return {
+        ...image,
+        links: createImageLinks(image.id, isAdmin),
+      }
+    })
+
+    const response = {
+      message: "Successfully fetched images!",
+      data: imagesWithLinks,
+    }
+
+    res.status(200).json(response)
   } catch (err) {
     console.error("Error during fetching of images.: ", err)
     res.status(500).json({ error: "Failed to fetch images." })
@@ -166,10 +232,10 @@ const updateDescription = async (req, res) => {
       return res.status(404).json({ error: "Please provide a valid imageId." })
     }
     if (foundImage.isFlagged) {
-      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
+      return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
     if (!isAdmin && foundImage.ownerId !== userId) {
-      return res.status(401).json({
+      return res.status(403).json({
         error: `You can only modify images you have uploaded. This image was uploaded by user id: ${foundImage.ownerId}`,
       })
     }
@@ -177,7 +243,13 @@ const updateDescription = async (req, res) => {
     //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
     foundImage.description = description
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-    res.status(200).json({ message: "Image description updated successfully." })
+
+    const response = {
+      message: "Image description updated successfully.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+
+    res.status(200).json(response)
   } catch (err) {
     console.log("Failed to update the description: ", err)
     res.status(500).json({ error: "Failed to update image description." })
@@ -191,6 +263,7 @@ const updateTags = async (req, res) => {
     let { imageId } = req.params
     imageId = Number(imageId)
     const userId = req.userId
+    const isAdmin = req.isAdmin
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
@@ -220,7 +293,11 @@ const updateTags = async (req, res) => {
     //Update the tags in the image and update JSON DB.
     foundImage.tags.push(...tags)
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-    res.status(200).json({ message: "Tags added successfully." })
+    const response = {
+      message: "Tags added successfully.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+    res.status(200).json(response)
   } catch (err) {
     console.error("Error during adding tags: ", err)
     res.status(500).json({ error: "Failed to add tags to image." })
@@ -232,6 +309,7 @@ const flagImage = async (req, res) => {
     //Get id of image needed to be flagged.
     let { imageId } = req.params
     imageId = Number(imageId)
+    const isAdmin = req.isAdmin
     if (!req.isAdmin) {
       return res.status(403).json({
         error: "Only admins can access this!",
@@ -254,7 +332,11 @@ const flagImage = async (req, res) => {
     //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
     foundImage.isFlagged = true
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-    res.status(200).json({ message: "Image flagged successfully." })
+    const response = {
+      message: "Image flagged successfully.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+    res.status(200).json(response)
   } catch (err) {
     console.error("Error during flagging: ", err)
     res.status(500).json({ error: "Failed to flag image." })
@@ -285,11 +367,22 @@ const getImagesByCommonTags = async (req, res) => {
       return false
     })
 
+    const imagesWithLinks = filteredImages.map((image) => {
+      return {
+        ...image,
+        links: createImageLinks(image.id, isAdmin),
+      }
+    })
+
     if (!filteredImages.length) {
       return res.status(404).json({ error: "No images found with given tags." })
     }
+    const response = {
+      message: "Tags added successfully.",
+      data: imagesWithLinks,
+    }
 
-    res.status(200).json({ images: filteredImages })
+    res.status(200).json({ response })
   } catch (err) {
     console.error("Error while fetching images by common tags: ", err)
     res.status(500).json({ error: "Failed to fetch images by these common tags." })

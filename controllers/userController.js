@@ -6,10 +6,33 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
+//Function to create HATEOS links.
+const createUsersLinks = (userId, isAdmin) => {
+  const userLinks = []
+  if (isAdmin) {
+    userLinks.push(
+      {
+        rel: "all_users",
+        method: "GET",
+        href: "/users",
+        description: "Get all users",
+      },
+      {
+        rel: "self",
+        method: "GET",
+        href: `/users/${userId}`,
+        description: "Get details of this user",
+      }
+    )
+  }
+  return userLinks
+}
+
 const getUserById = async (req, res) => {
   try {
     //Check if admin.
-    if (!req.isAdmin) {
+    const isAdmin = req.isAdmin
+    if (!isAdmin) {
       return res.status(403).json({
         error: "Only the admin can see the users!",
       })
@@ -29,7 +52,12 @@ const getUserById = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
     //Return details of user.
-    res.status(200).json({ ...foundUser })
+    const response = {
+      message: "Found user!",
+      data: { ...foundUser },
+      links: createUsersLinks(userId, isAdmin),
+    }
+    res.status(200).json(response)
   } catch (err) {
     console.log("Error while fetching.", err)
     res.status(500).json({ error: "Failed to fetch." })
@@ -39,7 +67,8 @@ const getUserById = async (req, res) => {
 const fetchBatchOfUsers = async (req, res) => {
   try {
     //Check if admin.
-    if (!req.isAdmin) {
+    const isAdmin = req.isAdmin
+    if (isAdmin) {
       return res.status(403).json({
         error: "Only the admin can see the users!",
       })
@@ -65,7 +94,16 @@ const fetchBatchOfUsers = async (req, res) => {
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
     }
-    res.status(200).json({ batchOfUsers })
+
+    // Generate links for each user in the batch
+    const UserWithLinks = batchOfUsers.map((user) => {
+      return { ...user, links: createUsersLinks(user.id, isAdmin) }
+    })
+    const response = {
+      message: "Successfully fetched users!",
+      data: UserWithLinks,
+    }
+    res.status(200).json(response)
   } catch (err) {
     console.error("Error during fetching: ", err)
     res.status(500).json({ error: "Failed to fetch users." })
