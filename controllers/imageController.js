@@ -188,16 +188,18 @@ const getBatchOfImages = async (req, res) => {
     }
 
     // Generate links for each image in the batch
-    const imagesWithLinks = batchOfUserImages.map((image) => {
-      return {
-        ...image,
-        links: createImageLinks(image.id, isAdmin),
-      }
+    const imageLinks = batchOfUserImages.map((image) => {
+      return createImageLinks(image.id, isAdmin)
+    })
+
+    const imageData = batchOfUserImages.map((image) => {
+      return { ...image }
     })
 
     const response = {
       message: "Successfully fetched images!",
-      data: imagesWithLinks,
+      data: imageData,
+      links: imageLinks,
     }
 
     res.status(200).json(response)
@@ -367,11 +369,12 @@ const getImagesByCommonTags = async (req, res) => {
       return false
     })
 
-    const imagesWithLinks = filteredImages.map((image) => {
-      return {
-        ...image,
-        links: createImageLinks(image.id, isAdmin),
-      }
+    const imageLinks = filteredImages.map((image) => {
+      return createImageLinks(image.id, isAdmin)
+    })
+
+    const imageData = filteredImages.map((image) => {
+      return { ...image }
     })
 
     if (!filteredImages.length) {
@@ -379,7 +382,8 @@ const getImagesByCommonTags = async (req, res) => {
     }
     const response = {
       message: "Tags added successfully.",
-      data: imagesWithLinks,
+      data: imageData,
+      links: imageLinks,
     }
 
     res.status(200).json({ response })

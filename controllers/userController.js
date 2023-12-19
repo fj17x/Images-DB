@@ -96,12 +96,18 @@ const fetchBatchOfUsers = async (req, res) => {
     }
 
     // Generate links for each user in the batch
-    const UserWithLinks = batchOfUsers.map((user) => {
-      return { ...user, links: createUsersLinks(user.id, isAdmin) }
+    const userLinks = batchOfUsers.map((user) => {
+      return createUsersLinks(user.id, isAdmin)
     })
+
+    const userData = batchOfUsers.map((user) => {
+      return { ...user }
+    })
+
     const response = {
       message: "Successfully fetched users!",
-      data: UserWithLinks,
+      data: userData,
+      userLinks: userLinks,
     }
     res.status(200).json(response)
   } catch (err) {
