@@ -68,7 +68,7 @@ const fetchBatchOfUsers = async (req, res) => {
   try {
     //Check if admin.
     const isAdmin = req.isAdmin
-    if (isAdmin) {
+    if (!isAdmin) {
       return res.status(403).json({
         error: "Only the admin can see the users!",
       })
