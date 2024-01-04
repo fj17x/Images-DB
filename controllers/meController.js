@@ -133,6 +133,7 @@ const deleteCurrentUserProfile = async (req, res) => {
 
     const response = {
       message: "Your profile has been deleted! (Soft deleted.)",
+      links: createMeLinks(),
     }
     res.status(200).json(response)
   } catch (err) {

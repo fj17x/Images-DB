@@ -9,4 +9,10 @@ userRouter.get("/", verifyToken, userController.fetchBatchOfUsers)
 // GET method to get fetch a user. (Uses regex to only get numbers.)
 userRouter.get("/:userId(\\d+)", verifyToken, userController.getUserById)
 
+userRouter.put("/:userId(\\d+)", verifyToken, userController.getUserById)
+
+userRouter.patch("/:userId(\\d+)", verifyToken, userController.getUserById)
+
+userRouter.delete("/:userId(\\d+)", verifyToken, userController.getUserById)
+
 export default userRouter
