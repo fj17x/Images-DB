@@ -1,5 +1,6 @@
 export default class Image {
   isFlagged = false
+  isDeleted = false
   constructor(id, url, title, description = "", ownerId, ownerUserName, tags = []) {
     this.id = id
     this.url = url

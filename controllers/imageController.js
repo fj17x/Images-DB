@@ -79,17 +79,7 @@ const createImage = async (req, res) => {
       })
     }
 
-    //Get username of user using given ID.
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-    console.log("allUsersObject: ", allUsersObject)
-    const user = allUsersObject.users.find((user) => user.id === userId)
-    if (!user) {
-      return res.status(404).json({
-        error: "User doesnt exist.",
-      })
-    }
-    const userName = user.username
+    const userName = req.userName
 
     //Get current Image DB as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
@@ -136,6 +126,9 @@ const getImageById = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
+    if (foundImage.isDeleted) {
+      return res.status(403).json({ error: "This image has been deleted!" })
+    }
     if (foundImage.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
@@ -177,7 +170,10 @@ const getBatchOfImages = async (req, res) => {
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
 
-    let userImages = allImagesObject.images.filter((image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId))
+    //Admin will be able to retrieve soft deleted images.
+    let userImages = allImagesObject.images.filter(
+      (image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId) && !image.isDeleted
+    )
 
     const batchOfUserImages = userImages.slice(startIndex, endIndex)
     if (!batchOfUserImages.length) {
@@ -233,6 +229,9 @@ const updateDescription = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Please provide a valid imageId." })
     }
+    if (foundImage.isDeleted) {
+      return res.status(403).json({ error: "This image has been deleted!" })
+    }
     if (foundImage.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
@@ -285,6 +284,9 @@ const updateTags = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
+    if (foundImage.isDeleted) {
+      return res.status(403).json({ error: "This image has been deleted!" })
+    }
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
@@ -327,6 +329,9 @@ const flagImage = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Please provide a valid imageId." })
     }
+    if (foundImage.isDeleted) {
+      return res.status(403).json({ error: "This image has been deleted!" })
+    }
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has already been flagged!" })
     }
@@ -361,7 +366,7 @@ const getImagesByCommonTags = async (req, res) => {
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
     const filteredImages = allImagesObject.images.filter((image) => {
-      if (!image.isFlagged && tagList.every((tag) => image.tags.includes(tag))) {
+      if (!image.isFlagged && !image.isDeleted && tagList.every((tag) => image.tags.includes(tag))) {
         if (isAdmin || image.ownerId === userId) {
           return true
         }
@@ -393,4 +398,57 @@ const getImagesByCommonTags = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, getBatchOfImages, updateDescription, updateTags, flagImage, getImagesByCommonTags }
+const deleteImageById = async (req, res) => {
+  try {
+    let { imageId } = req.params
+    imageId = Number(imageId)
+    const userId = req.userId
+    const isAdmin = req.isAdmin
+    if (!imageId) {
+      return res.status(400).json({ error: "Please provide imageId." })
+    }
+
+    //Get current JSON DB images as an object.
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allImagesObject = JSON.parse(allImagesJSON)
+
+    //Find image in DB.
+    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
+    const foundImage = allImagesObject.images[foundImageIndex]
+    if (!foundImage) {
+      return res.status(404).json({ error: "Image not found." })
+    }
+    if (foundImage.isDeleted) {
+      return res.status(400).json({ error: "This image has already been deleted!" })
+    }
+    if (foundImage.isFlagged) {
+      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
+    }
+    if (foundImage.ownerId !== userId) {
+      return res.status(403).json({ error: "Unauthorized to delete this image." })
+    }
+
+    //Soft delete the image and write in DB.
+    foundImage.isDeleted = true
+    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+    const response = {
+      message: "Image deleted.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+    res.status(200).json(response)
+  } catch (err) {
+    console.error("Error during deleting. ", err)
+    res.status(500).json({ error: "Failed to delete the image." })
+  }
+}
+
+export {
+  createImage,
+  getImageById,
+  getBatchOfImages,
+  updateDescription,
+  updateTags,
+  flagImage,
+  getImagesByCommonTags,
+  deleteImageById,
+}

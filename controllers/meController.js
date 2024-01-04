@@ -71,7 +71,6 @@ const updateCurrentUserDetails = async (req, res) => {
     }
 
     const allowedFields = {}
-
     if (userName) {
       allowedFields.username = userName
     }
@@ -89,6 +88,10 @@ const updateCurrentUserDetails = async (req, res) => {
     const foundIndex = allUsersObject.users.findIndex((user) => user.id === userId)
     if (foundIndex === -1) {
       return res.status(404).json({ error: "User not found." })
+    }
+
+    if (allUsersObject.users[foundIndex].isDeleted) {
+      res.status(404).json({ error: "User is deleted!" })
     }
 
     allUsersObject.users[foundIndex] = {
@@ -112,7 +115,6 @@ const updateCurrentUserDetails = async (req, res) => {
 const deleteCurrentUserProfile = async (req, res) => {
   try {
     const userId = req.userId
-
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
 
@@ -121,12 +123,16 @@ const deleteCurrentUserProfile = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
 
-    allUsersObject.users.splice(foundIndex, 1)
+    if (allUsersObject.users[foundIndex].isDeleted) {
+      res.status(404).json({ error: "User already deleted!" })
+    }
+
+    allUsersObject.users[foundIndex].isDeleted = true
 
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
 
     const response = {
-      message: "Your profile has been deleted!",
+      message: "Your profile has been deleted! (Soft deleted.)",
     }
     res.status(200).json(response)
   } catch (err) {

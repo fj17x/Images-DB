@@ -6,8 +6,11 @@ const imageRouter = express.Router()
 // POST method to upload an image URL.
 imageRouter.post("/", verifyToken, imageController.createImage)
 
-// GET method to get fetch an image using ID. (Uses Regex)
+// GET method to get fetch an image using its ID. (Uses Regex)
 imageRouter.get("/:imageId(\\d+)", verifyToken, imageController.getImageById)
+
+// DELETE method to delete an image using its ID. (Uses Regex)
+imageRouter.get("/:imageId(\\d+)", verifyToken, imageController.deleteImageById)
 
 // GET method to fetch batch of images.
 imageRouter.get("/", verifyToken, imageController.getBatchOfImages)

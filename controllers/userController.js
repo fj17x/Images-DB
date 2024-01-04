@@ -28,6 +28,7 @@ const createUsersLinks = (userId, isAdmin) => {
   return userLinks
 }
 
+//Shows every user including soft deleted ones.
 const getUserById = async (req, res) => {
   try {
     //Check if admin.
@@ -64,6 +65,7 @@ const getUserById = async (req, res) => {
   }
 }
 
+//Also fetches soft deleted users.
 const fetchBatchOfUsers = async (req, res) => {
   try {
     //Check if admin.

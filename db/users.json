@@ -5,21 +5,24 @@
       "id": 1,
       "username": "admin",
       "password": "$2b$15$o739tKodb9GbVlu4Ro3t.e/m.u4qXroD3Fzem8jSm3HzN1GGZXCUS",
-      "createdAt": "2023-12-15T08:52:53.633Z"
+      "createdAt": "2023-12-15T08:52:53.633Z",
+      "isDeleted": false
     },
     {
       "isAdmin": false,
       "id": 2,
       "username": "carl",
       "password": "$2b$15$p6x.7F/rOGDnIW7xMbfYbed9qHLB2fZn4J3VSyXoNYBqgqvna2SDS",
-      "createdAt": "2023-12-15T12:39:50.491Z"
+      "createdAt": "2023-12-15T12:39:50.491Z",
+      "isDeleted": false
     },
     {
       "isAdmin": false,
       "id": 3,
       "username": "thomas",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
-      "createdAt": "2023-12-15T16:13:30.803Z"
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false
     }
   ]
 }
