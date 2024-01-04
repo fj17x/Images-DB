@@ -424,7 +424,7 @@ const deleteImageById = async (req, res) => {
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (foundImage.ownerId !== userId) {
+    if (isAdmin || foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to delete this image." })
     }
 
