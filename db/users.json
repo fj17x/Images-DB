@@ -12,7 +12,7 @@
       "isAdmin": false,
       "id": 2,
       "userName": "carl",
-      "password": "$2b$15$p6x.7F/rOGDnIW7xMbfYbed9qHLB2fZn4J3VSyXoNYBqgqvna2SDS",
+      "password": "$2b$15$srhIzSAWxhPOrh7IyDFOVe/cx6kvNtf1Vru0r9/LFtfl82WW/qbFi",
       "createdAt": "2023-12-15T12:39:50.491Z",
       "isDeleted": false
     },
@@ -22,7 +22,7 @@
       "userName": "thomas",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": true
+      "isDeleted": false
     },
     {
       "isAdmin": false,
@@ -30,7 +30,7 @@
       "userName": "yenson",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": true
+      "isDeleted": false
     },
     {
       "isAdmin": false,
@@ -38,7 +38,7 @@
       "userName": "charlie",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": true
+      "isDeleted": false
     }
   ]
 }

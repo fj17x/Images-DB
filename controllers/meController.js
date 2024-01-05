@@ -67,20 +67,10 @@ const updateCurrentUserDetails = async (req, res) => {
     const { userName, password } = req.body
 
     if (!userName && !password) {
-      return res.status(400).json({ error: "userName or password is required for updating. Please provide it in the body." })
+      return res.status(400).json({ error: "userName or password is required. Please provide userName or password in the body." })
     }
 
     const allowedFields = {}
-    if (userName) {
-      allowedFields.userName = userName
-    }
-
-    if (password) {
-      const passwordToString = password.toString()
-      const saltRounds = 15
-      const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
-      allowedFields.password = hashedPassword
-    }
 
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
@@ -88,6 +78,20 @@ const updateCurrentUserDetails = async (req, res) => {
     const foundIndex = allUsersObject.users.findIndex((user) => user.id === userId)
     if (foundIndex === -1) {
       return res.status(404).json({ error: "User not found." })
+    }
+    if (userName) {
+      allowedFields.userName = userName
+      const existingUser = allUsersObject.users.find((user) => user.userName === userName)
+      if (existingUser && existingUser.userName !== req.userName) {
+        return res.status(400).json({ error: "This username already exists! Change your username to something else!" })
+      }
+    }
+
+    if (password) {
+      const passwordToString = password.toString()
+      const saltRounds = 15
+      const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
+      allowedFields.password = hashedPassword
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {

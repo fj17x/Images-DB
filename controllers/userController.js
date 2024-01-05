@@ -55,7 +55,7 @@ const getUserById = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!isAdmin) {
       return res.status(403).json({
-        error: "Only the admin can see the users!",
+        error: "Only the admin can see the users! Please view your own details at /me route!",
       })
     }
 
