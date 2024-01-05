@@ -70,8 +70,6 @@ const updateCurrentUserDetails = async (req, res) => {
       return res.status(400).json({ error: "userName or password is required. Please provide userName or password in the body." })
     }
 
-    const allowedFields = {}
-
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
 
@@ -79,28 +77,25 @@ const updateCurrentUserDetails = async (req, res) => {
     if (foundIndex === -1) {
       return res.status(404).json({ error: "User not found." })
     }
+
+    const foundUser = allUsersObject.users[foundIndex]
+
+    if (foundUser.isDeleted) {
+      return res.status(404).json({ error: "User is deleted!" })
+    }
     if (userName) {
-      allowedFields.userName = userName
       const existingUser = allUsersObject.users.find((user) => user.userName === userName)
       if (existingUser && existingUser.userName !== req.userName) {
         return res.status(400).json({ error: "This username already exists! Change your username to something else!" })
       }
+      foundUser.userName = userName
     }
 
     if (password) {
       const passwordToString = password.toString()
       const saltRounds = 15
       const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
-      allowedFields.password = hashedPassword
-    }
-
-    if (allUsersObject.users[foundIndex].isDeleted) {
-      return res.status(404).json({ error: "User is deleted!" })
-    }
-
-    allUsersObject.users[foundIndex] = {
-      ...allUsersObject.users[foundIndex],
-      ...allowedFields,
+      foundUser.password = hashedPassword
     }
 
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
