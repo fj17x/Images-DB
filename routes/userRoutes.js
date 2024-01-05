@@ -9,10 +9,16 @@ userRouter.get("/", verifyToken, userController.fetchBatchOfUsers)
 // GET method to get fetch a user. (Uses regex to only get numbers.)
 userRouter.get("/:userId(\\d+)", verifyToken, userController.getUserById)
 
-userRouter.put("/:userId(\\d+)", verifyToken, userController.getUserById)
+// PUT method to get update a user. (Uses regex to only get numbers.)
+userRouter.put("/:userId(\\d+)", verifyToken, userController.updateUserById)
 
-userRouter.patch("/:userId(\\d+)", verifyToken, userController.getUserById)
+// PATCH method to get update a user. (Uses regex to only get numbers.)
+userRouter.patch("/:userId(\\d+)", verifyToken, userController.updateUserById)
 
-userRouter.delete("/:userId(\\d+)", verifyToken, userController.getUserById)
+// POST method to get create a user.
+userRouter.post("/", verifyToken, userController.createUser)
+
+// DELETE method to get delete a user. (Uses regex to only get numbers.)
+userRouter.delete("/:userId(\\d+)", verifyToken, userController.deleteUserById)
 
 export default userRouter

@@ -28,7 +28,6 @@ imageRouter.patch("/:imageId/tags", verifyToken, imageController.updateTags)
 imageRouter.patch("/flag/:imageId(\\d+)", verifyToken, imageController.flagImage)
 
 // PUT method to update an image.
-//TODO
 imageRouter.put("/:imageId(\\d+)", verifyToken, imageController.updateImage)
 
 export default imageRouter

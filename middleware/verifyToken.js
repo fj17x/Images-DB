@@ -27,7 +27,7 @@ const verifyToken = async (req, res, next) => {
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
     const user = allUsersObject.users.find((user) => user.id === userId)
-    req.userName = user.username
+    req.userName = user.userName
     if (!user) {
       return res.status(400).json({ error: `Such a user with id:${userId} does not exist. Please register first.` })
     }

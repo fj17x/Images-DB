@@ -10,7 +10,7 @@
       "ownerId": 3,
       "ownerUserName": "thomas",
       "tags": ["bird", "fly", "rooster"],
-      "isDeleted": false
+      "isDeleted": true
     },
     {
       "isFlagged": false,

@@ -24,10 +24,10 @@ const createMeLinks = () => {
       description: "Update your details.",
     },
     {
-      rel: "delete_your_profile",
+      rel: "delete_your_account",
       method: "DELETE",
       href: `/me`,
-      description: "Delete your profile.",
+      description: "Delete your account.",
     }
   )
   return meLinks
@@ -72,7 +72,7 @@ const updateCurrentUserDetails = async (req, res) => {
 
     const allowedFields = {}
     if (userName) {
-      allowedFields.username = userName
+      allowedFields.userName = userName
     }
 
     if (password) {
@@ -91,7 +91,7 @@ const updateCurrentUserDetails = async (req, res) => {
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {
-      res.status(404).json({ error: "User is deleted!" })
+      return res.status(404).json({ error: "User is deleted!" })
     }
 
     allUsersObject.users[foundIndex] = {
@@ -112,7 +112,7 @@ const updateCurrentUserDetails = async (req, res) => {
   }
 }
 
-const deleteCurrentUserProfile = async (req, res) => {
+const deleteCurrentUser = async (req, res) => {
   try {
     const userId = req.userId
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
@@ -124,7 +124,7 @@ const deleteCurrentUserProfile = async (req, res) => {
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {
-      res.status(404).json({ error: "User already deleted!" })
+      return res.status(404).json({ error: "User already deleted!" })
     }
 
     allUsersObject.users[foundIndex].isDeleted = true
@@ -132,7 +132,7 @@ const deleteCurrentUserProfile = async (req, res) => {
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
 
     const response = {
-      message: "Your profile has been deleted! (Soft deleted.)",
+      message: "Your profile has been soft deleted!",
       links: createMeLinks(),
     }
     res.status(200).json(response)
@@ -142,4 +142,4 @@ const deleteCurrentUserProfile = async (req, res) => {
   }
 }
 
-export { getCurrentUserDetails, updateCurrentUserDetails, deleteCurrentUserProfile }
+export { getCurrentUserDetails, updateCurrentUserDetails, deleteCurrentUser }

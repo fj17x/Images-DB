@@ -6,7 +6,6 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
 //Function to create HATEOS links.
 const createImageLinks = (imageId, isAdmin) => {
@@ -424,7 +423,7 @@ const deleteImageById = async (req, res) => {
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (isAdmin || foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to delete this image." })
     }
 
@@ -442,6 +441,64 @@ const deleteImageById = async (req, res) => {
   }
 }
 
+const updateImage = async (req, res) => {
+  try {
+    let { imageId } = req.params
+    imageId = Number(imageId)
+    const userId = req.userId
+    const isAdmin = req.isAdmin
+
+    if (!imageId) {
+      return res.status(400).json({ error: "Please provide imageId." })
+    }
+
+    const { title, description, tags, url } = req.body
+
+    if (!title && !description && !tags && !url) {
+      return res.status(400).json({ error: "Please provide at least one field to update from: title, description, tags or url." })
+    }
+
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allImagesObject = JSON.parse(allImagesJSON)
+
+    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
+
+    const foundImage = allImagesObject.images[foundImageIndex]
+    if (!foundImage) {
+      return res.status(404).json({ error: "Image not found." })
+    }
+    if (foundImage.isDeleted) {
+      return res.status(400).json({ error: "This image has been deleted!" })
+    }
+
+    if (!isAdmin && foundImage.ownerId !== userId) {
+      return res.status(403).json({ error: "Unauthorized to update this image." })
+    }
+
+    if (title) {
+      foundImage.title = title
+    }
+    if (description) {
+      foundImage.description = description
+    }
+    if (Array.isArray(tags)) {
+      foundImage.tags = tags
+    }
+    if (url) {
+      foundImage.url = url
+    }
+
+    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+    const response = {
+      message: "Image details updated successfully.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+    res.status(200).json(response)
+  } catch (err) {
+    console.error("Error during image update: ", err)
+    res.status(500).json({ error: "Failed to update the image." })
+  }
+}
 export {
   createImage,
   getImageById,
@@ -451,4 +508,5 @@ export {
   flagImage,
   getImagesByCommonTags,
   deleteImageById,
+  updateImage,
 }

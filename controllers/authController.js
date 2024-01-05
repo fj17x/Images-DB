@@ -22,7 +22,7 @@ const authLinks = [
     rel: "login",
     method: "POST",
     href: "/login",
-    description: "Login with username and password",
+    description: "Login with userName and password",
   },
 ]
 
@@ -32,7 +32,7 @@ const register = async (req, res) => {
     const { userName, password } = req.body
 
     if (!userName || !password) {
-      return res.status(400).json({ error: "Please provide username and password." })
+      return res.status(400).json({ error: "Please provide userName and password." })
     }
 
     const passwordToString = password.toString()
@@ -42,9 +42,9 @@ const register = async (req, res) => {
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
 
-    const existingUser = allUsersObject.users.find((user) => user.username === userName)
+    const existingUser = allUsersObject.users.find((user) => user.userName === userName)
     if (existingUser) {
-      return res.status(400).json({ error: "Username already exists. Choose a different username." })
+      return res.status(400).json({ error: "userName already exists. Choose a different userName." })
     }
 
     const newUserId = (allUsersObject.users?.length ?? 0) + 1
@@ -54,7 +54,7 @@ const register = async (req, res) => {
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
 
     const jwtToken = jwt.sign({ userId: newUserId }, secretKey)
-    console.log(`A new user has registered with ID = ${newUserId} & username = '${userName}'`)
+    console.log(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
     const response = {
       message: "Successfully registered!",
       jwtToken,
@@ -73,14 +73,14 @@ const login = async (req, res) => {
     const { userName, password } = req.body
 
     if (!userName || !password) {
-      return res.status(400).json({ error: "Please provide username and password." })
+      return res.status(400).json({ error: "Please provide userName and password." })
     }
 
     const passwordToString = password.toString()
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
 
-    const user = allUsersObject.users.find((user) => user.username === userName)
+    const user = allUsersObject.users.find((user) => user.userName === userName)
     if (!user) {
       return res.status(400).json({ error: "Such a user does not exist. Please register first." })
     }

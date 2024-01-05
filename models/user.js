@@ -1,9 +1,9 @@
 export default class User {
   isAdmin = false
   isDeleted = false
-  constructor(id, username, password) {
+  constructor(id, userName, password) {
     this.id = id
-    this.username = username
+    this.userName = userName
     this.password = password
     this.createdAt = new Date()
   }
