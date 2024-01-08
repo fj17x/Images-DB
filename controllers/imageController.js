@@ -122,11 +122,8 @@ const getImageById = async (req, res) => {
 
     //Search for the image and check whether user has permission to access it.
     const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage) {
+    if (!foundImage || foundImage.isDeleted) {
       return res.status(404).json({ error: "Image not found." })
-    }
-    if (foundImage.isDeleted) {
-      return res.status(403).json({ error: "This image has been deleted!" })
     }
     if (foundImage.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
@@ -154,7 +151,7 @@ const getBatchOfImages = async (req, res) => {
     const isAdmin = req.isAdmin
 
     //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
+    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
     limit = Number(limit)
     offset = Number(offset)
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
@@ -214,109 +211,6 @@ const getBatchOfImages = async (req, res) => {
   }
 }
 
-const updateDescription = async (req, res) => {
-  try {
-    //Get the ID of the image to update along with description.
-    const { description } = req.body
-    let { imageId } = req.params
-    const isAdmin = req.isAdmin
-    imageId = Number(imageId)
-    const userId = req.userId
-    if (!imageId) {
-      return res.status(400).json({ error: "Please provide imageId." })
-    }
-    if (!description || typeof description !== "string") {
-      return res.status(400).json({ error: "Please provide description and make sure its a string." })
-    }
-
-    //Fetch all the images from JSON DB as JS object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Find image and verify whether user has permissions to modify it.
-    const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage) {
-      return res.status(404).json({ error: "Please provide a valid imageId." })
-    }
-    if (foundImage.isDeleted) {
-      return res.status(403).json({ error: "This image has been deleted!" })
-    }
-    if (foundImage.isFlagged) {
-      return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
-    }
-    if (!isAdmin && foundImage.ownerId !== userId) {
-      return res.status(403).json({
-        error: `You can only modify images you have uploaded. This image was uploaded by user id: ${foundImage.ownerId}`,
-      })
-    }
-
-    //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
-    foundImage.description = description
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-
-    const response = {
-      message: "Image description updated successfully.",
-      links: createImageLinks(imageId, isAdmin),
-    }
-
-    res.status(200).json(response)
-  } catch (err) {
-    console.log("Failed to update the description: ", err)
-    res.status(500).json({ error: "Failed to update image description." })
-  }
-}
-
-const updateTags = async (req, res) => {
-  try {
-    //Get tags from request
-    const { tags } = req.body
-    let { imageId } = req.params
-    imageId = Number(imageId)
-    const userId = req.userId
-    const isAdmin = req.isAdmin
-    if (!imageId) {
-      return res.status(400).json({ error: "Please provide imageId." })
-    }
-    if (!tags) {
-      return res.status(400).json({ error: "Please provide description." })
-    }
-    if (!Array.isArray(tags)) {
-      return res.status(400).json({ error: "Please provide tags as an array." })
-    }
-
-    //Get current JSON DB images as an object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Find image and verify whether user has permissions to modify it.
-    const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage) {
-      return res.status(404).json({ error: "Image not found." })
-    }
-    if (foundImage.isDeleted) {
-      return res.status(403).json({ error: "This image has been deleted!" })
-    }
-    if (foundImage.isFlagged) {
-      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
-    }
-    if (foundImage.ownerId !== userId) {
-      return res.status(403).json({ error: "Unauthorized to update tags for this image." })
-    }
-
-    //Update the tags in the image and update JSON DB.
-    foundImage.tags.push(...tags)
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-    const response = {
-      message: "Tags added successfully.",
-      links: createImageLinks(imageId, isAdmin),
-    }
-    res.status(200).json(response)
-  } catch (err) {
-    console.error("Error during adding tags: ", err)
-    res.status(500).json({ error: "Failed to add tags to image." })
-  }
-}
-
 const flagImage = async (req, res) => {
   try {
     //Get id of image needed to be flagged.
@@ -335,12 +229,10 @@ const flagImage = async (req, res) => {
 
     //Find image and verify whether user has permissions to modify it.
     const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage) {
-      return res.status(404).json({ error: "Please provide a valid imageId." })
+    if (!foundImage || foundImage.isDeleted) {
+      return res.status(404).json({ error: "Image not found." })
     }
-    if (foundImage.isDeleted) {
-      return res.status(403).json({ error: "This image has been deleted!" })
-    }
+
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has already been flagged!" })
     }
@@ -428,7 +320,7 @@ const deleteImageById = async (req, res) => {
       return res.status(404).json({ error: "Image not found." })
     }
     if (foundImage.isDeleted) {
-      return res.status(400).json({ error: "This image has already been deleted!" })
+      return res.status(400).json({ error: "Image not found." })
     }
     if (foundImage.isFlagged) {
       return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
@@ -451,18 +343,19 @@ const deleteImageById = async (req, res) => {
   }
 }
 
-const updateImage = async (req, res) => {
+const partiallyUpdateImage = async (req, res) => {
   try {
     let { imageId } = req.params
     imageId = Number(imageId)
     const userId = req.userId
     const isAdmin = req.isAdmin
+    const fieldsToUpdate = req.body
+    const { title, description, tags, url } = fieldsToUpdate
 
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
-
-    const { title, description, tags, url } = req.body
+    const allowedFieldsByUsers = ["title", "description", "tags", "url"]
 
     if (!title && !description && !tags && !url) {
       return res.status(400).json({ error: "Please provide at least one field to update from: title, description, tags or url." })
@@ -477,25 +370,44 @@ const updateImage = async (req, res) => {
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (foundImage.isDeleted) {
-      return res.status(400).json({ error: "This image has been deleted!" })
+    if (!isAdmin && foundImage.isDeleted) {
+      return res.status(400).json({ error: "Image not found." })
     }
 
     if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
-    if (title) {
-      foundImage.title = title
+    // Only certain feilds can be updated by non-admins.
+    if (!isAdmin) {
+      const allFields = Object.keys(fieldsToUpdate)
+      const invalidFields = allFields.filter(
+        (field) => fieldsToUpdate[field] !== undefined && !allowedFieldsByUsers.includes(field)
+      )
+      if (invalidFields.length > 0) {
+        return res.status(403).json({ error: `Unauthorized to update: ${invalidFields.join(", ")}` })
+      }
     }
-    if (description) {
-      foundImage.description = description
-    }
-    if (Array.isArray(tags)) {
-      foundImage.tags = tags
-    }
-    if (url) {
-      foundImage.url = url
+
+    for (const key in fieldsToUpdate) {
+      const value = fieldsToUpdate[key]
+      if (value !== undefined) {
+        if (key === "title" && typeof value !== "string") {
+          return res.status(400).json({ error: `${key} should be a string.` })
+        }
+        if (key === "description" && typeof value !== "string") {
+          return res.status(400).json({ error: `${key} should be a string.` })
+        }
+        if (key === "tags" && !Array.isArray(value)) {
+          return res.status(400).json({ error: `${key} should be an array.` })
+        }
+        if (key === "url" && typeof value !== "string") {
+          return res.status(400).json({ error: `${key} should be a string.` })
+        }
+
+        //Only admin can add the rest so type checking isnt done for them.
+        foundImage[key] = value
+      }
     }
 
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
@@ -509,14 +421,62 @@ const updateImage = async (req, res) => {
     res.status(500).json({ error: "Failed to update the image." })
   }
 }
+
+const updateImage = async (req, res) => {
+  try {
+    let { imageId } = req.params
+    imageId = Number(imageId)
+    const userId = req.userId
+    const isAdmin = req.isAdmin
+    const fieldsToUpdate = req.body
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: "Only an admin can send the PUT request!" })
+    }
+    if (!imageId) {
+      return res.status(400).json({ error: "Please provide imageId." })
+    }
+
+    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+    const allImagesObject = JSON.parse(allImagesJSON)
+
+    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
+    let foundImage = allImagesObject.images[foundImageIndex]
+
+    if (!foundImage) {
+      return res.status(404).json({ error: "Image not found." })
+    }
+    if (!isAdmin && foundImage.isDeleted) {
+      return res.status(400).json({ error: "Image not found." })
+    }
+
+    if (!isAdmin && foundImage.ownerId !== userId) {
+      return res.status(403).json({ error: "Unauthorized to update this image." })
+    }
+
+    allImagesObject.images[foundImageIndex] = {
+      ...fieldsToUpdate,
+    }
+
+    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+    const response = {
+      message: "Image details updated successfully.",
+      links: createImageLinks(imageId, isAdmin),
+    }
+    res.status(200).json(response)
+  } catch (err) {
+    console.error("Error during image update: ", err)
+    res.status(500).json({ error: "Failed to update the image." })
+  }
+}
+
 export {
   createImage,
   getImageById,
   getBatchOfImages,
-  updateDescription,
-  updateTags,
   flagImage,
   getImagesByCommonTags,
   deleteImageById,
+  partiallyUpdateImage,
   updateImage,
 }

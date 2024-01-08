@@ -66,7 +66,7 @@ const updateCurrentUserDetails = async (req, res) => {
     const userId = req.userId
     const { userName, password } = req.body
 
-    if (!userName && !password) {
+    if (!(userName || password)) {
       return res.status(400).json({ error: "userName or password is required. Please provide userName or password in the body." })
     }
 
@@ -81,7 +81,7 @@ const updateCurrentUserDetails = async (req, res) => {
     const foundUser = allUsersObject.users[foundIndex]
 
     if (foundUser.isDeleted) {
-      return res.status(400).json({ error: "The user is deleted!" })
+      return res.status(400).json({ error: "User not found." })
     }
     if (userName) {
       const existingUser = allUsersObject.users.find((user) => user.userName === userName)
@@ -123,7 +123,7 @@ const deleteCurrentUser = async (req, res) => {
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {
-      return res.status(404).json({ error: "User already deleted!" })
+      return res.status(404).json({ error: "User not found." })
     }
 
     allUsersObject.users[foundIndex].isDeleted = true

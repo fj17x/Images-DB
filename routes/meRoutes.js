@@ -5,7 +5,6 @@ const meRouter = express.Router()
 
 //Routes for user to view, modify and delete their details.
 meRouter.get("/", verifyToken, meController.getCurrentUserDetails)
-meRouter.put("/", verifyToken, meController.updateCurrentUserDetails)
 meRouter.patch("/", verifyToken, meController.updateCurrentUserDetails)
 meRouter.delete("/", verifyToken, meController.deleteCurrentUser)
 

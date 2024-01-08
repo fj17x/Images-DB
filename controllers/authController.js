@@ -43,6 +43,10 @@ const register = async (req, res) => {
     const allUsersObject = JSON.parse(allUsersJSON)
 
     const existingUser = allUsersObject.users.find((user) => user.userName === userName)
+    if (existingUser.isDeleted) {
+      return res.status(400).json({ error: "Please register using a different userName." })
+    }
+
     if (existingUser) {
       return res.status(400).json({ error: "userName already exists. Choose a different userName." })
     }
@@ -53,11 +57,9 @@ const register = async (req, res) => {
     allUsersObject.users.push(newUserObject)
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
 
-    const jwtToken = jwt.sign({ userId: newUserId }, secretKey)
     console.log(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
     const response = {
-      message: "Successfully registered!",
-      jwtToken,
+      message: "Successfully registered! Please login at /login route.",
       links: authLinks,
     }
     res.status(201).json(response)
@@ -83,6 +85,10 @@ const login = async (req, res) => {
     const user = allUsersObject.users.find((user) => user.userName === userName)
     if (!user) {
       return res.status(400).json({ error: "Such a user does not exist. Please register first." })
+    }
+
+    if (user.isDeleted) {
+      return res.status(400).json({ error: "Please register with a new userName!" })
     }
 
     const passwordMatches = await bcrypt.compare(passwordToString, user.password)

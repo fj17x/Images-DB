@@ -74,7 +74,7 @@ const getUserById = async (req, res) => {
     }
 
     if (foundUser.isDeleted) {
-      return res.status(400).json({ error: "User has been deleted!." })
+      return res.status(400).json({ error: "User not found." })
     }
 
     //Return details of user.
@@ -155,6 +155,49 @@ const fetchBatchOfUsers = async (req, res) => {
   }
 }
 
+const partiallyUpdateUserById = async (req, res) => {
+  try {
+    const isAdmin = req.isAdmin
+    if (!isAdmin) {
+      return res.status(403).json({
+        error: "Only the admin can update the users!",
+      })
+    }
+    let { userId } = req.params
+    userId = Number(userId)
+    const updatedData = req.body
+
+    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
+    const allUsersObject = JSON.parse(allUsersJSON)
+
+    const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === Number(userId))
+
+    if (foundUserIndex === -1) {
+      return res.status(404).json({ error: "User not found." })
+    }
+
+    if (allUsersObject.users[foundUserIndex].isDeleted) {
+      res.status(404).json({ error: "User not found." })
+    }
+
+    allUsersObject.users[foundUserIndex] = {
+      ...allUsersObject.users[foundUserIndex],
+      ...updatedData,
+    }
+
+    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
+
+    const response = {
+      message: "User updated successfully.",
+      userLinks: createUsersLinks(userId),
+    }
+    res.status(200).json(response)
+  } catch (err) {
+    console.error("Error while updating user: ", err)
+    res.status(500).json({ error: "Failed to update user." })
+  }
+}
+
 const updateUserById = async (req, res) => {
   try {
     const isAdmin = req.isAdmin
@@ -177,11 +220,10 @@ const updateUserById = async (req, res) => {
     }
 
     if (allUsersObject.users[foundUserIndex].isDeleted) {
-      res.status(404).json({ error: "This user has been deleted." })
+      res.status(404).json({ error: "User not found." })
     }
 
     allUsersObject.users[foundUserIndex] = {
-      ...allUsersObject.users[foundUserIndex],
       ...updatedData,
     }
 
@@ -261,7 +303,7 @@ const deleteUserById = async (req, res) => {
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {
-      return res.status(404).json({ error: "User already softly deleted!" })
+      return res.status(404).json({ error: "User not found." })
     }
 
     allUsersObject.users[foundIndex].isDeleted = true
@@ -278,4 +320,4 @@ const deleteUserById = async (req, res) => {
   }
 }
 
-export { getUserById, fetchBatchOfUsers, updateUserById, createUser, deleteUserById }
+export { getUserById, fetchBatchOfUsers, updateUserById, createUser, deleteUserById, partiallyUpdateUserById }

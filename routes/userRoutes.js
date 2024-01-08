@@ -13,7 +13,7 @@ userRouter.get("/:userId(\\d+)", verifyToken, userController.getUserById)
 userRouter.put("/:userId(\\d+)", verifyToken, userController.updateUserById)
 
 // PATCH method to get update a user. (Uses regex to only get numbers.)
-userRouter.patch("/:userId(\\d+)", verifyToken, userController.updateUserById)
+userRouter.patch("/:userId(\\d+)", verifyToken, userController.partiallyUpdateUserById)
 
 // POST method to get create a user.
 userRouter.post("/", verifyToken, userController.createUser)
