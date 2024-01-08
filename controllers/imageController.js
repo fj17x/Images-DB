@@ -154,7 +154,7 @@ const getBatchOfImages = async (req, res) => {
     const isAdmin = req.isAdmin
 
     //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0 } = req.query
+    let { limit = 10, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
     limit = Number(limit)
     offset = Number(offset)
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
@@ -181,6 +181,16 @@ const getBatchOfImages = async (req, res) => {
       }
       return res.status(404).json({ error: "No images found. " })
     }
+
+    batchOfUserImages.sort((imageA, imageB) => {
+      let comparison = 0
+      if (imageA[sortBy] < imageB[sortBy]) {
+        comparison = -1
+      } else if (imageA[sortBy] > imageB[sortBy]) {
+        comparison = 1
+      }
+      return sortOrder === "desc" ? comparison * -1 : comparison
+    })
 
     // Generate links for each image in the batch
     const imageLinks = batchOfUserImages.map((image) => {

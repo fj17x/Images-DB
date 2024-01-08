@@ -102,7 +102,7 @@ const fetchBatchOfUsers = async (req, res) => {
     }
 
     //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0 } = req.query
+    let { limit = 10, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
     limit = Number(limit)
     offset = Number(offset)
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
@@ -118,10 +118,21 @@ const fetchBatchOfUsers = async (req, res) => {
     const allUsersObject = JSON.parse(allUsersJSON)
 
     const usersWithoutDeleted = allUsersObject.users.filter((user) => !user.isDeleted)
-    const batchOfUsers = usersWithoutDeleted.users.slice(startIndex, endIndex)
+    console.log(usersWithoutDeleted)
+    const batchOfUsers = usersWithoutDeleted.slice(startIndex, endIndex)
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
     }
+
+    batchOfUsers.sort((imageA, imageB) => {
+      let comparison = 0
+      if (imageA[sortBy] < imageB[sortBy]) {
+        comparison = -1
+      } else if (imageA[sortBy] > imageB[sortBy]) {
+        comparison = 1
+      }
+      return sortOrder === "desc" ? comparison * -1 : comparison
+    })
 
     // Generate links for each user in the batch
     const userLinks = batchOfUsers.map((user) => {
@@ -166,7 +177,7 @@ const updateUserById = async (req, res) => {
     }
 
     if (allUsersObject.users[foundUserIndex].isDeleted) {
-      res.status(400).json({ error: "This user has been deleted." })
+      res.status(404).json({ error: "This user has been deleted." })
     }
 
     allUsersObject.users[foundUserIndex] = {
@@ -250,7 +261,7 @@ const deleteUserById = async (req, res) => {
     }
 
     if (allUsersObject.users[foundIndex].isDeleted) {
-      return res.status(400).json({ error: "User already softly deleted!" })
+      return res.status(404).json({ error: "User already softly deleted!" })
     }
 
     allUsersObject.users[foundIndex].isDeleted = true

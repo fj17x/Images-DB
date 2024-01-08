@@ -81,7 +81,7 @@ const updateCurrentUserDetails = async (req, res) => {
     const foundUser = allUsersObject.users[foundIndex]
 
     if (foundUser.isDeleted) {
-      return res.status(404).json({ error: "User is deleted!" })
+      return res.status(400).json({ error: "The user is deleted!" })
     }
     if (userName) {
       const existingUser = allUsersObject.users.find((user) => user.userName === userName)
