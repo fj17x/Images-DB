@@ -199,7 +199,8 @@ const getBatchOfImages = async (req, res) => {
     })
 
     const response = {
-      message: `Successfully fetched ${batchOfUserImages.length} images!`,
+      message: `Successfully fetched images!`,
+      fetched: batchOfUserImages.length,
       data: imageData,
       links: imageLinks,
     }
@@ -208,46 +209,6 @@ const getBatchOfImages = async (req, res) => {
   } catch (err) {
     console.error("Error during fetching of images.: ", err)
     res.status(500).json({ error: "Failed to fetch images." })
-  }
-}
-
-const flagImage = async (req, res) => {
-  try {
-    //Get id of image needed to be flagged.
-    let { imageId } = req.params
-    imageId = Number(imageId)
-    const isAdmin = req.isAdmin
-    if (!req.isAdmin) {
-      return res.status(403).json({
-        error: "Only admins can access this!",
-      })
-    }
-
-    //Fetch all the images from JSON DB as JS object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Find image and verify whether user has permissions to modify it.
-    const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage || foundImage.isDeleted) {
-      return res.status(404).json({ error: "Image not found." })
-    }
-
-    if (foundImage.isFlagged) {
-      return res.status(400).json({ error: "This image has already been flagged!" })
-    }
-
-    //Update description and update JSON DB. (Will update as objects are referenced by memory address.)
-    foundImage.isFlagged = true
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
-    const response = {
-      message: "Image flagged successfully.",
-      links: createImageLinks(imageId, isAdmin),
-    }
-    res.status(200).json(response)
-  } catch (err) {
-    console.error("Error during flagging: ", err)
-    res.status(500).json({ error: "Failed to flag image." })
   }
 }
 
@@ -287,7 +248,8 @@ const getImagesByCommonTags = async (req, res) => {
       return res.status(404).json({ error: "No images found with given tags." })
     }
     const response = {
-      message: `${filteredImages.length} Images with such tags found successfully.`,
+      message: ` Images with such tags found successfully.`,
+      fetched: filteredImages.length,
       data: imageData,
       links: imageLinks,
     }
@@ -330,6 +292,7 @@ const deleteImageById = async (req, res) => {
     }
 
     //Soft delete the image and write in DB.
+    foundImage.modifiedAt = new Date()
     foundImage.isDeleted = true
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     const response = {
@@ -378,7 +341,7 @@ const partiallyUpdateImage = async (req, res) => {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
-    // Only certain feilds can be updated by non-admins.
+    // Only certain fields can be updated by non-admins.
     if (!isAdmin) {
       const allFields = Object.keys(fieldsToUpdate)
       const invalidFields = allFields.filter(
@@ -392,24 +355,16 @@ const partiallyUpdateImage = async (req, res) => {
     for (const key in fieldsToUpdate) {
       const value = fieldsToUpdate[key]
       if (value !== undefined) {
-        if (key === "title" && typeof value !== "string") {
-          return res.status(400).json({ error: `${key} should be a string.` })
-        }
-        if (key === "description" && typeof value !== "string") {
+        if ((key === "title" || key === "description" || key === "url") && typeof value !== "string") {
           return res.status(400).json({ error: `${key} should be a string.` })
         }
         if (key === "tags" && !Array.isArray(value)) {
           return res.status(400).json({ error: `${key} should be an array.` })
         }
-        if (key === "url" && typeof value !== "string") {
-          return res.status(400).json({ error: `${key} should be a string.` })
-        }
-
-        //Only admin can add the rest so type checking isnt done for them.
         foundImage[key] = value
       }
     }
-
+    foundImage.modifiedAt = new Date()
     await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     const response = {
       message: "Image details updated successfully.",
@@ -470,13 +425,4 @@ const updateImage = async (req, res) => {
   }
 }
 
-export {
-  createImage,
-  getImageById,
-  getBatchOfImages,
-  flagImage,
-  getImagesByCommonTags,
-  deleteImageById,
-  partiallyUpdateImage,
-  updateImage,
-}
+export { createImage, getImageById, getBatchOfImages, getImagesByCommonTags, deleteImageById, partiallyUpdateImage, updateImage }

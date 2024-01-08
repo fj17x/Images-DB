@@ -32,7 +32,7 @@ const verifyToken = async (req, res, next) => {
       return res.status(400).json({ error: `Such a user with id:${userId} does not exist. Please register first.` })
     }
     if (user.isDeleted) {
-      return res.status(400).json({ error: `The user with id:${userId} was deleted.` })
+      return res.status(400).json({ error: `User not found.` })
     }
     req.isAdmin = user.isAdmin ? true : false
     next()

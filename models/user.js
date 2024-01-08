@@ -6,5 +6,6 @@ export default class User {
     this.userName = userName
     this.password = password
     this.createdAt = new Date()
+    this.modifiedAt = new Date()
   }
 }

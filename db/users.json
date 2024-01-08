@@ -6,7 +6,8 @@
       "userName": "admin",
       "password": "$2b$15$AVox.jFuwfnmXJ9z/orlGOAbqv.cOawnHHXxMF0kV6yRYmmGqTVjm",
       "createdAt": "2023-12-15T08:52:53.633Z",
-      "isDeleted": false
+      "isDeleted": false,
+      "modifiedAt": "2024-01-08T10:16:51.146Z"
     },
     {
       "isAdmin": false,
@@ -22,7 +23,8 @@
       "userName": "thomas",
       "password": "$2b$15$Y9.pTB5H62rzxfFVJ3JMA.Xzgh.dZnh5jch/qfki.8iETl//v6/OS",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": false
+      "isDeleted": false,
+      "modifiedAt": "2024-01-08T10:15:08.081Z"
     },
     {
       "isAdmin": false,
@@ -30,7 +32,8 @@
       "userName": "yenson",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": false
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
     },
     {
       "isAdmin": false,
@@ -38,7 +41,8 @@
       "userName": "charlie",
       "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
       "createdAt": "2023-12-15T16:13:30.803Z",
-      "isDeleted": false
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
     },
     {
       "isAdmin": false,
@@ -46,7 +50,8 @@
       "id": 6,
       "userName": "carl123",
       "password": "$2b$15$Br9eOB1hSmMWLyz1vaqRmONDFmIly/9vxLAcVA8n2y9ZRyAFFT6lC",
-      "createdAt": "2024-01-08T05:42:07.761Z"
+      "createdAt": "2023-12-16T05:42:07.761Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
     },
     {
       "isAdmin": false,
@@ -54,7 +59,224 @@
       "id": 7,
       "userName": "jackson",
       "password": "$2b$15$esN134qRhQUR9p5TJpZ4UuAI5H0lvR5.z6VXK5/9feCFYE8nocH0C",
-      "createdAt": "2024-01-08T05:44:58.549Z"
+      "createdAt": "2023-12-16T05:44:58.549Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": true,
+      "id": 8,
+      "userName": "chucky",
+      "password": "$2b$15$AVox.jFuwfnmXJ9z/orlGOAbqv.cOawnHHXxMF0kV6yRYmmGqTVjm",
+      "createdAt": "2023-12-15T08:52:53.633Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 9,
+      "userName": "stephen",
+      "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
+      "createdAt": "2023-12-15T12:39:50.491Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:42:58.210Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 10,
+      "userName": "hawkmen",
+      "password": "$2b$15$Y9.pTB5H62rzxfFVJ3JMA.Xzgh.dZnh5jch/qfki.8iETl//v6/OS",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 11,
+      "userName": "edric",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 12,
+      "userName": "plank",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 13,
+      "userName": "ninja",
+      "password": "$2b$15$Br9eOB1hSmMWLyz1vaqRmONDFmIly/9vxLAcVA8n2y9ZRyAFFT6lC",
+      "createdAt": "2023-12-16T05:42:07.761Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 14,
+      "userName": "monkeyman123",
+      "password": "$2b$15$esN134qRhQUR9p5TJpZ4UuAI5H0lvR5.z6VXK5/9feCFYE8nocH0C",
+      "createdAt": "2023-12-16T05:44:58.549Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": true,
+      "id": 15,
+      "userName": "peson",
+      "password": "$2b$15$AVox.jFuwfnmXJ9z/orlGOAbqv.cOawnHHXxMF0kV6yRYmmGqTVjm",
+      "createdAt": "2023-12-15T08:52:53.633Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 16,
+      "userName": "garfield",
+      "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
+      "createdAt": "2023-12-15T12:39:50.491Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:42:58.210Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 17,
+      "userName": "raj",
+      "password": "$2b$15$Y9.pTB5H62rzxfFVJ3JMA.Xzgh.dZnh5jch/qfki.8iETl//v6/OS",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 18,
+      "userName": "betty",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 19,
+      "userName": "qardiff",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 20,
+      "userName": "pluck",
+      "password": "$2b$15$Br9eOB1hSmMWLyz1vaqRmONDFmIly/9vxLAcVA8n2y9ZRyAFFT6lC",
+      "createdAt": "2023-12-16T05:42:07.761Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 21,
+      "userName": "oliver",
+      "password": "$2b$15$esN134qRhQUR9p5TJpZ4UuAI5H0lvR5.z6VXK5/9feCFYE8nocH0C",
+      "createdAt": "2023-12-16T05:44:58.549Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 22,
+      "userName": "francis",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 23,
+      "userName": "user999",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 24,
+      "userName": "chump",
+      "password": "$2b$15$Br9eOB1hSmMWLyz1vaqRmONDFmIly/9vxLAcVA8n2y9ZRyAFFT6lC",
+      "createdAt": "2023-12-16T05:42:07.761Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 25,
+      "userName": "redelectric",
+      "password": "$2b$15$esN134qRhQUR9p5TJpZ4UuAI5H0lvR5.z6VXK5/9feCFYE8nocH0C",
+      "createdAt": "2023-12-16T05:44:58.549Z",
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": true,
+      "id": 26,
+      "userName": "indian",
+      "password": "$2b$15$AVox.jFuwfnmXJ9z/orlGOAbqv.cOawnHHXxMF0kV6yRYmmGqTVjm",
+      "createdAt": "2023-12-15T08:52:53.633Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 27,
+      "userName": "cuper",
+      "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
+      "createdAt": "2023-12-15T12:39:50.491Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:42:58.210Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 28,
+      "userName": "sartan",
+      "password": "$2b$15$Y9.pTB5H62rzxfFVJ3JMA.Xzgh.dZnh5jch/qfki.8iETl//v6/OS",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 29,
+      "userName": "understand",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "id": 30,
+      "userName": "hubert",
+      "password": "$2b$15$5DIDCyN/er0EvX3Fr1U9KumKGC4C4n/8BFgMcmjTU0IaR8GpHLdDe",
+      "createdAt": "2023-12-15T16:13:30.803Z",
+      "isDeleted": false,
+      "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "isAdmin": false,
+      "isDeleted": false,
+      "id": 31,
+      "userName": "seplis",
+      "password": "$2b$15$sGtNBserASUpeKAW83sJh.8GRhfg.JdE.y2.WJwHUxM4UMlCQZVCu",
+      "createdAt": "2024-01-08T09:50:11.957Z",
+      "modifiedAt": "2024-01-08T09:50:11.957Z"
     }
   ]
 }

@@ -7,6 +7,7 @@ import bcrypt from "bcrypt"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const usersFilePath = path.join(__dirname, "..", "db", "users.json")
+const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
 
 //Function to create HATEOS links.
 const createUsersLinks = (userId) => {
@@ -118,7 +119,6 @@ const fetchBatchOfUsers = async (req, res) => {
     const allUsersObject = JSON.parse(allUsersJSON)
 
     const usersWithoutDeleted = allUsersObject.users.filter((user) => !user.isDeleted)
-    console.log(usersWithoutDeleted)
     const batchOfUsers = usersWithoutDeleted.slice(startIndex, endIndex)
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
@@ -144,7 +144,8 @@ const fetchBatchOfUsers = async (req, res) => {
     })
 
     const response = {
-      message: `Successfully fetched ${userData.length} users!`,
+      message: `Successfully fetched users!`,
+      fetched: userData.length,
       data: userData,
       userLinks: userLinks,
     }
@@ -171,12 +172,12 @@ const partiallyUpdateUserById = async (req, res) => {
     const allUsersObject = JSON.parse(allUsersJSON)
 
     const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === Number(userId))
-
-    if (foundUserIndex === -1) {
+    const foundUser = allUsersObject.users[foundUserIndex]
+    if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
 
-    if (allUsersObject.users[foundUserIndex].isDeleted) {
+    if (foundUser.isDeleted) {
       res.status(404).json({ error: "User not found." })
     }
 
@@ -185,7 +186,25 @@ const partiallyUpdateUserById = async (req, res) => {
       ...updatedData,
     }
 
+    foundUser.modifiedAt = new Date()
+
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
+
+    if (updatedData.userName) {
+      const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
+      const allImagesObject = JSON.parse(allImagesJSON)
+      let userImages = allImagesObject.images.filter(
+        (image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId) && !image.isDeleted
+      )
+
+      userImages.map((image) => {
+        if (image.ownerId === userId) {
+          image.ownerUserName = updatedData.userName
+        }
+        return image
+      })
+      await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2), "utf-8")
+    }
 
     const response = {
       message: "User updated successfully.",
@@ -212,21 +231,20 @@ const updateUserById = async (req, res) => {
 
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
-
     const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === Number(userId))
+    const foundUser = allUsersObject.users[foundUserIndex]
 
-    if (foundUserIndex === -1) {
+    if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
 
-    if (allUsersObject.users[foundUserIndex].isDeleted) {
+    if (foundUser.isDeleted) {
       res.status(404).json({ error: "User not found." })
     }
 
     allUsersObject.users[foundUserIndex] = {
       ...updatedData,
     }
-
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
 
     const response = {
@@ -260,7 +278,6 @@ const createUser = async (req, res) => {
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
     const existingUser = allUsersObject.users.find((user) => user.userName === userName)
-    console.log("existingUser: ", existingUser)
     if (existingUser) {
       return res.status(400).json({ error: "This userName already exists!." })
     }
@@ -297,16 +314,18 @@ const deleteUserById = async (req, res) => {
     const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
     const allUsersObject = JSON.parse(allUsersJSON)
 
-    const foundIndex = allUsersObject.users.findIndex((user) => user.id === userId)
-    if (foundIndex === -1) {
+    const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === userId)
+    const foundUser = allUsersObject.users[foundUserIndex]
+    if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
 
-    if (allUsersObject.users[foundIndex].isDeleted) {
+    if (foundUser.isDeleted) {
       return res.status(404).json({ error: "User not found." })
     }
 
-    allUsersObject.users[foundIndex].isDeleted = true
+    foundUser.isDeleted = true
+    foundUser.modifiedAt = new Date()
 
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
 

@@ -7,6 +7,7 @@ export default class Image {
     this.title = title
     this.description = description
     this.createdAt = new Date()
+    this.modifiedAt = new Date()
     this.ownerId = ownerId
     this.ownerUserName = ownerUserName
     this.tags = tags
