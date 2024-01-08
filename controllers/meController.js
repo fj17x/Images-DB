@@ -114,7 +114,6 @@ const updateCurrentUserDetails = async (req, res) => {
       const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
       foundUser.password = hashedPassword
     }
-    console.log(foundUser)
     foundUser.modifiedAt = new Date()
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
 

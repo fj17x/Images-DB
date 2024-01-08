@@ -43,7 +43,7 @@ const register = async (req, res) => {
     const allUsersObject = JSON.parse(allUsersJSON)
 
     const existingUser = allUsersObject.users.find((user) => user.userName === userName)
-    if (existingUser.isDeleted) {
+    if (existingUser?.isDeleted) {
       return res.status(400).json({ error: "Please register using a different userName." })
     }
 
