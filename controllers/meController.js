@@ -87,11 +87,11 @@ const updateCurrentUserDetails = async (req, res) => {
     if (userName) {
       const existingUser = allUsersObject.users.find((user) => user.userName === userName)
       if (existingUser && existingUser.userName !== req.userName) {
-        return res.status(400).json({ error: "This username already exists! Change your username to something else!" })
+        return res.status(400).json({ error: "This userName already exists! Change your userName to something else!" })
       }
       foundUser.userName = userName
 
-      //change username in all images.
+      //change userName in all images.
       const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
       const allImagesObject = JSON.parse(allImagesJSON)
 
@@ -101,7 +101,7 @@ const updateCurrentUserDetails = async (req, res) => {
 
       userImages.map((image) => {
         if (image.ownerId === userId) {
-          image.userName = userName
+          image.ownerUserName = userName
         }
         return image
       })

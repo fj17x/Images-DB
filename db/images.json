@@ -11,8 +11,7 @@
       "ownerUserName": "thomas",
       "tags": ["bird", "fly", "rooster"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "hudson"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -38,8 +37,7 @@
       "ownerUserName": "admin",
       "tags": ["smile", "man", "friend", "fly", "amazing", "funny"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -65,8 +63,7 @@
       "ownerUserName": "admin",
       "tags": ["smile", "man", "2022", "friend"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -79,8 +76,7 @@
       "ownerUserName": "admin",
       "tags": ["fly", "bird", "canada"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -199,8 +195,7 @@
       "ownerUserName": "admin",
       "tags": ["lake", "nature", "scenery"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -253,8 +248,7 @@
       "ownerUserName": "admin",
       "tags": ["forest", "autumn", "nature"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -320,8 +314,7 @@
       "ownerUserName": "admin",
       "tags": ["sailing", "boats", "water"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
@@ -387,8 +380,7 @@
       "ownerUserName": "admin",
       "tags": ["camping", "night", "stars"],
       "isDeleted": false,
-      "modifiedAt": "2023-12-16T08:30:00.000Z",
-      "userName": "admin"
+      "modifiedAt": "2023-12-16T08:30:00.000Z"
     },
     {
       "isFlagged": false,
