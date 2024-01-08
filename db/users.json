@@ -269,15 +269,6 @@
       "createdAt": "2023-12-15T16:13:30.803Z",
       "isDeleted": false,
       "modifiedAt": "2023-12-16T09:40:19.482Z"
-    },
-    {
-      "isAdmin": false,
-      "isDeleted": false,
-      "id": 31,
-      "userName": "seplis",
-      "password": "$2b$15$sGtNBserASUpeKAW83sJh.8GRhfg.JdE.y2.WJwHUxM4UMlCQZVCu",
-      "createdAt": "2024-01-08T09:50:11.957Z",
-      "modifiedAt": "2024-01-08T09:50:11.957Z"
     }
   ]
 }
