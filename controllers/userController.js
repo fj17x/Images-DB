@@ -184,9 +184,8 @@ const partiallyUpdateUserById = async (req, res) => {
     allUsersObject.users[foundUserIndex] = {
       ...allUsersObject.users[foundUserIndex],
       ...updatedData,
+      modifiedAt: new Date(),
     }
-
-    foundUser.modifiedAt = new Date()
 
     await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
 

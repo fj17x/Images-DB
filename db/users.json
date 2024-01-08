@@ -7,7 +7,7 @@
       "password": "$2b$15$AVox.jFuwfnmXJ9z/orlGOAbqv.cOawnHHXxMF0kV6yRYmmGqTVjm",
       "createdAt": "2023-12-15T08:52:53.633Z",
       "isDeleted": false,
-      "modifiedAt": "2024-01-08T10:16:51.146Z"
+      "modifiedAt": "2023-01-08T11:00:27.035Z"
     },
     {
       "isAdmin": false,
@@ -16,7 +16,7 @@
       "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
       "createdAt": "2023-12-15T12:39:50.491Z",
       "isDeleted": false,
-      "modifiedAt": "2024-01-08T10:16:51.146Z"
+      "modifiedAt": "2023-01-08T10:59:01.641Z"
     },
     {
       "isAdmin": false,
@@ -25,7 +25,7 @@
       "password": "$2b$15$Y9.pTB5H62rzxfFVJ3JMA.Xzgh.dZnh5jch/qfki.8iETl//v6/OS",
       "createdAt": "2023-12-15T16:13:30.803Z",
       "isDeleted": false,
-      "modifiedAt": "2024-01-08T10:15:08.081Z"
+      "modifiedAt": "2023-01-08T10:15:08.081Z"
     },
     {
       "isAdmin": false,

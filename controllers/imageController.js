@@ -356,10 +356,10 @@ const partiallyUpdateImage = async (req, res) => {
       const value = fieldsToUpdate[key]
       if (value !== undefined) {
         if ((key === "title" || key === "description" || key === "url") && typeof value !== "string") {
-          return res.status(400).json({ error: `${key} should be a string.` })
+          return res.status(400).json({ error: `${key} should be a string!` })
         }
         if (key === "tags" && !Array.isArray(value)) {
-          return res.status(400).json({ error: `${key} should be an array.` })
+          return res.status(400).json({ error: `${key} should be an array!` })
         }
         foundImage[key] = value
       }
