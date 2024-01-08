@@ -15,7 +15,8 @@
       "userName": "carl",
       "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
       "createdAt": "2023-12-15T12:39:50.491Z",
-      "isDeleted": false
+      "isDeleted": false,
+      "modifiedAt": "2024-01-08T10:16:51.146Z"
     },
     {
       "isAdmin": false,
