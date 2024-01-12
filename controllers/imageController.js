@@ -118,7 +118,6 @@ const getImageById = async (req, res) => {
     //Get current JSON DB images as an object.
     const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
     const allImagesObject = JSON.parse(allImagesJSON)
-    console.log("allImagesObject: ", allImagesObject)
 
     //Search for the image and check whether user has permission to access it.
     const foundImage = allImagesObject.images.find((image) => image.id === imageId)
