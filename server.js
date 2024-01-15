@@ -3,6 +3,7 @@ import imageRouter from "./routes/imageRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
+import sequelize from "./db/connection.js"
 
 const app = express()
 const PORT = 4000
