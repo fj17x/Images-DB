@@ -9,35 +9,16 @@ const User = sequelize.define(
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      unique: true,
     },
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // createdAt: {
-    //   type: DataTypes.DATE,
-    //   defaultValue: DataTypes.NOW,
-    // },
-    // modifiedAt: {
-    //   type: DataTypes.DATE,
-    //   defaultValue: DataTypes.NOW,
-    // },
-    ownerUserName: {
-      type: DataTypes.STRING,
-    },
-    tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: [],
-    },
-    // isDeleted: {
-    //   type: DataTypes.BOOLEAN,
-    //   defaultValue: false,
-    // },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -49,16 +30,5 @@ const User = sequelize.define(
   }
 )
 
+sequelize.sync()
 export default User
-
-// export default class User {
-//   isAdmin = false
-//   isDeleted = false
-//   constructor(id, userName, password) {
-//     this.id = id
-//     this.userName = userName
-//     this.password = password
-//     this.createdAt = new Date()
-//     this.modifiedAt = new Date()
-//   }
-// }

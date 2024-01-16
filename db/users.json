@@ -10,13 +10,7 @@
       "modifiedAt": "2023-12-08T11:00:27.035Z"
     },
     {
-      "isAdmin": false,
-      "id": 2,
-      "userName": "carl",
-      "password": "$2b$15$F64hMcywpSmtwujG/HwVR.ShNPqP6LTgY1JoovrFEraA0qzQfnITG",
-      "createdAt": "2023-12-15T12:39:50.491Z",
-      "isDeleted": false,
-      "modifiedAt": "2023-12-08T10:59:01.641Z"
+      "createdAt": "2024"
     },
     {
       "isAdmin": false,
@@ -269,6 +263,11 @@
       "createdAt": "2023-12-15T16:13:30.803Z",
       "isDeleted": false,
       "modifiedAt": "2023-12-16T09:40:19.482Z"
+    },
+    {
+      "tags": [],
+      "isAdmin": false,
+      "id": null
     }
   ]
 }

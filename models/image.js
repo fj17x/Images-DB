@@ -23,14 +23,6 @@ const Image = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: "",
     },
-    // createdAt: {
-    //   type: DataTypes.DATE,
-    //   defaultValue: DataTypes.NOW,
-    // },
-    // modifiedAt: {
-    //   type: DataTypes.DATE,
-    //   defaultValue: DataTypes.NOW,
-    // },
     ownerId: {
       type: DataTypes.INTEGER,
     },
@@ -45,31 +37,12 @@ const Image = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    // isDeleted: {
-    //   type: DataTypes.BOOLEAN,
-    //   defaultValue: false,
-    // },
   },
   {
     paranoid: true,
     deletedAt: "destroyTime",
   }
 )
+sequelize.sync()
 
 export default Image
-
-// export default class Image {
-//   isFlagged = false
-//   isDeleted = false
-//   constructor(id, url, title, description = "", ownerId, ownerUserName, tags = []) {
-//     this.id = id
-//     this.url = url
-//     this.title = title
-//     this.description = description
-//     this.createdAt = new Date()
-//     this.modifiedAt = new Date()
-//     this.ownerId = ownerId
-//     this.ownerUserName = ownerUserName
-//     this.tags = tags
-//   }
-// }
