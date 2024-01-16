@@ -1,10 +1,8 @@
-import path from "path"
-import { fileURLToPath } from "url"
-import User from "../models/User.js"
 import bcrypt from "bcrypt"
 import { QueryTypes } from "sequelize"
 import sequelize from "../db/connection.js"
-
+import User from "../models/User.js"
+import Image from "../models/Image.js"
 
 //Function to create HATEOS links.
 const createUsersLinks = (userId) => {
@@ -60,18 +58,10 @@ const getUserById = async (req, res) => {
     //Get ID of user from request.
     let { userId } = req.params
     let { showDeleted = "false" } = req.query
-    console.log("🚀 ~ getUserById ~ showDeleted:", showDeleted)
     userId = Number(userId)
-    let returnOnlyDeleted = false
-
-    if (showDeleted === "false") {
-      returnOnlyDeleted = true
-    } else {
-      returnOnlyDeleted = false
-    }
 
     //Search for the user and return it.
-    const foundUser = await User.findOne({ where: { id: userId }, paranoid: returnOnlyDeleted })
+    const foundUser = await User.findOne({ where: { id: userId }, paranoid: showDeleted === "false" ? true : false })
     if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
@@ -79,7 +69,7 @@ const getUserById = async (req, res) => {
     //Return details of user.
     const response = {
       message: "Found user!",
-      data: { ...foundUser },
+      data: { ...foundUser }.dataValues,
       links: createUsersLinks(userId),
     }
     res.status(200).json(response)
@@ -99,21 +89,25 @@ const fetchBatchOfUsers = async (req, res) => {
       })
     }
 
-    //Get limit and offset and calculate start and end index.
+    //Get limit and offset.
     let { limit = 10, offset = 0, sortBy = "id", sortOrder = "ASC", showDeleted = "false" } = req.query
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()
-    let returnOnlyDeleted = false
 
-    if (showDeleted === "false") {
-      returnOnlyDeleted = true
-    } else {
-      returnOnlyDeleted = false
+    if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
+      return res.status(400).json({
+        error: "Limit should be >= 1, and offset should be >= 0.",
+      })
     }
 
     //Try to use findAndCountAll
-    const batchOfUsers = await User.findAll({ limit, offset, order: [[sortBy, sortOrder ?? "ASC"]], paranoid: returnOnlyDeleted })
+    const batchOfUsers = await User.findAll({
+      limit,
+      offset,
+      order: [[sortBy, sortOrder ?? "ASC"]],
+      paranoid: showDeleted === "false" ? true : false,
+    })
 
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
@@ -153,6 +147,14 @@ const partiallyUpdateUserById = async (req, res) => {
     userId = Number(userId)
     const updatedData = req.body
 
+    for (const key in fieldsToUpdate) {
+      const value = fieldsToUpdate[key]
+      if (value !== undefined) {
+        if ((key === "userName" || key === "password") && typeof value !== "string") {
+          return res.status(400).json({ error: `${key} should be a string!` })
+        }
+      }
+    }
     await User.update(updatedData, { where: { id: userId } })
 
     //Make sure when username changed, images change too.
@@ -195,13 +197,13 @@ const updateUserById = async (req, res) => {
     userId = Number(userId)
     const { id, userName, password, createdAt, updatedAt, destroyTime } = req.body
 
-    if (!id || !userName || !password) {
+    if (!userName || !password) {
       return res.status(400).json({
-        error: "Request must include id, userName, and password.",
+        error: "Request must atleast include userName and password.",
       })
     }
 
-    if (typeof id !== "number" || typeof userName !== "string" || typeof password !== "string") {
+    if ((id && typeof id !== "number") || typeof userName !== "string" || typeof password !== "string") {
       return res.status(400).json({
         error: "Invalid data types for id, userName, or password.",
       })
@@ -211,12 +213,12 @@ const updateUserById = async (req, res) => {
       `UPDATE "Users" SET id=?,"userName"=?,password=?,"isAdmin"=?,"createdAt"=?,"updatedAt"=?,"destroyTime"=? WHERE id=?`,
       {
         replacements: [
-          id,
+          id ?? userId,
           userName,
           password,
           isAdmin ?? null,
-          createdAt ?? null,
-          updatedAt ?? null,
+          createdAt ?? "2000-01-01 05:30:00+05:30",
+          updatedAt ?? "2000-01-01 05:30:00+05:30",
           destroyTime ?? null,
           userId,
         ],

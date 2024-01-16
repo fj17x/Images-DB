@@ -2,14 +2,13 @@ import { DataTypes } from "sequelize"
 import sequelize from "../db/connection.js"
 
 const Image = sequelize.define(
-  "User",
+  "Image",
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      unique: true,
     },
     url: {
       type: DataTypes.STRING,
@@ -26,9 +25,6 @@ const Image = sequelize.define(
     ownerId: {
       type: DataTypes.INTEGER,
     },
-    ownerUserName: {
-      type: DataTypes.STRING,
-    },
     tags: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
@@ -43,6 +39,5 @@ const Image = sequelize.define(
     deletedAt: "destroyTime",
   }
 )
-sequelize.sync()
 
 export default Image

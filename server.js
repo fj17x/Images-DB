@@ -4,10 +4,16 @@ import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
 import sequelize from "./db/connection.js"
+import User from "./models/User.js"
+import Image from "./models/Image.js"
 
 const app = express()
 const PORT = 4000
 app.use(express.json())
+
+User.hasMany(Image, { foreignKey: "ownerId", as: "images" })
+Image.belongsTo(User, { foreignKey: "ownerId", as: "owner" })
+sequelize.sync()
 
 app.use("/auth", authRouter)
 app.use("/images", imageRouter)

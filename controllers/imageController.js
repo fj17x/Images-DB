@@ -1,11 +1,6 @@
-import fs from "fs/promises"
-import Image from "../models/image.js"
-import path from "path"
-import { fileURLToPath } from "url"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
+import { QueryTypes, Op } from "sequelize"
+import sequelize from "../db/connection.js"
+import Image from "../models/Image.js"
 
 //Function to create HATEOS links.
 const createImageLinks = (imageId, isAdmin) => {
@@ -49,7 +44,7 @@ const createImageLinks = (imageId, isAdmin) => {
 
 const createImage = async (req, res) => {
   try {
-    //Get metadata provided in JSON and JWT.
+    //Get data provided in body.
     let { imageURL, title, description, tags } = req.body
     const userId = req.userId
     const isAdmin = req.isAdmin
@@ -78,19 +73,15 @@ const createImage = async (req, res) => {
       })
     }
 
-    const userName = req.userName
+    const image = await Image.create({
+      url: imageURL,
+      ownerId: userId,
+      title,
+      description,
+      tags,
+    })
 
-    //Get current Image DB as an object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Create new Image object.
-    const newImageId = (allImagesObject.images?.length ?? 0) + 1
-    const newImageObject = new Image(newImageId, imageURL, title, description, userId, userName, tags)
-
-    //Push image into images object and write on JSON DB.
-    allImagesObject.images.push(newImageObject)
-    await fs.writeFile("db/images.json", JSON.stringify(allImagesObject, null, 2))
+    const newImageId = image.id
 
     const response = {
       message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
@@ -115,25 +106,18 @@ const getImageById = async (req, res) => {
       return res.status(400).json({ error: "Please provide imageId." })
     }
 
-    //Get current JSON DB images as an object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
+    const foundImage = await Image.findByPk(imageId)
 
-    //Search for the image and check whether user has permission to access it.
-    const foundImage = allImagesObject.images.find((image) => image.id === imageId)
-    if (!foundImage || foundImage.isDeleted) {
-      return res.status(404).json({ error: "Image not found." })
-    }
-    if (foundImage.isFlagged) {
+    if (foundImage.dataValues.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
-    if (!isAdmin && foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
 
     const response = {
       message: "Successfully found image!",
-      data: { ...foundImage },
+      data: { ...foundImage }.dataValues,
       links: createImageLinks(imageId, isAdmin),
     }
     //Return details of image.
@@ -149,57 +133,54 @@ const getBatchOfImages = async (req, res) => {
     const userId = req.userId
     const isAdmin = req.isAdmin
 
-    //Get limit and offset and calculate start and end index.
-    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
+    //Get limit and offset.
+    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc", showDeleted = "false" } = req.query
     limit = Number(limit)
     offset = Number(offset)
+    sortOrder = sortOrder.toUpperCase()
+
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
       return res.status(400).json({
         error: "Limit should be >= 1, and offset should be >= 0.",
       })
     }
-    const startIndex = offset
-    const endIndex = startIndex + limit
 
-    //Get current JSON DB images as an object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
+    const whereCondition = isAdmin
+      ? {}
+      : {
+          ownerId: userId,
+          isFlagged: false,
+        }
 
-    //Admin will be able to retrieve soft deleted images.
-    let userImages = allImagesObject.images.filter(
-      (image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId) && !image.isDeleted
-    )
+    const paranoidCondition = isAdmin ? (showDeleted === "false" ? true : false) : true
 
-    const batchOfUserImages = userImages.slice(startIndex, endIndex)
-    if (!batchOfUserImages.length) {
+    const batchOfImages = await Image.findAll({
+      limit,
+      offset,
+      order: [[sortBy, sortOrder ?? "ASC"]],
+      where: whereCondition,
+      paranoid: paranoidCondition,
+    })
+
+    if (!batchOfImages.length) {
       if (!isAdmin) {
-        return res.status(404).json({ error: `No images found for user with ID: ${userId} ` })
+        return res.status(404).json({ error: `No images found for user with ID: ${userId}.` })
       }
       return res.status(404).json({ error: "No images found. " })
     }
 
-    batchOfUserImages.sort((imageA, imageB) => {
-      let comparison = 0
-      if (imageA[sortBy] < imageB[sortBy]) {
-        comparison = -1
-      } else if (imageA[sortBy] > imageB[sortBy]) {
-        comparison = 1
-      }
-      return sortOrder === "desc" ? comparison * -1 : comparison
-    })
-
     // Generate links for each image in the batch
-    const imageLinks = batchOfUserImages.map((image) => {
+    const imageLinks = batchOfImages.map((image) => {
       return createImageLinks(image.id, isAdmin)
     })
 
-    const imageData = batchOfUserImages.map((image) => {
-      return { ...image }
+    const imageData = batchOfImages.map((image) => {
+      return { ...image }.dataValues
     })
 
     const response = {
       message: `Successfully fetched images!`,
-      fetched: batchOfUserImages.length,
+      fetched: batchOfImages.length,
       data: imageData,
       links: imageLinks,
     }
@@ -224,31 +205,39 @@ const getImagesByCommonTags = async (req, res) => {
 
     //Filter images based on tags.
     const tagList = tags.split(",")
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-    const filteredImages = allImagesObject.images.filter((image) => {
-      if (!image.isFlagged && !image.isDeleted && tagList.every((tag) => image.tags.includes(tag))) {
-        if (isAdmin || image.ownerId === userId) {
-          return true
-        }
-      }
-      return false
+
+    const imagesWithCommonTags = await Image.findAll({
+      where: {
+        tags: {
+          [Op.contains]: tagList,
+        },
+      },
     })
 
-    const imageLinks = filteredImages.map((image) => {
+    //check flagged
+    // const filteredImages = allImagesObject.images.filter((image) => {
+    //   if (!image.isFlagged && !image.isDeleted && tagList.every((tag) => image.tags.includes(tag))) {
+    //     if (isAdmin || image.ownerId === userId) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // })
+
+    const imageLinks = imagesWithCommonTags.map((image) => {
       return createImageLinks(image.id, isAdmin)
     })
 
-    const imageData = filteredImages.map((image) => {
-      return { ...image }
+    const imageData = imagesWithCommonTags.map((image) => {
+      return { ...image }.dataValues
     })
 
-    if (!filteredImages.length) {
+    if (!imagesWithCommonTags.length) {
       return res.status(404).json({ error: "No images found with given tags." })
     }
     const response = {
       message: ` Images with such tags found successfully.`,
-      fetched: filteredImages.length,
+      fetched: imagesWithCommonTags.length,
       data: imageData,
       links: imageLinks,
     }
@@ -270,30 +259,26 @@ const deleteImageById = async (req, res) => {
       return res.status(400).json({ error: "Please provide imageId." })
     }
 
-    //Get current JSON DB images as an object.
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    //Find image in DB.
-    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
-    const foundImage = allImagesObject.images[foundImageIndex]
+    const foundImage = await Image.findOne({
+      where: {
+        id: imageId,
+        ownerId: userId,
+      },
+    })
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (foundImage.isDeleted) {
-      return res.status(400).json({ error: "Image not found." })
-    }
-    if (foundImage.isFlagged) {
-      return res.status(400).json({ error: "This image has been flagged by the admin and cannot be accessed." })
-    }
-    if (!isAdmin && foundImage.ownerId !== userId) {
+
+    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to delete this image." })
     }
 
-    //Soft delete the image and write in DB.
-    foundImage.modifiedAt = new Date()
-    foundImage.isDeleted = true
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+    await Image.destroy({
+      where: {
+        id: imageId,
+      },
+    })
+
     const response = {
       message: "Image deleted.",
       links: createImageLinks(imageId, isAdmin),
@@ -312,31 +297,23 @@ const partiallyUpdateImage = async (req, res) => {
     const userId = req.userId
     const isAdmin = req.isAdmin
     const fieldsToUpdate = req.body
-    const { title, description, tags, url } = fieldsToUpdate
 
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
-    const allowedFieldsByUsers = ["title", "description", "tags", "url"]
 
-    if (!title && !description && !tags && !url) {
-      return res.status(400).json({ error: "Please provide at least one field to update from: title, description, tags or url." })
-    }
+    const foundImage = await Image.findOne({
+      where: {
+        id: imageId,
+      },
+      paranoid: isAdmin ? false : true,
+    })
 
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
-
-    const foundImage = allImagesObject.images[foundImageIndex]
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (!isAdmin && foundImage.isDeleted) {
-      return res.status(400).json({ error: "Image not found." })
-    }
 
-    if (!isAdmin && foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
@@ -347,7 +324,7 @@ const partiallyUpdateImage = async (req, res) => {
         (field) => fieldsToUpdate[field] !== undefined && !allowedFieldsByUsers.includes(field)
       )
       if (invalidFields.length > 0) {
-        return res.status(403).json({ error: `Unauthorized to update: ${invalidFields.join(", ")}` })
+        return res.status(403).json({ error: `Unauthorized to update these field(s): ${invalidFields.join(", ")}` })
       }
     }
 
@@ -360,11 +337,15 @@ const partiallyUpdateImage = async (req, res) => {
         if (key === "tags" && !Array.isArray(value)) {
           return res.status(400).json({ error: `${key} should be an array!` })
         }
-        foundImage[key] = value
       }
     }
-    foundImage.modifiedAt = new Date()
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
+
+    await Image.update(fieldsToUpdate, {
+      where: {
+        id: imageId,
+      },
+    })
+
     const response = {
       message: "Image details updated successfully.",
       links: createImageLinks(imageId, isAdmin),
@@ -382,37 +363,55 @@ const updateImage = async (req, res) => {
     imageId = Number(imageId)
     const userId = req.userId
     const isAdmin = req.isAdmin
-    const fieldsToUpdate = req.body
+    const { id, url, title, description, ownerId, tags, isFlagged, destroyTime, updatedAt, createdAt } = req.body
 
     if (!isAdmin) {
       return res.status(403).json({ error: "Only an admin can send the PUT request!" })
     }
-    if (!imageId) {
-      return res.status(400).json({ error: "Please provide imageId." })
+    if (!url || !title) {
+      return res.status(400).json({ error: "Request must atleast include url and title." })
     }
 
-    const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    const allImagesObject = JSON.parse(allImagesJSON)
-
-    const foundImageIndex = allImagesObject.images.findIndex((image) => image.id === imageId)
-    let foundImage = allImagesObject.images[foundImageIndex]
+    if ((id && typeof id !== "number") || typeof url !== "string" || typeof title !== "string") {
+      return res.status(400).json({
+        error: "Invalid data types for id, url, or title.",
+      })
+    }
+    const foundImage = await Image.findOne({
+      where: {
+        id: imageId,
+      },
+      paranoid: isAdmin ? false : true,
+    })
 
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
-    if (!isAdmin && foundImage.isDeleted) {
-      return res.status(400).json({ error: "Image not found." })
-    }
 
-    if (!isAdmin && foundImage.ownerId !== userId) {
+    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
-    allImagesObject.images[foundImageIndex] = {
-      ...fieldsToUpdate,
-    }
+    const x = await sequelize.query(
+      `UPDATE "Images" SET id=?,"url"=?,title=?,description=?,"ownerId"=?,"updatedAt"=?,"createdAt"=?, "destroyTime"=?,tags=?,"isFlagged"=? WHERE id=?`,
+      {
+        replacements: [
+          id ?? imageId,
+          url,
+          title,
+          description ?? null,
+          ownerId ?? foundImage.dataValues.ownerId,
+          updatedAt ?? "2000-01-01 05:30:00+05:30",
+          createdAt ?? "2000-01-01 05:30:00+05:30",
+          destroyTime ?? null,
+          tags ?? null,
+          isFlagged ?? null,
+          imageId,
+        ],
+        type: QueryTypes.UPDATE,
+      }
+    )
 
-    await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2))
     const response = {
       message: "Image details updated successfully.",
       links: createImageLinks(imageId, isAdmin),
