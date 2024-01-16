@@ -3,11 +3,6 @@ import path from "path"
 import { fileURLToPath } from "url"
 import bcrypt from "bcrypt"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
-const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
-
 //Function to create HATEOS links.
 const createMeLinks = () => {
   const meLinks = []
@@ -38,10 +33,6 @@ const getCurrentUserDetails = async (req, res) => {
   try {
     //Get ID of user from request.
     const userId = req.userId
-
-    //Get current JSON DB users as an object.
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
 
     //Search for the user and return his details.
     const foundUser = allUsersObject.users.find((user) => user.id === userId)

@@ -1,6 +1,5 @@
 import "dotenv/config"
 import jwt from "jsonwebtoken"
-import fs from "fs/promises"
 import bcrypt from "bcrypt"
 import User from "../models/User.js"
 
@@ -60,10 +59,6 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "Such a user does not exist. Please register first." })
     }
-
-    // if (user.isDeleted) {
-    //   return res.status(400).json({ error: "Please register with a new userName!" })
-    // }
 
     const passwordMatches = await bcrypt.compare(passwordToString, user.password)
     if (!passwordMatches) {

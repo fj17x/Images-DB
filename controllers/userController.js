@@ -1,4 +1,3 @@
-import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
 import User from "../models/User.js"
@@ -6,10 +5,6 @@ import bcrypt from "bcrypt"
 import { QueryTypes } from "sequelize"
 import sequelize from "../db/connection.js"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
-const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
 
 //Function to create HATEOS links.
 const createUsersLinks = (userId) => {
