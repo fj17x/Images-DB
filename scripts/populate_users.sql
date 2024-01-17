@@ -1,4 +1,4 @@
-
+--\i Desktop/Images-DB/scripts/populate_users.sql
 alter sequence "Users_id_seq" restart with 1;
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'admin', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-31', '2023-06-14');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'carl', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-01-26', '2023-12-10');
@@ -10,7 +10,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'aldo', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-13', '2023-03-09');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'lenci', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-31', '2023-10-01');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'katie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-06-19', '2023-06-19');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'yard', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-06', '2023-09-07');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'yard2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-06', '2023-09-07');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'arie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-06-27', '2023-07-23');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'cacilie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-14', '2023-12-09');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'kelsey', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-16', '2023-05-24');
@@ -90,7 +90,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'sigvard', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-07-28', '2023-11-27');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'alli', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-20', '2023-08-19');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'deena', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-04', '2023-01-21');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'alic', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-11', '2023-04-19');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'ali2c', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-11', '2023-04-19');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'maurise', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-21', '2023-09-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'marcie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-06-17', '2023-01-19');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'emlyn', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-03', '2023-09-22');
@@ -111,12 +111,12 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'mattias', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-08', '2023-06-04');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'griswold', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-26', '2023-12-02');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'lesli', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-14', '2023-03-28');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'morey', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-10', '2023-05-13');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'morey2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-10', '2023-05-13');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'teodorico', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-24', '2023-06-17');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'emelda', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-01', '2023-01-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'katey', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-30', '2024-01-03');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'licha', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-23', '2023-03-08');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'shelby', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-07', '2023-07-26');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'shelby2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-07', '2023-07-26');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'moyra', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-15', '2023-04-02');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'joshuah', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-19', '2023-04-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'ilise', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-07-04', '2023-09-15');
@@ -151,7 +151,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'collin', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-30', '2023-04-06');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'janetta', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-07-06', '2023-04-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'patience', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-05', '2023-09-04');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'trevar', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-07', '2023-10-13');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'trevar2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-07', '2023-10-13');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'korey', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-07-29', '2024-01-13');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'mitch', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-10', '2023-07-09');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'naomi', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-11', '2023-06-09');
@@ -168,7 +168,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'thorstein', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-07-29', '2023-07-30');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'carita', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-04', '2023-06-27');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'orsa', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-14', '2023-04-23');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'cyrillus', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-24', '2023-07-11');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'cyrillus2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-24', '2023-07-11');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'julissa', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-16', '2023-04-17');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'paulette', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-18', '2023-10-25');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'vivia', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-06', '2023-02-27');
@@ -235,7 +235,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'daisy', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-25', '2023-11-02');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'tessie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-04', '2023-07-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'tim', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-09', '2023-03-23');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'hal', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-05', '2023-10-24');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'hal2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-05', '2023-10-24');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'cristina', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-29', '2023-03-10');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'lennie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-01-16', '2023-07-22');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'pamela', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-05-02', '2023-12-26');
@@ -253,7 +253,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'golda', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-10', '2023-12-16');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'say', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-17', '2023-07-16');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'shermie', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-01-19', '2023-02-26');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'thomas', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-12', '2023-11-28');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'thomas2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-12', '2023-11-28');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'adah', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-05', '2024-01-01');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'filippa', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-21', '2023-01-26');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'corette', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-25', '2023-03-17');
@@ -264,7 +264,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'kev', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-22', '2023-08-08');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'bobette', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-13', '2023-08-26');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'preston', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-03', '2023-07-02');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'king', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-13', '2023-11-01');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'king2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-08-13', '2023-11-01');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'dehlia', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-16', '2023-07-25');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'shaun', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-02-08', '2023-04-13');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'doralynn', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-11-07', '2023-12-06');
@@ -295,7 +295,7 @@ insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( '
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'dian', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-10-10', '2023-07-15');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'alejoa', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-20', '2023-06-19');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'maury', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-12-12', '2023-05-07');
-insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'tara', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-02', '2023-12-19');
+insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'tara2', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-09-02', '2023-12-19');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'gardener', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-28', '2024-01-01');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'kalil', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-11', '2023-04-28');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'viv', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-04-18', '2023-07-27');
