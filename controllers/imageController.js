@@ -372,15 +372,46 @@ const updateImage = async (req, res) => {
     if (!isAdmin) {
       return res.status(403).json({ error: "Only an admin can send the PUT request!" })
     }
-    if (!url || !title) {
-      return res.status(400).json({ error: "Request must atleast include url and title." })
+
+    if (!id) {
+      return res.status(400).json({ error: "Request must include id." })
     }
 
-    if ((id && typeof id !== "number") || typeof url !== "string" || typeof title !== "string") {
+    if (!url) {
+      return res.status(400).json({ error: "Request must include url." })
+    }
+
+    if (!title) {
+      return res.status(400).json({ error: "Request must include title." })
+    }
+
+    if (!createdAt) {
+      return res.status(400).json({
+        error: "Request must include createdAt!",
+      })
+    }
+
+    if (!updatedAt) {
+      return res.status(400).json({
+        error: "Request must include updatedAt!",
+      })
+    }
+
+    if (typeof id !== "number" || typeof url !== "string" || typeof title !== "string") {
       return res.status(400).json({
         error: "Invalid data types for id, url, or title.",
       })
     }
+
+    const createdAtDate = new Date(createdAt)
+    const updatedAtDate = new Date(updatedAt)
+
+    if (isNaN(createdAtDate.getTime()) || isNaN(updatedAtDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format." })
+    }
+    const formattedcreatedAt = createdAtDate.toISOString()
+    const formattedupdatedAt = updatedAtDate.toISOString()
+
     const foundImage = await Image.findOne({
       where: {
         id: imageId,
@@ -405,8 +436,8 @@ const updateImage = async (req, res) => {
           title,
           description ?? null,
           ownerId ?? foundImage.dataValues.ownerId,
-          updatedAt ?? "2000-01-01 05:30:00+05:30",
-          createdAt ?? "2000-01-01 05:30:00+05:30",
+          formattedupdatedAt,
+          formattedcreatedAt,
           destroyTime ?? null,
           tags ?? null,
           isFlagged ?? null,

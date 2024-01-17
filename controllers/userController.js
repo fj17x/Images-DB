@@ -2,7 +2,6 @@ import bcrypt from "bcrypt"
 import { QueryTypes } from "sequelize"
 import sequelize from "../db/connection.js"
 import User from "../models/User.js"
-import Image from "../models/Image.js"
 
 //Function to create HATEOS links.
 const createUsersLinks = (userId) => {
@@ -157,23 +156,6 @@ const partiallyUpdateUserById = async (req, res) => {
     }
     await User.update(updatedData, { where: { id: userId } })
 
-    //Make sure when username changed, images change too.
-    // if (updatedData.userName) {
-    //   const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-    //   const allImagesObject = JSON.parse(allImagesJSON)
-    //   let userImages = allImagesObject.images.filter(
-    //     (image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId) && !image.isDeleted
-    //   )
-
-    //   userImages.map((image) => {
-    //     if (image.ownerId === userId) {
-    //       image.ownerUserName = updatedData.userName
-    //     }
-    //     return image
-    //   })
-    //   await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2), "utf-8")
-    // }
-
     const response = {
       message: "User updated successfully.",
       userLinks: createUsersLinks(userId),
@@ -197,28 +179,61 @@ const updateUserById = async (req, res) => {
     userId = Number(userId)
     const { id, userName, password, createdAt, updatedAt, destroyTime } = req.body
 
-    if (!userName || !password) {
+    if (!id) {
       return res.status(400).json({
-        error: "Request must atleast include userName and password.",
+        error: "Request must include id!",
       })
     }
 
-    if ((id && typeof id !== "number") || typeof userName !== "string" || typeof password !== "string") {
+    if (!userName) {
       return res.status(400).json({
-        error: "Invalid data types for id, userName, or password.",
+        error: "Request must include userName!",
       })
     }
+
+    if (!password) {
+      return res.status(400).json({
+        error: "Request must include password!",
+      })
+    }
+
+    if (!createdAt) {
+      return res.status(400).json({
+        error: "Request must include createdAt!",
+      })
+    }
+
+    if (!updatedAt) {
+      return res.status(400).json({
+        error: "Request must include updatedAt!",
+      })
+    }
+
+    if (typeof id !== "number" || typeof userName !== "string" || typeof password !== "string") {
+      return res.status(400).json({
+        error: "Invalid data types for id(number), userName(string), or password(string).",
+      })
+    }
+
+    const createdAtDate = new Date(createdAt)
+    const updatedAtDate = new Date(updatedAt)
+
+    if (isNaN(createdAtDate.getTime()) || isNaN(updatedAtDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format." })
+    }
+    const formattedcreatedAt = createdAtDate.toISOString()
+    const formattedupdatedAt = updatedAtDate.toISOString()
 
     await sequelize.query(
       `UPDATE "Users" SET id=?,"userName"=?,password=?,"isAdmin"=?,"createdAt"=?,"updatedAt"=?,"destroyTime"=? WHERE id=?`,
       {
         replacements: [
-          id ?? userId,
+          id,
           userName,
           password,
           isAdmin ?? null,
-          createdAt ?? "2000-01-01 05:30:00+05:30",
-          updatedAt ?? "2000-01-01 05:30:00+05:30",
+          formattedcreatedAt,
+          formattedupdatedAt,
           destroyTime ?? null,
           userId,
         ],
