@@ -7,8 +7,8 @@ insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerI
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/231x100.png/5fa2dd/ffffff', 'What if potatos could fly?', 'A scientist argues that he has created a remarkable invention!', '2023-06-19', '2023-02-15', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/197x100.png/cc0000/ffffff', 'Ripe duck to eat!', 'Man I love food!', '2023-05-06', '2023-10-05', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/134x100.png/ff4444/ffffff', 'Pasta, amazing!', 'Got it for 500 bucks!', '2023-03-28', '2023-07-03', 2);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/139x100.png/dddddd/000000', 'Stork', 'This can fly, did you know that?', '2023-10-01', '2023-02-08', 2);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/205x100.png/5fa2dd/ffffff', 'A bird flying!', 'O what a sight it must have!', '2023-09-09', '2023-05-21', 3);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/139x100.png/dddddd/000000', 'Dragon', 'This can fly, did you know that?', '2023-10-01', '2023-02-08', 2);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/205x100.png/5fa2dd/ffffff', 'A bird flying!', 'Ooo what a sight it must have!', '2023-09-09', '2023-05-21', 3);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/248x100.png/5fa2dd/ffffff', 'Goa', 'A city that was once ruled by the Portugese!', '2023-02-18', '2023-11-27', 3);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/236x100.png/ff4444/ffffff', 'Butter sauce', 'I told my friends to eat this, and now they love it!', '2023-12-11', '2023-08-25', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/199x100.png/dddddd/000000', 'Common grenadier', 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', '2023-01-21', '2023-02-14', 2);
@@ -300,15 +300,15 @@ insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerI
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/175x100.png/cc0000/ffffff', 'Porcupine, north american', 'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum. Proin eu mi.', '2023-10-17', '2023-09-08', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/168x100.png/5fa2dd/ffffff', 'Russian dragonfly', 'Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.', '2023-02-06', '2023-04-25', 1);
 update "Images" set tags=ARRAY['bird','fly','beatiful'] where id=1;
-update "Images" set tags=ARRAY['bird','beatiful'] where id=2;
+update "Images" set tags=ARRAY['bird','beatiful', 'myth'] where id=2;
 update "Images" set tags=ARRAY['fly','plane'] where id=3;
 update "Images" set tags=ARRAY['india','beatiful'] where id=4;
-update "Images" set tags=ARRAY['plane'] where id=5;
+update "Images" set tags=ARRAY['plane','angry'] where id=5;
 update "Images" set tags=ARRAY['fly', 'food'] where id=6;
 update "Images" set tags=ARRAY['food'] where id=7;
-update "Images" set tags=ARRAY['funny','fly','beatiful'] where id=8;
-update "Images" set tags=ARRAY['bird','fly'] where id=9;
+update "Images" set tags=ARRAY['funny','food'] where id=8;
+update "Images" set tags=ARRAY['bird','fly','myth'] where id=9;
 update "Images" set tags=ARRAY['fly', 'bird'] where id=10;
-update "Images" set tags=ARRAY['india'] where id=11;
-
+update "Images" set tags=ARRAY['india','beatiful'] where id=11;
+update "Images" set tags=ARRAY['angry','food'] where id=12;
 
