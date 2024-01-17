@@ -82,6 +82,9 @@ const updateCurrentUserDetails = async (req, res) => {
 
     //If userName is given, update it.
     if (userName) {
+      if (typeof userName !== "string") {
+        return res.status(400).json({ error: "Please provide userName as a string!" })
+      }
       const existingUser = await User.findOne({ where: { userName } })
       if (existingUser && existingUser.userName !== req.userName) {
         return res.status(400).json({ error: "This userName already exists! Change your userName to something else!" })
@@ -92,6 +95,9 @@ const updateCurrentUserDetails = async (req, res) => {
 
     //If password is given, update it.
     if (password) {
+      if (typeof password !== "string") {
+        return res.status(400).json({ error: "Please provide password as a string!" })
+      }
       const passwordToString = password.toString()
       const saltRounds = 15
       const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
@@ -113,7 +119,7 @@ const updateCurrentUserDetails = async (req, res) => {
 
 const deleteCurrentUser = async (req, res) => {
   try {
-    //Retrieve userId from request.
+    //Retrieve userId from JWT.
     const userId = req.userId
 
     //Soft delete the user.
