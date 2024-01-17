@@ -50,7 +50,7 @@ const getUserById = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!isAdmin) {
       return res.status(403).json({
-        error: "Only the admin can see the users! Please view your own details at /me route!",
+        error: "Only the admin can use this route! Please view your own details at /me route!",
       })
     }
 
@@ -84,7 +84,7 @@ const fetchBatchOfUsers = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!isAdmin) {
       return res.status(403).json({
-        error: "Only the admin can see the users!",
+        error: "Only the admin can use this route!",
       })
     }
 
@@ -258,7 +258,7 @@ const createUser = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!isAdmin) {
       return res.status(403).json({
-        error: "Only the admin can update the users!",
+        error: "Only the admin can create the users using this route!",
       })
     }
     const { userName, password } = req.body
@@ -290,7 +290,7 @@ const deleteUserById = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!isAdmin) {
       return res.status(403).json({
-        error: "Only the admin can see the users!",
+        error: "Only the admin can delete the other users!",
       })
     }
 

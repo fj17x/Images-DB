@@ -12,9 +12,9 @@ const app = express()
 const PORT = process.env.APP_PORT
 app.use(express.json())
 
-User.hasMany(Image, { foreignKey: "ownerId", as: "userImages" })
+User.hasMany(Image, { foreignKey: "ownerId", as: "images" })
 Image.belongsTo(User, { foreignKey: "ownerId", as: "owner" })
-sequelize.sync()
+sequelize.sync({ force: true })
 
 app.use("/auth", authRouter)
 app.use("/images", imageRouter)
