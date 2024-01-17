@@ -26,6 +26,10 @@ const register = async (req, res) => {
       return res.status(400).json({ error: "Please provide userName and password." })
     }
 
+    if (typeof userName !== "string" || typeof password !== "string") {
+      return res.status(400).json({ error: "Please provide userName and password as strings!" })
+    }
+
     const passwordToString = password.toString()
     const saltRounds = 15
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
@@ -40,7 +44,8 @@ const register = async (req, res) => {
     res.status(201).json(response)
   } catch (err) {
     console.log("Error during registering: ", err)
-    res.status(500).json({ error: "Failed to register." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to register.", details: errorMessage })
   }
 }
 
@@ -51,6 +56,10 @@ const login = async (req, res) => {
 
     if (!userName || !password) {
       return res.status(400).json({ error: "Please provide userName and password." })
+    }
+
+    if (typeof userName !== "string" || typeof password !== "string") {
+      return res.status(400).json({ error: "Please provide userName and password as strings!" })
     }
 
     const passwordToString = password.toString()
@@ -76,8 +85,8 @@ const login = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error during logging in: ", err)
-    //err["errors"][0]?.message
-    res.status(500).json({ error: "Failed to login." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to login.", details: errorMessage })
   }
 }
 

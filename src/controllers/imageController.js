@@ -123,6 +123,7 @@ const getImageById = async (req, res) => {
     if (foundImage.dataValues.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
+
     if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
@@ -151,6 +152,7 @@ const getBatchOfImages = async (req, res) => {
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()
+    sortOrder = sortOrder === "DESC" ? "DESC" : "ASC"
 
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
       return res.status(400).json({
@@ -170,7 +172,7 @@ const getBatchOfImages = async (req, res) => {
     const batchOfImages = await Image.findAll({
       limit,
       offset,
-      order: [[sortBy, sortOrder ?? "ASC"]],
+      order: [[sortBy, sortOrder]],
       where: whereCondition,
       paranoid: paranoidCondition,
       include: {
@@ -323,16 +325,81 @@ const partiallyUpdateImage = async (req, res) => {
     imageId = Number(imageId)
     const userId = req.userId
     const isAdmin = req.isAdmin
+    const { id, url, title, description, ownerId, tags, isFlagged, destroyTime, updatedAt, createdAt } = req.body
     const fieldsToUpdate = req.body
+    const allowedFieldsByUsers = ["title", "description", "tags", "url"]
 
-    if (!imageId) {
-      return res.status(400).json({ error: "Please provide imageId." })
+    if (id && typeof id !== "number") {
+      return res.status(400).json({ error: "Id should be provided as an number." })
     }
 
+    if (url && typeof url !== "string") {
+      return res.status(400).json({ error: "URL should be provided as an string." })
+    }
+
+    if (description && typeof description !== "string") {
+      return res.status(400).json({ error: "Description should be provided as an string." })
+    }
+
+    if (title && typeof title !== "string") {
+      return res.status(400).json({ error: "Title should be provided as an string." })
+    }
+
+    if (ownerId && typeof ownerId !== "number") {
+      return res.status(400).json({ error: "OwnerId should be provided as an string." })
+    }
+
+    if (tags && !Array.isArray(tags)) {
+      return res.status(400).json({
+        error: "Tags should be provided as an array.",
+      })
+    }
+
+    if (isFlagged && typeof isFlagged !== "boolean") {
+      return res.status(400).json({
+        error: "isFlagged should be provided as an boolean.",
+      })
+    }
+
+    if (ownerId && typeof ownerId !== "number") {
+      return res.status(400).json({
+        error: "Invalid data type for number.",
+      })
+    }
+
+    if (createdAt) {
+      const createdAtDate = new Date(createdAt)
+      if (isNaN(createdAtDate.getTime())) {
+        return res.status(400).json({ error: "Invalid date format for createdAt." })
+      }
+      const formattedCreatedAt = createdAtDate.toISOString()
+      fieldsToUpdate.createdAt = formattedCreatedAt
+    }
+
+    if (updatedAt) {
+      const updatedAtDate = new Date(updatedAt)
+      if (isNaN(updatedAtDate.getTime())) {
+        return res.status(400).json({ error: "Invalid date format for updatedAt." })
+      }
+      const formattedUpdatedAt = updatedAtDate.toISOString()
+      fieldsToUpdate.updatedAt = formattedUpdatedAt
+    }
+
+    if (destroyTime) {
+      const destroyTimeDate = new Date(destroyTime)
+      if (isNaN(destroyTimeDate.getTime())) {
+        return res.status(400).json({ error: "Invalid date format for destroyTime." })
+      }
+      const formattedDestroyTime = destroyTimeDate.toISOString()
+      fieldsToUpdate.destroyTime = formattedDestroyTime
+    }
+
+    console.log("🚀 ~ partiallyUpdateImage ~ fieldsToUpdate:", fieldsToUpdate)
     const foundImage = await Image.findOne({
       where: {
         id: imageId,
       },
+      attributes: ["ownerId", "isFlagged"],
       paranoid: isAdmin ? false : true,
     })
 
@@ -342,6 +409,10 @@ const partiallyUpdateImage = async (req, res) => {
 
     if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update this image." })
+    }
+
+    if (!isAdmin && foundImage.dataValues.isFlagged === true) {
+      return res.status(403).json({ error: "This image has been flagged and cannot be changed!" })
     }
 
     // Only certain fields can be updated by non-admins.
@@ -355,22 +426,11 @@ const partiallyUpdateImage = async (req, res) => {
       }
     }
 
-    for (const key in fieldsToUpdate) {
-      const value = fieldsToUpdate[key]
-      if (value !== undefined) {
-        if ((key === "title" || key === "description" || key === "url") && typeof value !== "string") {
-          return res.status(400).json({ error: `${key} should be a string!` })
-        }
-        if (key === "tags" && !Array.isArray(value)) {
-          return res.status(400).json({ error: `${key} should be an array!` })
-        }
-      }
-    }
-
     await Image.update(fieldsToUpdate, {
       where: {
         id: imageId,
       },
+      paranoid: false,
     })
 
     const response = {
@@ -427,6 +487,24 @@ const updateImage = async (req, res) => {
       })
     }
 
+    if (tags && !Array.isArray(tags)) {
+      return res.status(400).json({
+        error: "Tags should be provided as an array.",
+      })
+    }
+
+    if (isFlagged && typeof isFlagged !== "boolean") {
+      return res.status(400).json({
+        error: "isFlagged should be provided as an array.",
+      })
+    }
+
+    if (ownerId && typeof ownerId !== "number") {
+      return res.status(400).json({
+        error: "Invalid data type for number.",
+      })
+    }
+
     const createdAtDate = new Date(createdAt)
     const updatedAtDate = new Date(updatedAt)
 
@@ -435,6 +513,15 @@ const updateImage = async (req, res) => {
     }
     const formattedcreatedAt = createdAtDate.toISOString()
     const formattedupdatedAt = updatedAtDate.toISOString()
+
+    if (destroyTime) {
+      const destroyTimeDate = new Date(destroyTime)
+      if (isNaN(destroyTimeDate.getTime())) {
+        return res.status(400).json({ error: "Invalid date format for destroyTime." })
+      }
+      const formattedDestroyTime = destroyTimeDate.toISOString()
+      fieldsToUpdate.destroyTime = formattedDestroyTime
+    }
 
     const foundImage = await Image.findOne({
       where: {
@@ -452,7 +539,7 @@ const updateImage = async (req, res) => {
     }
 
     await sequelize.query(
-      `UPDATE "Images" SET id=?,"url"=?,title=?,description=?,"ownerId"=?,"updatedAt"=?,"createdAt"=?, "destroyTime"=?,tags=?,"isFlagged"=? WHERE id=?`,
+      `UPDATE "Images" SET id=?,"url"=?,title=?,description=?,"ownerId"=?,"updatedAt"=?,"createdAt"=?, "destroyTime"=?,tags=ARRAY[?]::VARCHAR[],"isFlagged"=? WHERE id=?`,
       {
         replacements: [
           id ?? imageId,

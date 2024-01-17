@@ -60,7 +60,8 @@ const getCurrentUserDetails = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while fetching.", err)
-    res.status(500).json({ error: "Failed to fetch." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }
 }
 
@@ -105,7 +106,8 @@ const updateCurrentUserDetails = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while updating.", err)
-    res.status(500).json({ error: "Failed to update." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to update.", details: errorMessage })
   }
 }
 
@@ -125,7 +127,8 @@ const deleteCurrentUser = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while deleting.", err)
-    res.status(500).json({ error: "Failed to delete." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to delete.", details: errorMessage })
   }
 }
 

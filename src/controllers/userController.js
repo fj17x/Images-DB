@@ -74,7 +74,8 @@ const getUserById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while fetching.", err)
-    res.status(500).json({ error: "Failed to fetch." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }
 }
 
@@ -130,7 +131,8 @@ const fetchBatchOfUsers = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during fetching: ", err)
-    res.status(500).json({ error: "Failed to fetch users." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch users.", details: errorMessage })
   }
 }
 
@@ -164,7 +166,8 @@ const partiallyUpdateUserById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error while updating user: ", err)
-    res.status(500).json({ error: "Failed to update user." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to update user.", details: errorMessage })
   }
 }
 
@@ -249,7 +252,8 @@ const updateUserById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error while updating user: ", err)
-    res.status(500).json({ error: "Failed to update user." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to update user.", details: errorMessage })
   }
 }
 
@@ -281,7 +285,8 @@ const createUser = async (req, res) => {
     res.status(201).json(response)
   } catch (err) {
     console.log("Error during creating: ", err)
-    res.status(500).json({ error: "Failed to create." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to create.", details: errorMessage })
   }
 }
 
@@ -309,7 +314,8 @@ const deleteUserById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while deleting.", err)
-    res.status(500).json({ error: "Failed to delete." })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to delete.", details: errorMessage })
   }
 }
 

@@ -300,16 +300,16 @@ insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerI
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/232x100.png/cc0000/ffffff', 'Bird, bare-faced go away', null, '2023-06-09', '2023-09-11', 4);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/175x100.png/cc0000/ffffff', 'Porcupine, north american', 'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum. Proin eu mi.', '2023-10-17', '2023-09-08', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/168x100.png/5fa2dd/ffffff', 'Russian dragonfly', 'Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.', '2023-02-06', '2023-04-25', 1);
-update "Images" set tags=ARRAY['bird','fly','beatiful'] where id=1;
-update "Images" set tags=ARRAY['bird','beatiful', 'myth'] where id=2;
+update "Images" set tags=ARRAY['bird','fly','beautiful'] where id=1;
+update "Images" set tags=ARRAY['bird','beautiful', 'myth'] where id=2;
 update "Images" set tags=ARRAY['fly','plane'] where id=3;
-update "Images" set tags=ARRAY['india','beatiful'] where id=4;
+update "Images" set tags=ARRAY['india','beautiful'] where id=4;
 update "Images" set tags=ARRAY['plane','angry'] where id=5;
 update "Images" set tags=ARRAY['fly', 'food'] where id=6;
 update "Images" set tags=ARRAY['food'] where id=7;
 update "Images" set tags=ARRAY['funny','food'] where id=8;
 update "Images" set tags=ARRAY['bird','fly','myth'] where id=9;
 update "Images" set tags=ARRAY['fly', 'bird'] where id=10;
-update "Images" set tags=ARRAY['india','beatiful'] where id=11;
+update "Images" set tags=ARRAY['india','beautiful'] where id=11;
 update "Images" set tags=ARRAY['angry','food'] where id=12;
 
