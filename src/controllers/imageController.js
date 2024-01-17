@@ -92,7 +92,8 @@ const createImage = async (req, res) => {
     res.status(201).json(response)
   } catch (err) {
     console.log("Error during uploading: ", err)
-    res.status(500).json({ error: "Failed to upload. Must provide url and title.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to upload. Must provide url and title.", details: errorMessage })
   }
 }
 
@@ -135,7 +136,8 @@ const getImageById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error while fetching.", err)
-    res.status(500).json({ error: "Failed to fetch.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }
 }
 
@@ -204,7 +206,8 @@ const getBatchOfImages = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during fetching of images.: ", err)
-    res.status(500).json({ error: "Failed to fetch images.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch images.", details: errorMessage })
   }
 }
 
@@ -267,7 +270,8 @@ const getImagesByCommonTags = async (req, res) => {
     res.status(200).json({ response })
   } catch (err) {
     console.error("Error while fetching images by common tags: ", err)
-    res.status(500).json({ error: "Failed to fetch images by these common tags.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch images by these common tags.", details: errorMessage })
   }
 }
 
@@ -308,7 +312,8 @@ const deleteImageById = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during deleting. ", err)
-    res.status(500).json({ error: "Failed to delete the image.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to delete the image.", details: errorMessage })
   }
 }
 
@@ -375,7 +380,8 @@ const partiallyUpdateImage = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during image update: ", err)
-    res.status(500).json({ error: "Failed to update the image.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to update the image.", details: errorMessage })
   }
 }
 
@@ -472,7 +478,8 @@ const updateImage = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during image update: ", err)
-    res.status(500).json({ error: "Failed to update the image.", details: err?.errors[0]?.message })
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to update the image.", details: errorMessage })
   }
 }
 

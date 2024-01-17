@@ -14,7 +14,7 @@ app.use(express.json())
 
 User.hasMany(Image, { foreignKey: "ownerId", as: "images" })
 Image.belongsTo(User, { foreignKey: "ownerId", as: "owner" })
-sequelize.sync({ force: true })
+sequelize.sync()
 
 app.use("/auth", authRouter)
 app.use("/images", imageRouter)
