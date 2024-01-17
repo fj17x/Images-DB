@@ -210,23 +210,25 @@ const getImagesByCommonTags = async (req, res) => {
     //Filter images based on tags.
     const tagList = tags.split(",")
 
-    const imagesWithCommonTags = await Image.findAll({
-      where: {
-        tags: {
-          [Op.contains]: tagList,
-        },
-      },
-    })
+    console.log("🚀 ~ getImagesByCommonTags ~ isAdmin:", isAdmin)
+    const whereCondition = isAdmin
+      ? {
+          tags: {
+            [Op.contains]: tagList,
+          },
+        }
+      : {
+          tags: {
+            [Op.contains]: tagList,
+          },
+          isFlagged: false,
+          ownerId: userId,
+        }
 
-    //check flagged
-    // const filteredImages = allImagesObject.images.filter((image) => {
-    //   if (!image.isFlagged && !image.isDeleted && tagList.every((tag) => image.tags.includes(tag))) {
-    //     if (isAdmin || image.ownerId === userId) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // })
+    const imagesWithCommonTags = await Image.findAll({
+      where: whereCondition,
+      order: [["id", "ASC"]],
+    })
 
     const imageLinks = imagesWithCommonTags.map((image) => {
       return createImageLinks(image.id, isAdmin)
