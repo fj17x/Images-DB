@@ -137,6 +137,7 @@ const fetchBatchOfUsers = async (req, res) => {
 const partiallyUpdateUserById = async (req, res) => {
   try {
     const isAdmin = req.isAdmin
+    const fieldsToUpdate = req.body
     if (!isAdmin) {
       return res.status(403).json({
         error: "Only the admin can update the users!",

@@ -1,6 +1,7 @@
 import { QueryTypes, Op } from "sequelize"
 import sequelize from "../db/connection.js"
 import Image from "../models/Image.js"
+import User from "../models/User.js"
 
 //Function to create HATEOS links.
 const createImageLinks = (imageId, isAdmin) => {
@@ -57,7 +58,7 @@ const createImage = async (req, res) => {
 
     if (!title || typeof title !== "string") {
       return res.status(400).json({
-        error: "Please provide a title and ensure the type is a string.",
+        error: "Please provide the title and ensure the type is a string.",
       })
     }
 
@@ -106,7 +107,13 @@ const getImageById = async (req, res) => {
       return res.status(400).json({ error: "Please provide imageId." })
     }
 
-    const foundImage = await Image.findByPk(imageId)
+    const foundImage = await Image.findByPk(imageId, {
+      include: {
+        model: User,
+        as: "owner",
+        attributes: ["userName"],
+      },
+    })
 
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
@@ -164,6 +171,11 @@ const getBatchOfImages = async (req, res) => {
       order: [[sortBy, sortOrder ?? "ASC"]],
       where: whereCondition,
       paranoid: paranoidCondition,
+      include: {
+        model: User,
+        as: "owner",
+        attributes: ["userName"],
+      },
     })
 
     if (!batchOfImages.length) {
@@ -210,7 +222,6 @@ const getImagesByCommonTags = async (req, res) => {
     //Filter images based on tags.
     const tagList = tags.split(",")
 
-    console.log("🚀 ~ getImagesByCommonTags ~ isAdmin:", isAdmin)
     const whereCondition = isAdmin
       ? {
           tags: {
@@ -228,6 +239,11 @@ const getImagesByCommonTags = async (req, res) => {
     const imagesWithCommonTags = await Image.findAll({
       where: whereCondition,
       order: [["id", "ASC"]],
+      include: {
+        model: User,
+        as: "owner",
+        attributes: ["userName"],
+      },
     })
 
     const imageLinks = imagesWithCommonTags.map((image) => {
@@ -429,7 +445,7 @@ const updateImage = async (req, res) => {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
-    const x = await sequelize.query(
+    await sequelize.query(
       `UPDATE "Images" SET id=?,"url"=?,title=?,description=?,"ownerId"=?,"updatedAt"=?,"createdAt"=?, "destroyTime"=?,tags=?,"isFlagged"=? WHERE id=?`,
       {
         replacements: [
