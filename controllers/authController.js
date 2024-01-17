@@ -1,14 +1,7 @@
 import "dotenv/config"
 import jwt from "jsonwebtoken"
-import fs from "fs/promises"
 import bcrypt from "bcrypt"
 import User from "../models/User.js"
-import path from "path"
-import { fileURLToPath } from "url"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
 
 //For HATEOS
 const authLinks = [
@@ -28,9 +21,7 @@ const authLinks = [
 
 const register = async (req, res) => {
   try {
-    const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
     const { userName, password } = req.body
-
     if (!userName || !password) {
       return res.status(400).json({ error: "Please provide userName and password." })
     }
@@ -39,25 +30,9 @@ const register = async (req, res) => {
     const saltRounds = 15
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
 
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
+    const newUser = await User.create({ userName: userName, password: hashedPassword })
 
-    const existingUser = allUsersObject.users.find((user) => user.userName === userName)
-    if (existingUser?.isDeleted) {
-      return res.status(400).json({ error: "Please register using a different userName." })
-    }
-
-    if (existingUser) {
-      return res.status(400).json({ error: "userName already exists. Choose a different userName." })
-    }
-
-    const newUserId = (allUsersObject.users?.length ?? 0) + 1
-    const newUserObject = new User(newUserId, userName, hashedPassword)
-
-    allUsersObject.users.push(newUserObject)
-    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
-
-    console.log(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
+    console.log(`A new user has registered with ID = ${newUser.id} & userName = '${newUser.userName}'`)
     const response = {
       message: "Successfully registered! Please login at /login route.",
       links: authLinks,
@@ -79,16 +54,10 @@ const login = async (req, res) => {
     }
 
     const passwordToString = password.toString()
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
 
-    const user = allUsersObject.users.find((user) => user.userName === userName)
+    const user = await User.findOne({ where: { userName: userName } })
     if (!user) {
       return res.status(400).json({ error: "Such a user does not exist. Please register first." })
-    }
-
-    if (user.isDeleted) {
-      return res.status(400).json({ error: "Please register with a new userName!" })
     }
 
     const passwordMatches = await bcrypt.compare(passwordToString, user.password)
@@ -107,6 +76,7 @@ const login = async (req, res) => {
     res.status(200).json(response)
   } catch (err) {
     console.log("Error during logging in: ", err)
+    //err["errors"][0]?.message
     res.status(500).json({ error: "Failed to login." })
   }
 }

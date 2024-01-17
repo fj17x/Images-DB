@@ -1,12 +1,6 @@
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import fs from "fs/promises"
-import path from "path"
-import { fileURLToPath } from "url"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
+import User from "../models/User.js"
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -24,16 +18,11 @@ const verifyToken = async (req, res, next) => {
     req.userId = userId
 
     //Check whether user is an admin. If yes, make req.isAdmin true.
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-    const user = allUsersObject.users.find((user) => user.id === userId)
-    req.userName = user.userName
+    const user = await User.findByPk(userId)
     if (!user) {
       return res.status(400).json({ error: `Such a user with id:${userId} does not exist. Please register first.` })
     }
-    if (user.isDeleted) {
-      return res.status(400).json({ error: `User not found.` })
-    }
+    req.userName = user.userName
     req.isAdmin = user.isAdmin ? true : false
     next()
   } catch (err) {

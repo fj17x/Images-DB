@@ -1,13 +1,7 @@
-import fs from "fs/promises"
-import path from "path"
-import { fileURLToPath } from "url"
-import User from "../models/User.js"
 import bcrypt from "bcrypt"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const usersFilePath = path.join(__dirname, "..", "db", "users.json")
-const imagesFilePath = path.join(__dirname, "..", "db", "images.json")
+import { QueryTypes } from "sequelize"
+import sequelize from "../db/connection.js"
+import User from "../models/User.js"
 
 //Function to create HATEOS links.
 const createUsersLinks = (userId) => {
@@ -62,26 +56,19 @@ const getUserById = async (req, res) => {
 
     //Get ID of user from request.
     let { userId } = req.params
+    let { showDeleted = "false" } = req.query
     userId = Number(userId)
 
-    //Get current JSON DB users as an object.
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-
     //Search for the user and return it.
-    const foundUser = allUsersObject.users.find((user) => user.id === userId)
+    const foundUser = await User.findOne({ where: { id: userId }, paranoid: showDeleted === "false" ? true : false })
     if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
-    }
-
-    if (foundUser.isDeleted) {
-      return res.status(400).json({ error: "User not found." })
     }
 
     //Return details of user.
     const response = {
       message: "Found user!",
-      data: { ...foundUser },
+      data: { ...foundUser }.dataValues,
       links: createUsersLinks(userId),
     }
     res.status(200).json(response)
@@ -91,7 +78,6 @@ const getUserById = async (req, res) => {
   }
 }
 
-//Also fetches soft deleted users.
 const fetchBatchOfUsers = async (req, res) => {
   try {
     //Check if admin.
@@ -102,37 +88,29 @@ const fetchBatchOfUsers = async (req, res) => {
       })
     }
 
-    //Get limit and offset and calculate start and end index.
-    let { limit = 10, offset = 0, sortBy = "createdAt", sortOrder = "asc" } = req.query
+    //Get limit and offset.
+    let { limit = 10, offset = 0, sortBy = "id", sortOrder = "ASC", showDeleted = "false" } = req.query
     limit = Number(limit)
     offset = Number(offset)
+    sortOrder = sortOrder.toUpperCase()
+
     if (isNaN(limit) || isNaN(offset) || limit < 1 || offset < 0) {
       return res.status(400).json({
         error: "Limit should be >= 1, and offset should be >= 0.",
       })
     }
-    const startIndex = offset
-    const endIndex = startIndex + limit
 
-    //Get current JSON DB images as an object.
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
+    //Try to use findAndCountAll
+    const batchOfUsers = await User.findAll({
+      limit,
+      offset,
+      order: [[sortBy, sortOrder ?? "ASC"]],
+      paranoid: showDeleted === "false" ? true : false,
+    })
 
-    const usersWithoutDeleted = allUsersObject.users.filter((user) => !user.isDeleted)
-    const batchOfUsers = usersWithoutDeleted.slice(startIndex, endIndex)
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
     }
-
-    batchOfUsers.sort((imageA, imageB) => {
-      let comparison = 0
-      if (imageA[sortBy] < imageB[sortBy]) {
-        comparison = -1
-      } else if (imageA[sortBy] > imageB[sortBy]) {
-        comparison = 1
-      }
-      return sortOrder === "desc" ? comparison * -1 : comparison
-    })
 
     // Generate links for each user in the batch
     const userLinks = batchOfUsers.map((user) => {
@@ -140,7 +118,7 @@ const fetchBatchOfUsers = async (req, res) => {
     })
 
     const userData = batchOfUsers.map((user) => {
-      return { ...user }
+      return { ...user }.dataValues
     })
 
     const response = {
@@ -168,42 +146,15 @@ const partiallyUpdateUserById = async (req, res) => {
     userId = Number(userId)
     const updatedData = req.body
 
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-
-    const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === Number(userId))
-    const foundUser = allUsersObject.users[foundUserIndex]
-    if (!foundUser) {
-      return res.status(404).json({ error: "User not found." })
-    }
-
-    if (foundUser.isDeleted) {
-      res.status(404).json({ error: "User not found." })
-    }
-
-    allUsersObject.users[foundUserIndex] = {
-      ...allUsersObject.users[foundUserIndex],
-      ...updatedData,
-      modifiedAt: new Date(),
-    }
-
-    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
-
-    if (updatedData.userName) {
-      const allImagesJSON = await fs.readFile(imagesFilePath, "utf-8")
-      const allImagesObject = JSON.parse(allImagesJSON)
-      let userImages = allImagesObject.images.filter(
-        (image) => !image.isFlagged && (req.isAdmin || image.ownerId === userId) && !image.isDeleted
-      )
-
-      userImages.map((image) => {
-        if (image.ownerId === userId) {
-          image.ownerUserName = updatedData.userName
+    for (const key in fieldsToUpdate) {
+      const value = fieldsToUpdate[key]
+      if (value !== undefined) {
+        if ((key === "userName" || key === "password") && typeof value !== "string") {
+          return res.status(400).json({ error: `${key} should be a string!` })
         }
-        return image
-      })
-      await fs.writeFile(imagesFilePath, JSON.stringify(allImagesObject, null, 2), "utf-8")
+      }
     }
+    await User.update(updatedData, { where: { id: userId } })
 
     const response = {
       message: "User updated successfully.",
@@ -226,25 +177,69 @@ const updateUserById = async (req, res) => {
     }
     let { userId } = req.params
     userId = Number(userId)
-    const updatedData = req.body
+    const { id, userName, password, createdAt, updatedAt, destroyTime } = req.body
 
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-    const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === Number(userId))
-    const foundUser = allUsersObject.users[foundUserIndex]
-
-    if (!foundUser) {
-      return res.status(404).json({ error: "User not found." })
+    if (!id) {
+      return res.status(400).json({
+        error: "Request must include id!",
+      })
     }
 
-    if (foundUser.isDeleted) {
-      res.status(404).json({ error: "User not found." })
+    if (!userName) {
+      return res.status(400).json({
+        error: "Request must include userName!",
+      })
     }
 
-    allUsersObject.users[foundUserIndex] = {
-      ...updatedData,
+    if (!password) {
+      return res.status(400).json({
+        error: "Request must include password!",
+      })
     }
-    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
+
+    if (!createdAt) {
+      return res.status(400).json({
+        error: "Request must include createdAt!",
+      })
+    }
+
+    if (!updatedAt) {
+      return res.status(400).json({
+        error: "Request must include updatedAt!",
+      })
+    }
+
+    if (typeof id !== "number" || typeof userName !== "string" || typeof password !== "string") {
+      return res.status(400).json({
+        error: "Invalid data types for id(number), userName(string), or password(string).",
+      })
+    }
+
+    const createdAtDate = new Date(createdAt)
+    const updatedAtDate = new Date(updatedAt)
+
+    if (isNaN(createdAtDate.getTime()) || isNaN(updatedAtDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format." })
+    }
+    const formattedcreatedAt = createdAtDate.toISOString()
+    const formattedupdatedAt = updatedAtDate.toISOString()
+
+    await sequelize.query(
+      `UPDATE "Users" SET id=?,"userName"=?,password=?,"isAdmin"=?,"createdAt"=?,"updatedAt"=?,"destroyTime"=? WHERE id=?`,
+      {
+        replacements: [
+          id,
+          userName,
+          password,
+          isAdmin ?? null,
+          formattedcreatedAt,
+          formattedupdatedAt,
+          destroyTime ?? null,
+          userId,
+        ],
+        type: QueryTypes.UPDATE,
+      }
+    )
 
     const response = {
       message: "User updated successfully.",
@@ -274,18 +269,9 @@ const createUser = async (req, res) => {
     const saltRounds = 15
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
 
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-    const existingUser = allUsersObject.users.find((user) => user.userName === userName)
-    if (existingUser) {
-      return res.status(400).json({ error: "This userName already exists!." })
-    }
+    const newUser = await User.create({ userName: userName, password: hashedPassword })
+    const newUserId = newUser.id
 
-    const newUserId = (allUsersObject.users?.length ?? 0) + 1
-    const newUserObject = new User(newUserId, userName, hashedPassword)
-
-    allUsersObject.users.push(newUserObject)
-    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2))
     console.log(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
     const response = {
       message: "Successfully created this user!",
@@ -310,23 +296,11 @@ const deleteUserById = async (req, res) => {
     let { userId } = req.params
     userId = Number(userId)
 
-    const allUsersJSON = await fs.readFile(usersFilePath, "utf-8")
-    const allUsersObject = JSON.parse(allUsersJSON)
-
-    const foundUserIndex = allUsersObject.users.findIndex((user) => user.id === userId)
-    const foundUser = allUsersObject.users[foundUserIndex]
-    if (!foundUser) {
-      return res.status(404).json({ error: "User not found." })
-    }
-
-    if (foundUser.isDeleted) {
-      return res.status(404).json({ error: "User not found." })
-    }
-
-    foundUser.isDeleted = true
-    foundUser.modifiedAt = new Date()
-
-    await fs.writeFile(usersFilePath, JSON.stringify(allUsersObject, null, 2), "utf-8")
+    await User.destroy({
+      where: {
+        id: userId,
+      },
+    })
 
     const response = {
       message: "This user has been deleted!",
