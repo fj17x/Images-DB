@@ -108,6 +108,10 @@ const getImageById = async (req, res) => {
 
     const foundImage = await Image.findByPk(imageId)
 
+    if (!foundImage) {
+      return res.status(404).json({ error: "Image not found." })
+    }
+
     if (foundImage.dataValues.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
