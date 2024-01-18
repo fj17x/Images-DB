@@ -1,7 +1,7 @@
 import { QueryTypes, Op } from "sequelize"
 import sequelize from "../config/connection.js"
-import Image from "../models/Image.js"
-import User from "../models/User.js"
+import Image from "../models/image.js"
+import User from "../models/user.js"
 
 //Function to create HATEOS links.
 const createImageLinks = (imageId, isAdmin) => {

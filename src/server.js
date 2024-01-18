@@ -5,8 +5,8 @@ import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
 import sequelize from "./config/connection.js"
-import User from "./models/User.js"
-import Image from "./models/Image.js"
+import User from "./models/user.js"
+import Image from "./models/image.js"
 
 const app = express()
 const PORT = process.env.APP_PORT

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
-import User from "../models/User.js"
-import Image from "../models/Image.js"
+import User from "../models/user.js"
+import Image from "../models/image.js"
 
 //Function to create HATEOS links.
 const createMeLinks = () => {
