@@ -501,7 +501,7 @@ const updateImage = async (req, res) => {
 
     if (ownerId && typeof ownerId !== "number") {
       return res.status(400).json({
-        error: "Invalid data type for number.",
+        error: "Invalid data type for ownerId.",
       })
     }
 
@@ -546,7 +546,7 @@ const updateImage = async (req, res) => {
           url,
           title,
           description ?? null,
-          ownerId ?? foundImage.dataValues.ownerId,
+          ownerId ?? null,
           formattedupdatedAt,
           formattedcreatedAt,
           destroyTime ?? null,
