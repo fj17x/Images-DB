@@ -15,9 +15,6 @@ imageRouter.delete("/:imageId(\\d+)", verifyToken, imageController.deleteImageBy
 // GET method to fetch batch of images.
 imageRouter.get("/", verifyToken, imageController.getBatchOfImages)
 
-// GET method to fetch images with common tags.
-imageRouter.get("/common-tags", verifyToken, imageController.getImagesByCommonTags)
-
 // PATCH method to update an image.
 imageRouter.patch("/:imageId(\\d+)", verifyToken, imageController.partiallyUpdateImage)
 

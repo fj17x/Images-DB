@@ -21,14 +21,14 @@ const createUsersLinks = (userId) => {
       description: "Get details of this user",
     },
     {
-      rel: "update_user",
-      method: "PUT",
-      href: `/users/${userId}`,
-      description: "Update details of this user",
-    },
-    {
       rel: "partially_update_user",
       method: "PATCH",
+      href: `/users/${userId}`,
+      description: "Partially update details of this user",
+    },
+    {
+      rel: "update_user",
+      method: "PUT",
       href: `/users/${userId}`,
       description: "Update details of this user",
     },
@@ -37,6 +37,12 @@ const createUsersLinks = (userId) => {
       method: "DELETE",
       href: `/users/${userId}`,
       description: "Delete this user",
+    },
+    {
+      rel: "create_user",
+      method: "POST",
+      href: "/users",
+      description: "Create a new user.",
     }
   )
 

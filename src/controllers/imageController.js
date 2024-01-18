@@ -4,7 +4,7 @@ import Image from "../models/image.js"
 import User from "../models/user.js"
 
 //Function to create HATEOS links.
-const createImageLinks = (imageId, isAdmin) => {
+const createImageLinks = (imageId) => {
   const links = [
     {
       rel: "self",
@@ -13,16 +13,22 @@ const createImageLinks = (imageId, isAdmin) => {
       description: "Get details of this image",
     },
     {
-      rel: "update_description",
-      method: "PATCH",
-      href: `/images/${imageId}/description`,
-      description: "Update description of this image",
+      rel: "update_image",
+      method: "PUT",
+      href: `/images/${imageId}`,
+      description: "Update the image.",
     },
     {
-      rel: "update_tags",
+      rel: "partially_update_image",
       method: "PATCH",
-      href: `/images/${imageId}/tags`,
-      description: "Update tags of this image",
+      href: `/images/${imageId}`,
+      description: "Partially update the image.",
+    },
+    {
+      rel: "delete_image",
+      method: "DELETE",
+      href: `/images/${imageId}`,
+      description: "Delete the image.",
     },
     {
       rel: "all_images",
@@ -30,15 +36,13 @@ const createImageLinks = (imageId, isAdmin) => {
       href: "/images",
       description: "Get all images",
     },
+    {
+      rel: "upload_image",
+      method: "POST",
+      href: "/images",
+      description: "Upload an image.",
+    },
   ]
-  if (isAdmin) {
-    links.push({
-      rel: "flag_image",
-      method: "PATCH",
-      href: `/images/${imageId}/flag`,
-      description: "Flag this image (Admin Only)",
-    })
-  }
 
   return links
 }
@@ -86,7 +90,7 @@ const createImage = async (req, res) => {
 
     const response = {
       message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
-      links: createImageLinks(newImageId, isAdmin),
+      links: createImageLinks(newImageId),
     }
 
     res.status(201).json(response)
@@ -131,7 +135,7 @@ const getImageById = async (req, res) => {
     const response = {
       message: "Successfully found image!",
       data: { ...foundImage }.dataValues,
-      links: createImageLinks(imageId, isAdmin),
+      links: createImageLinks(imageId),
     }
     //Return details of image.
     res.status(200).json(response)
@@ -146,9 +150,21 @@ const getBatchOfImages = async (req, res) => {
   try {
     const userId = req.userId
     const isAdmin = req.isAdmin
+    let tagList = []
 
     //Get limit and offset.
-    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc", showDeleted = "false" } = req.query
+    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc", showDeleted = "false", tags } = req.query
+
+    if (tags && typeof tags !== "string") {
+      return res.status(400).json({ error: "Provide tags as comma seperated values!" })
+    }
+
+    if (tags) {
+      tagList = tags.split(",")
+    }
+
+    //Filter images based on tags.
+
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()
@@ -161,10 +177,17 @@ const getBatchOfImages = async (req, res) => {
     }
 
     const whereCondition = isAdmin
-      ? {}
+      ? {
+          tags: {
+            [Op.contains]: tagList,
+          },
+        }
       : {
-          ownerId: userId,
+          tags: {
+            [Op.contains]: tagList,
+          },
           isFlagged: false,
+          ownerId: userId,
         }
 
     const paranoidCondition = isAdmin ? (showDeleted === "false" ? true : false) : true
@@ -191,7 +214,7 @@ const getBatchOfImages = async (req, res) => {
 
     // Generate links for each image in the batch
     const imageLinks = batchOfImages.map((image) => {
-      return createImageLinks(image.id, isAdmin)
+      return createImageLinks(image.id)
     })
 
     const imageData = batchOfImages.map((image) => {
@@ -210,70 +233,6 @@ const getBatchOfImages = async (req, res) => {
     console.error("Error during fetching of images.: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to fetch images.", details: errorMessage })
-  }
-}
-
-const getImagesByCommonTags = async (req, res) => {
-  try {
-    //Get tags, userId and check whether user is admin.
-    const { tags } = req.query
-    const userId = req.userId
-    const isAdmin = req.isAdmin
-
-    if (!tags) {
-      return res.status(400).json({ error: "Please provide tags for filtering." })
-    }
-
-    //Filter images based on tags.
-    const tagList = tags.split(",")
-
-    const whereCondition = isAdmin
-      ? {
-          tags: {
-            [Op.contains]: tagList,
-          },
-        }
-      : {
-          tags: {
-            [Op.contains]: tagList,
-          },
-          isFlagged: false,
-          ownerId: userId,
-        }
-
-    const imagesWithCommonTags = await Image.findAll({
-      where: whereCondition,
-      order: [["id", "ASC"]],
-      include: {
-        model: User,
-        as: "owner",
-        attributes: ["userName"],
-      },
-    })
-
-    const imageLinks = imagesWithCommonTags.map((image) => {
-      return createImageLinks(image.id, isAdmin)
-    })
-
-    const imageData = imagesWithCommonTags.map((image) => {
-      return { ...image }.dataValues
-    })
-
-    if (!imagesWithCommonTags.length) {
-      return res.status(404).json({ error: "No images found with given tags." })
-    }
-    const response = {
-      message: ` Images with such tags found successfully.`,
-      fetched: imagesWithCommonTags.length,
-      data: imageData,
-      links: imageLinks,
-    }
-
-    res.status(200).json({ response })
-  } catch (err) {
-    console.error("Error while fetching images by common tags: ", err)
-    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
-    res.status(500).json({ error: "Failed to fetch images by these common tags.", details: errorMessage })
   }
 }
 
@@ -309,7 +268,7 @@ const deleteImageById = async (req, res) => {
 
     const response = {
       message: "Image deleted.",
-      links: createImageLinks(imageId, isAdmin),
+      links: createImageLinks(imageId),
     }
     res.status(200).json(response)
   } catch (err) {
@@ -394,7 +353,6 @@ const partiallyUpdateImage = async (req, res) => {
       fieldsToUpdate.destroyTime = formattedDestroyTime
     }
 
-    console.log("🚀 ~ partiallyUpdateImage ~ fieldsToUpdate:", fieldsToUpdate)
     const foundImage = await Image.findOne({
       where: {
         id: imageId,
@@ -435,7 +393,7 @@ const partiallyUpdateImage = async (req, res) => {
 
     const response = {
       message: "Image details updated successfully.",
-      links: createImageLinks(imageId, isAdmin),
+      links: createImageLinks(imageId),
     }
     res.status(200).json(response)
   } catch (err) {
@@ -560,7 +518,7 @@ const updateImage = async (req, res) => {
 
     const response = {
       message: "Image details updated successfully.",
-      links: createImageLinks(imageId, isAdmin),
+      links: createImageLinks(imageId),
     }
     res.status(200).json(response)
   } catch (err) {
@@ -570,4 +528,4 @@ const updateImage = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, getBatchOfImages, getImagesByCommonTags, deleteImageById, partiallyUpdateImage, updateImage }
+export { createImage, getImageById, getBatchOfImages, deleteImageById, partiallyUpdateImage, updateImage }

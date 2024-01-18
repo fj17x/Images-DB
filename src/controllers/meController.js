@@ -14,7 +14,7 @@ const createMeLinks = () => {
     },
     {
       rel: "update_your_details",
-      method: "PUT",
+      method: "PATCH",
       href: `/me`,
       description: "Update your details.",
     },

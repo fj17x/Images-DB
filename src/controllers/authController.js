@@ -9,13 +9,13 @@ const authLinks = [
     rel: "register",
     method: "POST",
     href: "/register",
-    description: "Register a new user",
+    description: "Register a new user.",
   },
   {
     rel: "login",
     method: "POST",
     href: "/login",
-    description: "Login with userName and password",
+    description: "Login with userName and password.",
   },
 ]
 
