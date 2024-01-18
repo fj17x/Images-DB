@@ -152,7 +152,15 @@ const getBatchOfImages = async (req, res) => {
     let tagList = []
 
     //Get limit and offset.
-    let { limit = 50, offset = 0, sortBy = "createdAt", sortOrder = "asc", showDeleted = "false", tags } = req.query
+    let {
+      limit = 50,
+      offset = 0,
+      sortBy = "createdAt",
+      sortOrder = "asc",
+      showDeleted = "false",
+      showFlagged = "true",
+      tags,
+    } = req.query
 
     if (tags && typeof tags !== "string") {
       return res.status(400).json({ error: "Provide tags as comma seperated values!" })
@@ -180,6 +188,7 @@ const getBatchOfImages = async (req, res) => {
           tags: {
             [Op.contains]: tagList,
           },
+          isFlagged: showFlagged === "true" ? { [Op.or]: [true, false] } : false,
         }
       : {
           tags: {
