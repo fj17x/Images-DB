@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import User from "../models/user.js"
+import { User } from "../models/index.js"
 
 const verifyToken = async (req, res, next) => {
   try {

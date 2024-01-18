@@ -15,15 +15,4 @@ const connectionURI =
 
 const sequelize = new Sequelize(connectionURI)
 
-const makeConnection = async () => {
-  try {
-    await sequelize.authenticate()
-    console.log("Application successfully connected to database!")
-  } catch (error) {
-    console.log("Failed to connect to db!", error)
-  }
-}
-
-makeConnection()
-
 export default sequelize
