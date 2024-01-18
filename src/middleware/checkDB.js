@@ -8,7 +8,7 @@ const checkDB = async (req, res, next) => {
     next()
   } catch (err) {
     console.log("Error verifying token.", err)
-    return res.status(500).json({ error: "Database is down!" })
+    return res.status(500).json({ error: "Something went wrong!" })
   }
 }
 
