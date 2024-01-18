@@ -1,5 +1,5 @@
 import { QueryTypes, Op } from "sequelize"
-import sequelize from "../db/connection.js"
+import sequelize from "../config/connection.js"
 import Image from "../models/Image.js"
 import User from "../models/User.js"
 

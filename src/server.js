@@ -4,7 +4,7 @@ import imageRouter from "./routes/imageRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
-import sequelize from "./db/connection.js"
+import sequelize from "./config/connection.js"
 import User from "./models/User.js"
 import Image from "./models/Image.js"
 

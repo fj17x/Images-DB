@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
 import { QueryTypes } from "sequelize"
-import sequelize from "../db/connection.js"
+import sequelize from "../config/connection.js"
 import User from "../models/User.js"
 
 //Function to create HATEOS links.
