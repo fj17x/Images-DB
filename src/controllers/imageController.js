@@ -85,7 +85,7 @@ const createImage = async (req, res) => {
     })
 
     const newImageId = image.id
-    
+
     const response = {
       message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
       links: createImageLinks(newImageId),
@@ -154,7 +154,7 @@ const getBatchOfImages = async (req, res) => {
     let {
       limit = 50,
       offset = 0,
-      sortBy = "createdAt",
+      sortBy = "id",
       sortOrder = "asc",
       showDeleted = "false",
       showFlagged = "true",
