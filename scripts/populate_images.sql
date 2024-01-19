@@ -1,4 +1,4 @@
---\i Desktop/Images-DB/scripts/populate_images.sql
+--\i scripts/populate_images.sql
 alter sequence "Images_id_seq" restart with 1;
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/111x100.png/5fa2dd/ffffff', 'A beautiful bumblebee', 'This is quite a pic!', '2023-05-04', '2023-03-27', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/210x100.png/dddddd/000000', 'Ostrich in the wild, black-eyed', 'I took this photo at age 12!.', '2023-09-13', '2023-08-24', 4);

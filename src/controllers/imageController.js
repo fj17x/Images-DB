@@ -49,13 +49,12 @@ const createImageLinks = (imageId) => {
 const createImage = async (req, res) => {
   try {
     //Get data provided in body.
-    let { imageURL, title, description, tags } = req.body
+    let { url, title, description, tags } = req.body
     const userId = req.userId
-    const isAdmin = req.isAdmin
 
-    if (!imageURL || typeof imageURL !== "string") {
+    if (!url || typeof url !== "string") {
       return res.status(400).json({
-        error: "Please provide the imageURL and ensure the type is a string.",
+        error: "Please provide the url and ensure the type is a string.",
       })
     }
 
@@ -78,7 +77,7 @@ const createImage = async (req, res) => {
     }
 
     const image = await Image.create({
-      url: imageURL,
+      url,
       ownerId: userId,
       title,
       description,
@@ -86,7 +85,7 @@ const createImage = async (req, res) => {
     })
 
     const newImageId = image.id
-
+    
     const response = {
       message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
       links: createImageLinks(newImageId),

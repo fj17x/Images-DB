@@ -1,4 +1,4 @@
---\i Desktop/Images-DB/scripts/populate_users.sql
+--\i scripts/populate_users.sql
 alter sequence "Users_id_seq" restart with 1;
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'admin', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-03-31', '2023-06-14');
 insert into "Users" ( "userName", password, "createdAt", "updatedAt") values ( 'carl', '$2b$15$K8QGnd1A7.A7.p661qLi/.giGjGxueAFx4quondR./BMjQHwA2aau', '2023-01-26', '2023-12-10');

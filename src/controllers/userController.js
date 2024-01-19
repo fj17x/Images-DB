@@ -179,15 +179,14 @@ const partiallyUpdateUserById = async (req, res) => {
 
 const updateUserById = async (req, res) => {
   try {
-    const isAdmin = req.isAdmin
-    if (!isAdmin) {
+    if (!req.isAdmin) {
       return res.status(403).json({
         error: "Only the admin can update the users!",
       })
     }
     let { userId } = req.params
     userId = Number(userId)
-    const { id, userName, password, createdAt, updatedAt, destroyTime } = req.body
+    const { id, userName, password, createdAt, isAdmin, updatedAt, destroyTime } = req.body
 
     if (!id) {
       return res.status(400).json({
@@ -219,17 +218,33 @@ const updateUserById = async (req, res) => {
       })
     }
 
-    if (typeof id !== "number" || typeof userName !== "string" || typeof password !== "string") {
+    if (typeof id !== "number") {
       return res.status(400).json({
-        error: "Invalid data types for id(number), userName(string), or password(string).",
+        error: "Invalid data type for id. Please provide a number.",
+      })
+    }
+
+    if (typeof userName !== "string") {
+      return res.status(400).json({
+        error: "Invalid data type for userName.Please provide a string..",
+      })
+    }
+
+    if (typeof password !== "string") {
+      return res.status(400).json({
+        error: "Invalid data type for password. Please provide a string.",
       })
     }
 
     const createdAtDate = new Date(createdAt)
     const updatedAtDate = new Date(updatedAt)
 
-    if (isNaN(createdAtDate.getTime()) || isNaN(updatedAtDate.getTime())) {
-      return res.status(400).json({ error: "Invalid date format." })
+    if (isNaN(createdAtDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format for createdAt." })
+    }
+
+    if (isNaN(updatedAtDate.getTime())) {
+      return res.status(400).json({ error: "Invalid date format for updatedAt." })
     }
     const formattedcreatedAt = createdAtDate.toISOString()
     const formattedupdatedAt = updatedAtDate.toISOString()
