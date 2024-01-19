@@ -15,9 +15,9 @@ insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerI
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/199x100.png/dddddd/000000', 'Hanging Gardens of Babylon', '', '2023-01-21', '2023-02-14', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/189x100.png/cc0000/ffffff', 'A 130 year old man', 'Such an old person!!!!', '2023-09-24', '2024-01-01', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/196x100.png/cc0000/ffffff', 'The best comedian.', null, '2023-06-03', '2023-09-21', 1);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/188x100.png/cc0000/ffffff', 'Cormorant, great', 'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor.', '2023-11-11', '2023-07-18', 4);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/113x100.png/cc0000/ffffff', 'Wallaby, agile', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula.', '2023-10-03', '2023-07-31', 2);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/149x100.png/cc0000/ffffff', 'Tawny eagle', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet.', '2023-07-17', '2023-04-24', 1);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/188x100.png/cc0000/ffffff', 'My friend Jacob!', 'He lives in Hollywood.', '2023-11-11', '2023-07-18', 4);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/113x100.png/cc0000/ffffff', 'Ripe Duck', '', '2023-10-03', '2023-07-31', 2);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/149x100.png/cc0000/ffffff', 'The Yeti.', 'People have claimed that he exists but no one could prove it!.', '2023-07-17', '2023-04-24', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/115x100.png/ff4444/ffffff', 'Crowned hawk-eagle', 'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum.', '2023-03-06', '2023-09-14', 3);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/154x100.png/ff4444/ffffff', 'European spoonbill', 'Vestibulum ante ipsum primis in faucibus orci lu justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue.', '2023-07-27', '2023-05-17', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/201x100.png/cc0000/ffffff', 'Long-tailed spotted cat', null, '2023-10-03', '2023-07-30', 2);
@@ -313,8 +313,12 @@ update "Images" set tags=ARRAY['fly', 'bird'] where id=10;
 update "Images" set tags=ARRAY['india','beautiful'] where id=11;
 update "Images" set tags=ARRAY['angry','food'] where id=12;
 update "Images" set tags=ARRAY['myth','beautiful'] where id=13;
-update "Images" set tags=ARRAY['ugly'] where id=14;
+update "Images" set tags=ARRAY['ugly','plane'] where id=14;
 update "Images" set tags=ARRAY['funny'] where id=15;
+update "Images" set tags=ARRAY['ugly','funny'] where id=16;
+update "Images" set tags=ARRAY['beautiful','food','fly'] where id=17;
+update "Images" set tags=ARRAY['myth','food','fly'] where id=18;
+
 
 
 

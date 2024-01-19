@@ -19,7 +19,7 @@ const Image = sequelize.define(
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: "",
     },
     ownerId: {
