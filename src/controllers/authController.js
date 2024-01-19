@@ -30,6 +30,17 @@ const register = async (req, res) => {
       return res.status(400).json({ error: "Please provide userName and password as strings!" })
     }
 
+    const foundUser = await User.findOne({
+      where: {
+        userName,
+      },
+      raw: true,
+    })
+
+    if (foundUser) {
+      return res.status(400).json({ error: "userName already exists!" })
+    }
+
     const passwordToString = password.toString()
     const saltRounds = 15
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
@@ -65,7 +76,7 @@ const login = async (req, res) => {
 
     const passwordToString = password.toString()
 
-    const user = await User.findOne({ where: { userName: userName } })
+    const user = await User.findOne({ where: { userName: userName }, raw: true, attributes: ["password", "id"] })
     if (!user) {
       return res.status(400).json({ error: "Such a user does not exist. Please register first." })
     }

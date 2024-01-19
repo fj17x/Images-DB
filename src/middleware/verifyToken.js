@@ -13,12 +13,12 @@ const verifyToken = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ error: "Token not provided. Please provide token in Authorization header." })
     }
-    let userId = jwt.verify(token, secretKey)
-    userId = userId.userId
+    const decodedToken = jwt.verify(token, secretKey)
+    const userId = decodedToken.userId
     req.userId = userId
 
     //Check whether user is an admin. If yes, make req.isAdmin true.
-    const user = await User.findByPk(userId)
+    const user = await User.findByPk(userId, { raw: true, attributes: ["userName", "isAdmin"] })
     if (!user) {
       return res
         .status(400)
@@ -28,8 +28,14 @@ const verifyToken = async (req, res, next) => {
     req.isAdmin = user.isAdmin ? true : false
     next()
   } catch (err) {
-    console.log("Error verifying token.", err)
-    return res.status(401).json({ error: "Invalid token." })
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ error: "Token expired." })
+    } else if (err.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Invalid token." })
+    } else {
+      console.log("Error verifying token.", err)
+      return res.status(500).json({ error: "Internal Server Error." })
+    }
   }
 }
 

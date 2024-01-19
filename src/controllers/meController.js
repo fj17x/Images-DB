@@ -46,6 +46,7 @@ const getCurrentUserDetails = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
     const userPlainObject = foundUser.get({ plain: true })
+    console.log("🚀 ~ getCurrentUserDetails ~ foundUser:", foundUser)
     const { password, images, ...userDataToSend } = userPlainObject
     const imagesUploaded = images.map((image) => image.id)
 
@@ -84,7 +85,7 @@ const updateCurrentUserDetails = async (req, res) => {
       if (typeof userName !== "string") {
         return res.status(400).json({ error: "Please provide userName as a string!" })
       }
-      const existingUser = await User.findOne({ where: { userName } })
+      const existingUser = await User.findOne({ where: { userName }, raw: true, attributes: ["userName"] })
       if (existingUser && existingUser.userName !== req.userName) {
         return res.status(400).json({ error: "This userName already exists! Change your userName to something else." })
       }
@@ -122,7 +123,7 @@ const deleteCurrentUser = async (req, res) => {
     const userId = req.userId
 
     //Soft delete the user.
-    User.destroy({ where: { id: userId } })
+    await User.destroy({ where: { id: userId } })
 
     //Return response.
     const response = {

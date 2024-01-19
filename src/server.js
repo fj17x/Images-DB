@@ -6,7 +6,7 @@ import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
 
 const app = express()
-const PORT = process.env.APP_PORT
+const PORT = process.env.APP_PORT ?? 4000
 app.use(express.json())
 
 app.use("/auth", authRouter)

@@ -66,7 +66,7 @@ const getUserById = async (req, res) => {
     userId = Number(userId)
 
     //Search for the user and return it.
-    const foundUser = await User.findOne({ where: { id: userId }, paranoid: showDeleted === "false" ? true : false })
+    const foundUser = await User.findOne({ where: { id: userId }, paranoid: showDeleted === "false" ? true : false, raw: true })
     if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
@@ -74,7 +74,7 @@ const getUserById = async (req, res) => {
     //Return details of user.
     const response = {
       message: "Found user!",
-      data: { ...foundUser }.dataValues,
+      data: { ...foundUser },
       links: createUsersLinks(userId),
     }
     res.status(200).json(response)
@@ -113,6 +113,7 @@ const fetchBatchOfUsers = async (req, res) => {
       offset,
       order: [[sortBy, sortOrder ?? "ASC"]],
       paranoid: showDeleted === "false" ? true : false,
+      raw: true,
     })
 
     if (!batchOfUsers.length) {
@@ -125,7 +126,7 @@ const fetchBatchOfUsers = async (req, res) => {
     })
 
     const userData = batchOfUsers.map((user) => {
-      return { ...user }.dataValues
+      return { ...user }
     })
 
     const response = {
@@ -154,6 +155,17 @@ const partiallyUpdateUserById = async (req, res) => {
     let { userId } = req.params
     userId = Number(userId)
     const updatedData = req.body
+
+    const foundUser = await User.findOne({
+      where: {
+        id: userId,
+      },
+      raw: true,
+    })
+
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found." })
+    }
 
     for (const key in fieldsToUpdate) {
       const value = fieldsToUpdate[key]
@@ -249,6 +261,17 @@ const updateUserById = async (req, res) => {
     const formattedcreatedAt = createdAtDate.toISOString()
     const formattedupdatedAt = updatedAtDate.toISOString()
 
+    const foundUser = await User.findOne({
+      where: {
+        id: userId,
+      },
+      raw: true,
+    })
+
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found." })
+    }
+
     await sequelize.query(
       `UPDATE "Users" SET id=?,"userName"=?,password=?,"isAdmin"=?,"createdAt"=?,"updatedAt"=?,"destroyTime"=? WHERE id=?`,
       {
@@ -291,6 +314,17 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: "Please provide userName and password of the user to create." })
     }
 
+    const foundUser = await User.findOne({
+      where: {
+        userName,
+      },
+      raw: true,
+    })
+
+    if (foundUser) {
+      return res.status(400).json({ error: "userName already exists!" })
+    }
+
     const passwordToString = password.toString()
     const saltRounds = 15
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
@@ -322,6 +356,17 @@ const deleteUserById = async (req, res) => {
 
     let { userId } = req.params
     userId = Number(userId)
+
+    const foundUser = await User.findOne({
+      where: {
+        id: userId,
+      },
+      raw: true,
+    })
+
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found." })
+    }
 
     await User.destroy({
       where: {

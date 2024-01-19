@@ -33,7 +33,7 @@ const createImageLinks = (imageId) => {
       rel: "all_images",
       method: "GET",
       href: "/images",
-      description: "Get all images",
+      description: "Get all images.",
     },
     {
       rel: "upload_image",
@@ -117,6 +117,7 @@ const getImageById = async (req, res) => {
         as: "owner",
         attributes: ["userName"],
       },
+      raw: true,
       paranoid: isAdmin ? false : true,
     })
 
@@ -124,17 +125,17 @@ const getImageById = async (req, res) => {
       return res.status(404).json({ error: "Image not found." })
     }
 
-    if (foundImage.dataValues.isFlagged) {
+    if (foundImage.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
 
-    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "You can only access images you have uploaded." })
     }
 
     const response = {
       message: "Successfully found image!",
-      data: { ...foundImage }.dataValues,
+      data: { ...foundImage },
       links: createImageLinks(imageId),
     }
     //Return details of image.
@@ -212,12 +213,10 @@ const getBatchOfImages = async (req, res) => {
         as: "owner",
         attributes: ["userName"],
       },
+      raw: true,
     })
 
     if (!batchOfImages.length) {
-      if (!isAdmin) {
-        return res.status(404).json({ error: `No images found for user with ID: ${userId}.` })
-      }
       return res.status(404).json({ error: "No images found. " })
     }
 
@@ -227,7 +226,7 @@ const getBatchOfImages = async (req, res) => {
     })
 
     const imageData = batchOfImages.map((image) => {
-      return { ...image }.dataValues
+      return { ...image }
     })
 
     const response = {
@@ -259,12 +258,13 @@ const deleteImageById = async (req, res) => {
       where: {
         id: imageId,
       },
+      raw: true,
     })
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
 
-    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to delete this image." })
     }
 
@@ -367,17 +367,18 @@ const partiallyUpdateImage = async (req, res) => {
       },
       attributes: ["ownerId", "isFlagged"],
       paranoid: isAdmin ? false : true,
+      raw: true,
     })
 
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
 
-    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
+    if (!isAdmin && foundImage.ownerId !== userId) {
       return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
-    if (!isAdmin && foundImage.dataValues.isFlagged === true) {
+    if (!isAdmin && foundImage.isFlagged === true) {
       return res.status(403).json({ error: "This image has been flagged and cannot be changed!" })
     }
 
@@ -494,14 +495,11 @@ const updateImage = async (req, res) => {
         id: imageId,
       },
       paranoid: isAdmin ? false : true,
+      raw: true,
     })
 
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
-    }
-
-    if (!isAdmin && foundImage.dataValues.ownerId !== userId) {
-      return res.status(403).json({ error: "Unauthorized to update this image." })
     }
 
     await sequelize.query(
