@@ -87,7 +87,8 @@ const createImage = async (req, res) => {
     const newImageId = image.id
 
     const response = {
-      message: `Sucessfully uploaded image! Image Id is : ${newImageId}`,
+      message: `Sucessfully uploaded image!`,
+      imageId: Number(newImageId),
       links: createImageLinks(newImageId),
     }
 
@@ -116,6 +117,7 @@ const getImageById = async (req, res) => {
         as: "owner",
         attributes: ["userName"],
       },
+      paranoid: isAdmin ? false : true,
     })
 
     if (!foundImage) {
@@ -256,7 +258,6 @@ const deleteImageById = async (req, res) => {
     const foundImage = await Image.findOne({
       where: {
         id: imageId,
-        ownerId: userId,
       },
     })
     if (!foundImage) {

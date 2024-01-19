@@ -39,6 +39,7 @@ const register = async (req, res) => {
     console.log(`A new user has registered with ID = ${newUser.id} & userName = '${newUser.userName}'`)
     const response = {
       message: "Successfully registered! Please login at /login route.",
+      userId: Number(newUser.id),
       links: authLinks,
     }
     res.status(201).json(response)

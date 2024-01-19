@@ -86,7 +86,7 @@ const updateCurrentUserDetails = async (req, res) => {
       }
       const existingUser = await User.findOne({ where: { userName } })
       if (existingUser && existingUser.userName !== req.userName) {
-        return res.status(400).json({ error: "This userName already exists! Change your userName to something else!" })
+        return res.status(400).json({ error: "This userName already exists! Change your userName to something else." })
       }
 
       User.update({ userName }, { where: { id: userId } })

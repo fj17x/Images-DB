@@ -1,9 +1,9 @@
 --\i scripts/populate_images.sql
 alter sequence "Images_id_seq" restart with 1;
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/111x100.png/5fa2dd/ffffff', 'A beautiful bumblebee', 'This is quite a pic!', '2023-05-04', '2023-03-27', 2);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/210x100.png/dddddd/000000', 'Ostrich in the wild, black-eyed', 'I took this photo at age 12!.', '2023-09-13', '2023-08-24', 4);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/210x100.png/dddddd/000000', 'Ostrich in the wild, black-eyed', 'I took this photo at age 12!.', '2023-09-13', '2023-08-24', 3);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/247x100.png/5fa2dd/ffffff', 'Aeroplane crash!!!, white-tailed', null, '2024-01-13', '2023-02-12', 3);
-insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/107x100.png/cc0000/ffffff', 'India is such a place!', 'I hope you visit here!', '2023-08-30', '2023-06-01', 4);
+insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/107x100.png/cc0000/ffffff', 'India is such a place!', 'I hope you visit here!', '2023-08-30', '2023-06-01', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/240x100.png/cc0000/ffffff', 'My trip to Seattle!', 'Do like and assist me!', '2023-08-14', '2023-12-18', 1);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/231x100.png/5fa2dd/ffffff', 'What if potatos could fly?', 'A scientist argues that he has created a remarkable invention!', '2023-06-19', '2023-02-15', 2);
 insert into "Images" (url, title, description, "createdAt", "updatedAt", "ownerId") values ('http://dummyimage.com/197x100.png/cc0000/ffffff', 'Ripe duck to eat!', 'Man I love food!', '2023-05-06', '2023-10-05', 2);
