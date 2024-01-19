@@ -15,5 +15,5 @@ app.use("/users", userRouter)
 app.use("/me", meRouter)
 
 app.listen(PORT, () => {
-  console.log(`App running on Port: ${PORT}`)
+  console.info(`App running on Port: ${PORT}`)
 })

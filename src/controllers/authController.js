@@ -47,7 +47,7 @@ const register = async (req, res) => {
 
     const newUser = await User.create({ userName: userName, password: hashedPassword })
 
-    console.log(`A new user has registered with ID = ${newUser.id} & userName = '${newUser.userName}'`)
+    console.info(`A new user has registered with ID = ${newUser.id} & userName = '${newUser.userName}'`)
     const response = {
       message: "Successfully registered! Please login at /login route.",
       userId: Number(newUser.id),
@@ -55,7 +55,7 @@ const register = async (req, res) => {
     }
     res.status(201).json(response)
   } catch (err) {
-    console.log("Error during registering: ", err)
+    console.error("Error during registering: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to register.", details: errorMessage })
   }
@@ -88,7 +88,7 @@ const login = async (req, res) => {
 
     const userId = user.id
     const jwtToken = jwt.sign({ userId }, secretKey)
-    console.log(`ID ${userId} requested for their token!`)
+    console.info(`ID ${userId} requested for their token!`)
     const response = {
       message: "Successfully logged in!",
       jwtToken,
@@ -96,7 +96,7 @@ const login = async (req, res) => {
     }
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error during logging in: ", err)
+    console.error("Error during logging in: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to login.", details: errorMessage })
   }

@@ -79,7 +79,7 @@ const getUserById = async (req, res) => {
     }
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while fetching.", err)
+    console.error("Error while fetching.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }
@@ -332,14 +332,14 @@ const createUser = async (req, res) => {
     const newUser = await User.create({ userName: userName, password: hashedPassword })
     const newUserId = newUser.id
 
-    console.log(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
+    console.info(`A new user has registered with ID = ${newUserId} & userName = '${userName}'`)
     const response = {
       message: "Successfully created this user!",
       links: createUsersLinks(newUserId),
     }
     res.status(201).json(response)
   } catch (err) {
-    console.log("Error during creating: ", err)
+    console.error("Error during creating: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to create.", details: errorMessage })
   }
@@ -379,7 +379,7 @@ const deleteUserById = async (req, res) => {
     }
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while deleting.", err)
+    console.error("Error while deleting.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to delete.", details: errorMessage })
   }

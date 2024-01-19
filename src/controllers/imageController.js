@@ -94,7 +94,7 @@ const createImage = async (req, res) => {
 
     res.status(201).json(response)
   } catch (err) {
-    console.log("Error during uploading: ", err)
+    console.error("Error during uploading: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to upload. Must provide url and title.", details: errorMessage })
   }
@@ -141,7 +141,7 @@ const getImageById = async (req, res) => {
     //Return details of image.
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while fetching.", err)
+    console.error("Error while fetching.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }

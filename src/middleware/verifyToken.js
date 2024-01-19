@@ -33,7 +33,7 @@ const verifyToken = async (req, res, next) => {
     } else if (err.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Invalid token." })
     } else {
-      console.log("Error verifying token.", err)
+      console.error("Error verifying token.", err)
       return res.status(500).json({ error: "Internal Server Error." })
     }
   }

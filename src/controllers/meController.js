@@ -46,7 +46,6 @@ const getCurrentUserDetails = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
     const userPlainObject = foundUser.get({ plain: true })
-    console.log("🚀 ~ getCurrentUserDetails ~ foundUser:", foundUser)
     const { password, images, ...userDataToSend } = userPlainObject
     const imagesUploaded = images.map((image) => image.id)
 
@@ -59,7 +58,7 @@ const getCurrentUserDetails = async (req, res) => {
 
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while fetching.", err)
+    console.error("Error while fetching.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
   }
@@ -111,7 +110,7 @@ const updateCurrentUserDetails = async (req, res) => {
     }
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while updating.", err)
+    console.error("Error while updating.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to update.", details: errorMessage })
   }
@@ -132,7 +131,7 @@ const deleteCurrentUser = async (req, res) => {
     }
     res.status(200).json(response)
   } catch (err) {
-    console.log("Error while deleting.", err)
+    console.error("Error while deleting.", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to delete.", details: errorMessage })
   }
