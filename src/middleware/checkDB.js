@@ -1,4 +1,3 @@
-import "dotenv/config"
 import sequelize from "../config/connection.js"
 
 const checkDB = async (req, res, next) => {

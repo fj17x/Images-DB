@@ -1,12 +1,12 @@
-import express from "express"
 import "dotenv/config"
+import express from "express"
 import imageRouter from "./routes/imageRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
 
 const app = express()
-const PORT = process.env.APP_PORT ?? 4000
+const PORT = process.env.APP_PORT
 app.use(express.json())
 
 app.use("/auth", authRouter)
