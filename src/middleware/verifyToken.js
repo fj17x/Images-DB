@@ -7,7 +7,7 @@ const verifyToken = async (req, res, next) => {
     //Verify JWT token and get back user Id.
     const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
     if (!req.headers.authorization) {
-      return res.status(400).json({ error: "Token not provided. Please provide token in Authorization header." })
+      return res.status(401).json({ error: "Token not provided. Please provide token in Authorization header." })
     }
     const token = req.headers.authorization.split(" ")[1]
     if (!token) {

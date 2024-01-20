@@ -30,6 +30,14 @@ const register = async (req, res) => {
       return res.status(400).json({ error: "Please provide userName and password as strings!" })
     }
 
+    const userNameMaxLength = 15
+
+    if (userName.length > userNameMaxLength) {
+      return res.status(400).json({
+        error: "userName exceeds maximum length (65).",
+      })
+    }
+
     const foundUser = await User.findOne({
       where: {
         userName,
@@ -74,6 +82,14 @@ const login = async (req, res) => {
       return res.status(400).json({ error: "Please provide userName and password as strings!" })
     }
 
+    const userNameMaxLength = 15
+
+    if (userName.length > userNameMaxLength) {
+      return res.status(400).json({
+        error: "userName exceeds maximum length(65).",
+      })
+    }
+
     const passwordToString = password.toString()
 
     const user = await User.findOne({ where: { userName: userName }, raw: true, attributes: ["password", "id"] })
@@ -85,9 +101,9 @@ const login = async (req, res) => {
     if (!passwordMatches) {
       return res.status(401).json({ error: "Your password is incorrect." })
     }
-
+    const expiresIn = "365d"
     const userId = user.id
-    const jwtToken = jwt.sign({ userId }, secretKey)
+    const jwtToken = jwt.sign({ userId }, secretKey, { expiresIn })
     console.info(`ID ${userId} requested for their token!`)
     const response = {
       message: "Successfully logged in!",

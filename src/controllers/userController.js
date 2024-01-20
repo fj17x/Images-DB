@@ -173,6 +173,14 @@ const partiallyUpdateUserById = async (req, res) => {
         if ((key === "userName" || key === "password") && typeof value !== "string") {
           return res.status(400).json({ error: `${key} should be a string!` })
         }
+        if (key === "userName") {
+          const userNameMaxLength = 15
+          if (value.length > userNameMaxLength) {
+            return res.status(400).json({
+              error: "userName exceeds maximum length(65).",
+            })
+          }
+        }
       }
     }
     await User.update(updatedData, { where: { id: userId } })
@@ -209,6 +217,14 @@ const updateUserById = async (req, res) => {
     if (!userName) {
       return res.status(400).json({
         error: "Request must include userName!",
+      })
+    }
+
+    const userNameMaxLength = 15
+
+    if (userName.length > userNameMaxLength) {
+      return res.status(400).json({
+        error: "userName exceeds maximum length(65).",
       })
     }
 
@@ -312,6 +328,14 @@ const createUser = async (req, res) => {
     const { userName, password } = req.body
     if (!userName || !password) {
       return res.status(400).json({ error: "Please provide userName and password of the user to create." })
+    }
+
+    const userNameMaxLength = 15
+
+    if (userName.length > userNameMaxLength) {
+      return res.status(400).json({
+        error: "userName exceeds maximum length(65).",
+      })
     }
 
     const foundUser = await User.findOne({

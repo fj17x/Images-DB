@@ -73,7 +73,13 @@ const updateCurrentUserDetails = async (req, res) => {
     if (!(userName || password)) {
       return res.status(400).json({ error: "userName or password is required. Please provide userName or password in the body." })
     }
+    const userNameMaxLength = 15
 
+    if (userName.length > userNameMaxLength) {
+      return res.status(400).json({
+        error: "userName exceeds maximum length(65).",
+      })
+    }
     const foundUser = await User.findByPk(userId)
     if (!foundUser) {
       return res.status(404).json({ error: "User not found." })

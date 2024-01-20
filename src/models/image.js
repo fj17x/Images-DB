@@ -15,7 +15,7 @@ const Image = sequelize.define(
       allowNull: false,
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(65),
       allowNull: false,
     },
     description: {

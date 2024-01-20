@@ -51,6 +51,7 @@ const createImage = async (req, res) => {
     //Get data provided in body.
     let { url, title, description, tags } = req.body
     const userId = req.userId
+    const titleMaxLength = 65
 
     if (!url || typeof url !== "string") {
       return res.status(400).json({
@@ -58,9 +59,9 @@ const createImage = async (req, res) => {
       })
     }
 
-    if (!title || typeof title !== "string") {
+    if (!title || typeof title !== "string" || title.length > titleMaxLength) {
       return res.status(400).json({
-        error: "Please provide the title and ensure the type is a string.",
+        error: "Please provide the title and ensure the type is a string having length < 65 characters.",
       })
     }
 
@@ -295,6 +296,7 @@ const partiallyUpdateImage = async (req, res) => {
     const { id, url, title, description, ownerId, tags, isFlagged, destroyTime, updatedAt, createdAt } = req.body
     const fieldsToUpdate = req.body
     const allowedFieldsByUsers = ["title", "description", "tags", "url"]
+    const titleMaxLength = 65
 
     if (id && typeof id !== "number") {
       return res.status(400).json({ error: "Id should be provided as an number." })
@@ -308,10 +310,13 @@ const partiallyUpdateImage = async (req, res) => {
       return res.status(400).json({ error: "Description should be provided as an string." })
     }
 
-    if (title && typeof title !== "string") {
-      return res.status(400).json({ error: "Title should be provided as an string." })
+    if (title) {
+      if (typeof title !== "string") {
+        return res.status(400).json({ error: "Title should be provided as a string." })
+      } else if (title.length > titleMaxLength) {
+        return res.status(400).json({ error: "The title should be less than 65 characters." })
+      }
     }
-
     if (ownerId && typeof ownerId !== "number") {
       return res.status(400).json({ error: "OwnerId should be provided as an string." })
     }
@@ -416,9 +421,9 @@ const updateImage = async (req, res) => {
   try {
     let { imageId } = req.params
     imageId = Number(imageId)
-    const userId = req.userId
     const isAdmin = req.isAdmin
     const { id, url, title, description, ownerId, tags, isFlagged, destroyTime, updatedAt, createdAt } = req.body
+    const titleMaxLength = 65
 
     if (!isAdmin) {
       return res.status(403).json({ error: "Only an admin can send the PUT request!" })
@@ -432,8 +437,10 @@ const updateImage = async (req, res) => {
       return res.status(400).json({ error: "Request must include url." })
     }
 
-    if (!title) {
-      return res.status(400).json({ error: "Request must include title." })
+    if (!title || title.length > titleMaxLength) {
+      return res.status(400).json({
+        error: !title ? "Request must include title." : "Title length should be less than 65 characters.",
+      })
     }
 
     if (!createdAt) {
