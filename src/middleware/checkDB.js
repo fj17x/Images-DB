@@ -3,7 +3,7 @@ import sequelize from "../config/connection.js"
 const checkDB = async (req, res, next) => {
   try {
     await sequelize.authenticate()
-    console.error("Application successfully connected to database!")
+    console.info("Application successfully connected to database!")
     next()
   } catch (err) {
     console.error("Error verifying token.", err)
