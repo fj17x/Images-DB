@@ -50,7 +50,7 @@
   }
 
   .logo-img {
-    width: 3rem;
+    width: 2.8rem;
     height: auto;
     display: block;
     margin-right: 2rem;
@@ -85,11 +85,10 @@
   .menu-icon {
     font-size: 2rem;
     cursor: pointer;
-    display: none; /* Initially hide on larger screens */
+    display: none;
   }
 
   @media only screen and (max-width: 768px) {
-    /* Show menu icon and hide regular nav links on smaller screens */
     .nav-links {
       display: none;
     }
