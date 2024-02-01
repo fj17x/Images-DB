@@ -12,10 +12,10 @@ const authLinks = [
     description: "Register a new user.",
   },
   {
-    rel: "login",
+    rel: "sign in",
     method: "POST",
-    href: "/login",
-    description: "Login with userName and password.",
+    href: "/signin",
+    description: "Sign in with userName and password.",
   },
 ]
 
@@ -110,6 +110,11 @@ const login = async (req, res) => {
       jwtToken,
       links: authLinks,
     }
+    res.cookie("jwt", jwtToken, {
+      httpOnly: true,
+      // secure: true,
+      sameSite: "Strict",
+    })
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during logging in: ", err)

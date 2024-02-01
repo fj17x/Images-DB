@@ -1,3 +1,7 @@
+<script>
+</script>
+
+<!-- 
 <nav class="navbar">
   <a href="/" class="logo-link">
     <img src="/logo.png" alt="Logo" class="logo-img" />
@@ -8,16 +12,16 @@
   <div class="menu-icon">&#9776;</div>
   <ul class="nav-links">
     <li><a href="/register">Register</a></li>
-    <li><a href="/login">Login</a></li>
+    <li><a href="/signin">Sign In</a></li>
   </ul>
-</nav>
+</nav> -->
 
 <slot />
 
 <style>
   :root {
     font:
-      bold 1.2em "Fira Sans",
+      1.2em "Fira Sans",
       sans-serif;
     overflow: hidden;
   }
@@ -75,7 +79,6 @@
     text-decoration: none;
     color: white;
     font-weight: bold;
-    transition: color 0.2s ease-in-out;
   }
 
   .nav-links a:hover {

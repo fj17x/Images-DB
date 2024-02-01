@@ -9,6 +9,6 @@ authRouter.use(checkDB)
 authRouter.post("/register", authController.register)
 
 // POST method to log in via userName and password. (Gives a JWT token)
-authRouter.post("/login", authController.login)
+authRouter.post("/signin", authController.login)
 
 export default authRouter

@@ -1,15 +1,16 @@
 <div class="hero">
   <div class="overlay"></div>
   <div class="hero-content">
-    <h1>Welcome!</h1>
-    <p>Explore amazing features and get started on your journey with us.</p>
-    <a href="/register" class="get-started-btn">Get Started</a>
+    <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
+    <p class="text">Share your life's snapshots.</p>
+    <a href="/register" class="get-started-btn">Create an account</a>
+    <a href="/signin" class="have-account"> Already have an account?</a>
   </div>
 </div>
 
 <style>
   .hero {
-    height: 90vh;
+    height: 100vh;
     position: relative;
     text-align: center;
     color: #fff;
@@ -34,21 +35,34 @@
     z-index: 1;
   }
 
-  .hero h1 {
-    font-size: 3rem;
+  .title-light {
+    font-weight: lighter;
+  }
+  .title-strong {
+    font-weight: bold;
   }
 
-  .hero p {
-    font-size: 1.5rem;
+  .hero h1 {
+    font-size: 4.5rem;
+    margin: 0px auto;
+  }
+
+  .text {
+    font-size: 1.8rem;
+    margin-top: 0px;
+    margin-bottom: 3.4rem;
+    font-family: cursive;
+    letter-spacing: -2px;
+    /* font-weight: lighter; */
   }
 
   .get-started-btn {
     display: inline-block;
-    padding: 0.9375rem 1.875rem;
+    padding: 1rem 1.8rem;
     font-size: 1.5rem;
     text-decoration: none;
     color: #fff;
-    background-color: #e74c3c;
+    background-color: #1baa9e;
     border-radius: 0.5rem;
     transition:
       background-color 0.3s ease-in-out,
@@ -56,7 +70,16 @@
   }
 
   .get-started-btn:hover {
-    background-color: #c0392b;
+    background-color: #1dcfc0;
     transform: scale(1.05);
+  }
+
+  .have-account {
+    text-decoration: none;
+    display: block;
+    margin-top: 0.5rem;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: lighter;
   }
 </style>
