@@ -53,7 +53,6 @@
     margin-bottom: 3.4rem;
     font-family: cursive;
     letter-spacing: -2px;
-    /* font-weight: lighter; */
   }
 
   .get-started-btn {
@@ -77,9 +76,13 @@
   .have-account {
     text-decoration: none;
     display: block;
-    margin-top: 0.5rem;
+    margin-top: 0.7rem;
     color: white;
     font-size: 0.9rem;
     font-weight: lighter;
+  }
+
+  .have-account:hover {
+    text-decoration: underline;
   }
 </style>

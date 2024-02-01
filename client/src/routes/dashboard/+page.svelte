@@ -72,7 +72,7 @@
           <br />
           <input type="text" name="tag" id="tag" />
           {#each tags as tag}
-            <span on:click={removeTag}>{tag}</span>
+            <button on:click={removeTag}>{tag}</button>
           {/each}
           <button type="button" on:click={addTag}>Add tag</button></span
         >
