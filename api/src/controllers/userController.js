@@ -350,7 +350,7 @@ const createUser = async (req, res) => {
     }
 
     const passwordToString = password.toString()
-    const saltRounds = 15
+    const saltRounds = 10
     const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
 
     const newUser = await User.create({ userName: userName, password: hashedPassword })

@@ -104,7 +104,7 @@ const updateCurrentUserDetails = async (req, res) => {
         return res.status(400).json({ error: "Please provide password as a string!" })
       }
       const passwordToString = password.toString()
-      const saltRounds = 15
+      const saltRounds = 10
       const hashedPassword = await bcrypt.hash(passwordToString, saltRounds)
       User.update({ password: hashedPassword }, { where: { id: userId } })
     }
