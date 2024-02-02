@@ -14,7 +14,7 @@
     const reply = await response.json()
     if (response.ok) {
       alert(`${reply.message}`)
-      window.location.href = "/dashboard"
+      window.location.href = "/dashboard/upload"
     } else {
       alert(`${reply.error}`)
     }

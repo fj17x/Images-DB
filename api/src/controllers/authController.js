@@ -104,7 +104,6 @@ const login = async (req, res) => {
     const expiresIn = "365d"
     const userId = user.id
     const jwtToken = jwt.sign({ userId }, secretKey, { expiresIn })
-    console.info(`ID ${userId} requested for their token!`)
     const response = {
       message: "Successfully logged in!",
       jwtToken,
@@ -115,6 +114,7 @@ const login = async (req, res) => {
       // secure: true,
       sameSite: "Strict",
     })
+    console.info(`ID ${userId} requested for their token!`)
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during logging in: ", err)

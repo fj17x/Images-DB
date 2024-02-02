@@ -1,13 +1,21 @@
 <script>
+  import { onMount } from "svelte"
+  import Dashboard from "$lib/components/Dashboard.svelte"
+
   let tags = []
+  let userName = "Unknown User"
 
   const addTag = () => {
     const tagInput = document.getElementById("tag")
     const tagValue = tagInput.value.trim()
 
     if (tagValue) {
-      tags = [...tags, tagValue]
-      tagInput.value = ""
+      if (!tags.includes(tagValue)) {
+        tags = [...tags, tagValue]
+        tagInput.value = ""
+      } else {
+        alert("Tag already exists!")
+      }
     } else {
       alert("Please enter a tag!")
     }
@@ -15,7 +23,9 @@
 
   const removeTag = (event) => {
     const toRemoveTag = event.target.innerText
+    console.log(tags)
     tags = tags.filter((tag) => tag !== toRemoveTag)
+    console.log(tags)
   }
 
   const handleSubmit = async (event) => {
@@ -42,18 +52,27 @@
       alert(`${reply.error}`)
     }
   }
+
+  onMount(async () => {
+    const response = await fetch(`http://localhost:4000/me`, {
+      method: "GET",
+      credentials: "include",
+    })
+    const reply = await response.json()
+    if (response.ok) {
+      userName = reply.data.userName
+      userName = userName[0].toUpperCase() + userName.slice(1)
+    } else {
+      alert("Please sign in!")
+      window.location.href = "/signin"
+    }
+  })
 </script>
 
-<div class="dashboard">
-  <div class="sidebar">
-    <a href="#" class="sidebar-text"><p>Upload</p></a>
-    <a href="#" class="sidebar-text"><p>My Images</p></a>
-
-    <a href="#" class="sidebar-text"><p>Settings</p></a>
-    <a href="#" class="sidebar-text"><p>Thomas</p></a>
-  </div>
+<div class="container">
+  <Dashboard />
   <div class="content">
-    <h2>Upload an Image</h2>
+    <h2>Upload an Image:</h2>
 
     <div class="main-card">
       <form class="card-form" on:submit|preventDefault={handleSubmit}>
@@ -72,51 +91,33 @@
           <br />
           <input type="text" name="tag" id="tag" />
           {#each tags as tag}
-            <button on:click={removeTag}>{tag}</button>
+            <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}
-          <button type="button" on:click={addTag}>Add tag</button></span
+          <br />
+          <button class="submit-button" type="button" on:click={addTag}>Add tag</button></span
         >
         <br />
-        <input type="file" name="file" required />
+        <input class="upload-file" type="file" name="file" required />
         <br />
-        <button type="submit">Confirm</button>
+        <button class="submit-button" type="submit">Confirm</button>
       </form>
     </div>
   </div>
 </div>
 
 <style>
-  .dashboard {
+  .container {
     display: flex;
-    /* justify-content: space-between; */
-    padding: 2rem;
-  }
-
-  .sidebar {
-    width: 15rem;
-    background-color: #007aff;
-    color: #fff;
-    border-radius: 42px;
-    height: 80vh;
-  }
-  label {
-    color: #7f7f7f;
-  }
-
-  .sidebar-text {
-    font-size: 1.6rem;
-    color: #fff;
-    text-decoration: none;
   }
 
   .content {
-    max-width: calc(100% - 15rem);
     flex: 1;
     padding: 0px 2rem;
+    margin-left: 14vw;
   }
 
   .main-card {
-    background-color: #f2f9ff;
+    background-color: #1ca496;
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
@@ -128,22 +129,31 @@
     justify-content: center;
     align-items: space-between;
     flex-direction: column;
+    color: white;
   }
 
-  @media (max-width: 768px) {
-    .dashboard {
-      flex-direction: column;
-    }
+  input {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+  }
 
-    .content,
-    .sidebar {
-      width: 100%;
-      max-width: none;
-      height: auto;
-    }
+  .submit-button {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+  }
 
-    .sidebar {
-      display: flex;
-    }
+  .submit-button {
+    cursor: pointer;
+    background-color: #172740;
+    color: #fff;
+    border: none;
+    border-radius: 0.3rem;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
   }
 </style>

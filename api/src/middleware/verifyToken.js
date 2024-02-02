@@ -12,7 +12,7 @@ const verifyToken = async (req, res, next) => {
     }
     const decodedToken = jwt.verify(token, secretKey)
     const userId = decodedToken.userId
-    req.userId = userId
+    req.userId = Number(userId)
 
     //Check whether user is an admin. If yes, make req.isAdmin true.
     const user = await User.findByPk(userId, { raw: true, attributes: ["userName", "isAdmin"] })

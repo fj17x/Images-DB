@@ -24,7 +24,6 @@
     font:
       1.2em "Fira Sans",
       sans-serif;
-    overflow: hidden;
   }
 
   * {
@@ -35,7 +34,7 @@
     margin: 0;
   }
 
-  .navbar {
+  /* .navbar {
     height: 10vh;
     background-color: #333;
     color: white;
@@ -121,5 +120,5 @@
     .navbar.active .nav-links a {
       font-size: 1.2rem;
     }
-  }
+  } */
 </style>

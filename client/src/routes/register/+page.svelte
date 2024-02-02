@@ -19,7 +19,7 @@
     const reply = await response.json()
     if (response.ok) {
       alert(`${reply.message} Your id is ${reply.userId}`)
-      window.location.href = "/dashboard"
+      window.location.href = "/dashboard/upload"
     } else {
       alert(`${reply.error}`)
     }
