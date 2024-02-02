@@ -3,7 +3,6 @@
   import Dashboard from "$lib/components/Dashboard.svelte"
   import ImageCard from "$lib/components/ImageCard.svelte"
 
-  let userName = "Unknown User"
   let currentOffset = 0
   let images = []
 
@@ -15,32 +14,28 @@
 
     const imagesReply = await response.json()
     images = [...images, ...imagesReply.data]
+    currentOffset += 9
+  }
+
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+      fetchNextImages()
+    }
   }
 
   onMount(async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const reply = await response.json()
-    if (response.ok) {
-      userName = reply.data.userName
-      userName = userName[0].toUpperCase() + userName.slice(1)
-    } else {
-      alert("Please sign in!")
-      window.location.href = "/signin"
-    }
-
     fetchNextImages()
   })
 </script>
+
+<svelte:window on:scroll={handleScroll} />
 
 <div class="container">
   <Dashboard />
   <div class="content">
     <h2>Your images:</h2>
 
-    <div class="main-card">
+    <div class="main-card" on:scroll={handleScroll}>
       {#if images.length > 0}
         {#each images as { id, url, title }}
           <ImageCard {id} {url} {title} />
@@ -75,5 +70,6 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
     place-items: center;
+    align-items: start;
   }
 </style>
