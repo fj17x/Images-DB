@@ -11,4 +11,7 @@ authRouter.post("/register", authController.register)
 // POST method to log in via userName and password. (Gives a JWT token)
 authRouter.post("/signin", authController.login)
 
+// GET method to log out. (Clears client cookie)
+authRouter.get("/logout", authController.logout)
+
 export default authRouter
