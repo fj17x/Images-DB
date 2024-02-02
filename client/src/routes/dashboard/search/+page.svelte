@@ -38,9 +38,7 @@
 
     const response = await fetch(`http://localhost:4000/images/${searchId}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+
       credentials: "include",
     })
     const reply = await response.json()
@@ -74,9 +72,7 @@
 
     const response = await fetch(`http://localhost:4000/images?${params.toString()}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+
       credentials: "include",
     })
     const reply = await response.json()

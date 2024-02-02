@@ -125,17 +125,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    const jwtToken = req.cookies.jwt
-
-    if (!jwtToken) {
-      return res.status(401).json({ error: "Unauthorized - No token provided." })
-    }
-    const decodedToken = jwt.verify(jwtToken, process.env.SECRET_KEY || "THISISFUN")
-    const userId = decodedToken.userId
-
     res.clearCookie("jwt")
-
-    console.info(`User with ID ${userId} has successfully logged out.`)
     res.status(200).json({ message: "Successfully logged out." })
   } catch (err) {
     console.error("Error during logout: ", err)

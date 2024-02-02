@@ -1,3 +1,16 @@
+<script>
+  const handleLogout = async () => {
+    const response = await fetch(`http://localhost:4000/auth/logout`, {
+      method: "GET",
+    })
+    if (response.ok) {
+      window.location.href = "/"
+    } else {
+      alert(`Could not logout!`)
+    }
+  }
+</script>
+
 <div class="dashboard">
   <div class="option">
     <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="dashboard-text"><p>Home</p></a>
@@ -15,8 +28,9 @@
   <div class="option">
     <i class="fa fa-cog fa-lg" aria-hidden="true"></i><a href="/dashboard/settings" class="dashboard-text"><p>Settings</p></a>
   </div>
-  <div class="option">
-    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/profile" class="dashboard-text"><p>Log out</p></a>
+  <div class="option logout" on:click={handleLogout}>
+    <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+    <p>Log out</p>
   </div>
 </div>
 
@@ -49,5 +63,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .logout {
+    cursor: pointer;
   }
 </style>
