@@ -5,7 +5,10 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
+  let isLoading = false
+
   const handleSubmit = async (event) => {
+    isLoading = true
     const userName = event.target.userName.value.trim()
     const password = event.target.password.value.trim()
     const confirmPassword = event.target.confirmPassword.value.trim()
@@ -15,6 +18,7 @@
       alertModalOptions.message = "Password does not match."
       alertModalOptions.type = "failure"
       showAlertModal = true
+      isLoading = false
       return
     }
     const data = { userName, password }
@@ -37,6 +41,7 @@
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
+    isLoading = false
   }
 
   const onConfirm = () => {
@@ -66,7 +71,13 @@
             <input type="password" placeholder="Confirm your password" name="confirmPassword" required />
           </div>
           <div class="submit-button">
-            <button type="submit">Submit</button>
+            <button type="submit">
+              {#if isLoading}
+                <i class="fas fa-spinner fa-spin"></i>
+              {:else}
+                Submit
+              {/if}</button
+            >
           </div>
           <div class="text"><a href="/signin">Already registered? Sign in here!</a></div>
           <div class="text"><a href="/"> Home</a></div>

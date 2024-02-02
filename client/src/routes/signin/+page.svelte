@@ -5,7 +5,10 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
+  let isLoading = false
+
   const handleSubmit = async (event) => {
+    isLoading = true
     const userName = event.target.userName.value.trim()
     const password = event.target.password.value.trim()
     const data = { userName, password }
@@ -29,6 +32,7 @@
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
+    isLoading = false
   }
 
   const onConfirm = () => {
@@ -54,7 +58,13 @@
             <input type="password" placeholder="Enter your password" name="password" required />
           </div>
           <div class="submit-button">
-            <button type="submit">Submit</button>
+            <button type="submit">
+              {#if isLoading}
+                <i class="fas fa-spinner fa-spin"></i>
+              {:else}
+                Submit
+              {/if}</button
+            >
           </div>
           <div class="text"><a href="/register">New here? Register first!</a></div>
           <div class="text"><a href="/"> Home</a></div>
