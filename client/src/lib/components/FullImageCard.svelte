@@ -17,27 +17,27 @@
 </script>
 
 <div class="full-image-card">
-  <a href="/dashboard/myimages/{id}" class="anchor">
+  <a class="anchor" target="_blank" href={url}>
     <img src={url} alt={title} />
-    <div class="details">
-      <p class="title">{title}</p>
-      {#if description}
-        <p class="description">{description}</p>
-      {/if}
-      {#if tags}
-        <div class="tags">
-          <span>Tags:&nbsp;</span>
-          {#each tags as tag}
-            <span class="tag">{tag},&nbsp;</span>
-          {/each}
-        </div>
-      {/if}
-      <p class="created-at">Created on: {formatDate(createdAt)}</p>
-      {#if modifiedAt}
-        <p class="modified-at">Last modified at: {formatDate(modifiedAt)}</p>
-      {/if}
-    </div>
   </a>
+  <div class="details">
+    <p class="title">{title}</p>
+    {#if description}
+      <p class="description">{description}</p>
+    {/if}
+    {#if tags}
+      <div class="tags">
+        <span>Tags:&nbsp;</span>
+        {#each tags as tag}
+          <span class="tag">{tag},&nbsp;</span>
+        {/each}
+      </div>
+    {/if}
+    <p class="created-at">Created on: {formatDate(createdAt)}</p>
+    {#if modifiedAt}
+      <p class="modified-at">Last modified at: {formatDate(modifiedAt)}</p>
+    {/if}
+  </div>
 </div>
 
 <style>

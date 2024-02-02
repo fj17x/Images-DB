@@ -33,12 +33,9 @@
 
   const handleSubmitSingle = async (event) => {
     const formData = new FormData(event.target)
-
     const searchId = formData.get("id").trim()
-
     const response = await fetch(`http://localhost:4000/images/${searchId}`, {
       method: "GET",
-
       credentials: "include",
     })
     const reply = await response.json()
@@ -161,7 +158,6 @@
 </div>
 
 {#if showModalForOne}
-  {console.log("xxx", imageData)}
   <ImageModal bind:showModal={showModalForOne} {...imageData}></ImageModal>
 {/if}
 {#if showModalForMany}

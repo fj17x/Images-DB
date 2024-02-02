@@ -14,7 +14,7 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
     <ImageCard {url} {title} {id} />
-    <button class="close-button" autofocus on:click={() => dialog.close()}>Close</button>
+    <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>
 
@@ -62,7 +62,7 @@
     margin: auto;
     padding: 0.5em 1em;
     margin-top: 1em;
-    background-color: #007bff; /* Adjust as needed */
+    background-color: #007bff; 
     color: #fff;
     border: none;
     border-radius: 0.2em;
@@ -72,6 +72,6 @@
   }
 
   .close-button:hover {
-    background-color: #0056b3; /* Adjust as needed */
+    background-color: #0056b3; 
   }
 </style>

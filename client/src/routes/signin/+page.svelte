@@ -1,4 +1,5 @@
 <script>
+  import { goto } from "$app/navigation"
   const handleSubmit = async (event) => {
     const userName = event.target.userName.value.trim()
     const password = event.target.password.value.trim()
@@ -14,7 +15,7 @@
     const reply = await response.json()
     if (response.ok) {
       alert(`${reply.message}`)
-      window.location.href = "/dashboard/myimages"
+      goto("/dashboard/myimages")
     } else {
       alert(`${reply.error}`)
     }

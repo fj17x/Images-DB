@@ -1,52 +1,40 @@
 <script>
-  import ImageCard from "./ImageCard.svelte"
   export let showModal
-  export let images
+  export let onConfirm
+
   let dialog
 
   $: if (dialog && showModal) dialog.showModal()
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
+<dialog bind:this={dialog} on:close={() => (showModal = false)}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <div class="image-grid">
-      {#each images as { id, url, title }}
-        <ImageCard {url} {title} {id} />
-      {/each}
-    </div>
-    <button class="close-button" on:click={() => dialog.close()}>Close</button>
+    <h2>Confirm logout</h2>
+    <hr />
+    <p>Are you sure you want to logout?</p>
+    <button class="close-button red" on:click={() => onConfirm(true)}>Yes</button>
+    <button class="close-button grey" on:click={() => onConfirm(false)}>No</button>
   </div>
 </dialog>
 
 <style>
   dialog {
-    width: 90%;
-    max-width: 800px;
+    max-width: 32em;
     border-radius: 0.2em;
     border: none;
     padding: 0;
   }
-
-  .image-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
-    gap: 1em;
-  }
-
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.3);
   }
-
   dialog > div {
     padding: 1em;
   }
-
   dialog[open] {
     animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-
   @keyframes zoom {
     from {
       transform: scale(0.95);
@@ -55,11 +43,9 @@
       transform: scale(1);
     }
   }
-
   dialog[open]::backdrop {
     animation: fade 0.2s ease-out;
   }
-
   @keyframes fade {
     from {
       opacity: 0;
@@ -69,16 +55,11 @@
     }
   }
 
-  button {
-    display: block;
-  }
-
   .close-button {
     display: block;
     margin: auto;
     padding: 0.5em 1em;
     margin-top: 1em;
-    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 0.2em;
@@ -87,7 +68,20 @@
     transition: background-color 0.3s ease;
   }
 
-  .close-button:hover {
-    background-color: #0056b3;
+  .grey {
+    background-color: rgb(62, 175, 58);
+  }
+  .red {
+    background-color: rgb(165, 26, 26);
+  }
+
+  .grey:hover {
+    background-color: green;
+    transform: scale(1.05);
+  }
+
+  .red:hover {
+    background-color: red;
+    transform: scale(1.05);
   }
 </style>
