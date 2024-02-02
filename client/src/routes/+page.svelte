@@ -1,10 +1,47 @@
+<script>
+  import { onMount } from "svelte"
+  import { goto } from "$app/navigation"
+
+  let signedIn = false
+
+  const checkSignedIn = async () => {
+    const response = await fetch(`http://localhost:4000/me`, {
+      method: "GET",
+      credentials: "include",
+    })
+    if (response.ok) {
+      signedIn = true
+    }
+  }
+
+  const handleRegister = async () => {
+    if (signedIn) {
+      goto("/dashboard/myimages")
+    } else {
+      goto("/register")
+    }
+  }
+
+  const handleSignIn = async () => {
+    if (signedIn) {
+      goto("/dashboard/myimages")
+    } else {
+      goto("/signin")
+    }
+  }
+
+  onMount(async () => {
+    await checkSignedIn()
+  })
+</script>
+
 <div class="hero">
   <div class="overlay"></div>
   <div class="hero-content">
     <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
     <p class="text">Share your life's snapshots.</p>
-    <a href="/register" class="get-started-btn">Create an account</a>
-    <a href="/signin" class="have-account"> Already have an account?</a>
+    <div on:click={handleRegister} class="get-started-btn">Create an account</div>
+    <div on:click={handleSignIn} class="have-account">Already have an account?</div>
   </div>
 </div>
 
@@ -63,6 +100,7 @@
     color: #fff;
     background-color: #1baa9e;
     border-radius: 0.5rem;
+    cursor: pointer;
     transition:
       background-color 0.3s ease-in-out,
       transform 0.3s ease-in-out;
@@ -80,6 +118,7 @@
     color: white;
     font-size: 0.9rem;
     font-weight: lighter;
+    cursor: pointer;
   }
 
   .have-account:hover {

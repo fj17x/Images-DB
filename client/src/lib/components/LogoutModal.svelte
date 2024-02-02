@@ -1,6 +1,6 @@
 <script>
   export let showModal
-  export let onConfirm
+  export let onLogoutConfirm
 
   let dialog
 
@@ -14,8 +14,8 @@
     <h2>Confirm logout</h2>
     <hr />
     <p>Are you sure you want to logout?</p>
-    <button class="close-button red" on:click={() => onConfirm(true)}>Yes</button>
-    <button class="close-button green" on:click={() => onConfirm(false)}>No</button>
+    <button class="close-button red" on:click={() => onLogoutConfirm(true)}>Yes</button>
+    <button class="close-button green" on:click={() => onLogoutConfirm(false)}>No</button>
   </div>
 </dialog>
 

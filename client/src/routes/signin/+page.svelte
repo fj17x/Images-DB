@@ -23,13 +23,16 @@
       alertModalOptions.message = `${reply.message}`
       alertModalOptions.type = "success"
       showAlertModal = true
-      goto("/dashboard/myimages")
     } else {
       alertModalOptions.header = "Sign in failed"
       alertModalOptions.message = `${reply.error}`
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
+  }
+
+  const onConfirm = () => {
+    goto("/dashboard/myimages")
   }
 </script>
 
@@ -58,7 +61,7 @@
   </div>
 </div>
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onConfirm}></AlertModal>
 {/if}
 
 <style>
@@ -158,7 +161,12 @@
     width: 100%;
   }
 
-  button:hover {
+  .submit-button:hover {
     background: green;
+    transform: scale(1.01);
+  }
+  .submit-button:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
   }
 </style>

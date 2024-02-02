@@ -3,7 +3,7 @@
   import { onMount } from "svelte"
 
   const checkSignedIn = async () => {
-    const response = await fetch(`http://localhost:4000/images`, {
+    const response = await fetch(`http://localhost:4000/me`, {
       method: "GET",
       credentials: "include",
     })

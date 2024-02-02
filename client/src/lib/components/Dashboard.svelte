@@ -7,7 +7,7 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
-  const handleLogoutConfirmation = async (confirmed) => {
+  const onLogoutConfirm = async (confirmed) => {
     showLogoutModal = false
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/auth/logout`, {
@@ -48,10 +48,7 @@
     <p>Log out</p>
   </div>
   {#if showLogoutModal}
-    <LogoutModal bind:showModal={showLogoutModal} onConfirm={handleLogoutConfirmation}></LogoutModal>
-  {/if}
-  {#if showLogoutModal}
-    <LogoutModal bind:showModal={showLogoutModal} onConfirm={handleLogoutConfirmation}></LogoutModal>
+    <LogoutModal bind:showModal={showLogoutModal} {onLogoutConfirm}></LogoutModal>
   {/if}
   {#if showAlertModal}
     <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>

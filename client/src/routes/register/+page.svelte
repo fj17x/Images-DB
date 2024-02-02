@@ -170,7 +170,12 @@
     width: 100%;
   }
 
-  button:hover {
+  .submit-button:hover {
     background: green;
+    transform: scale(1.01);
+  }
+  .submit-button:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
   }
 </style>
