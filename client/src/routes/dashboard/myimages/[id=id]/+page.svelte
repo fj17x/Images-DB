@@ -14,7 +14,6 @@
     })
 
     const imagesReply = await response.json()
-    console.log("🚀 ~ fetchImageWithId ~ imagesReply:", imagesReply)
     image = imagesReply.data
   }
 
@@ -39,10 +38,9 @@
 <div class="container">
   <Dashboard />
   <div class="content">
-    <h2>Image</h2>
-
     <div class="main-card">
       {#if image}
+        <h3>Image ID: {image.id}</h3>
         <FullImageCard {...image} />
       {:else}
         <h1>Image not found!</h1>
@@ -72,9 +70,5 @@
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    place-items: center;
   }
 </style>

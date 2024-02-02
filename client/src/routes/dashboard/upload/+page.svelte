@@ -72,7 +72,7 @@
 <div class="container">
   <Dashboard />
   <div class="content">
-    <h2>Upload an Image:</h2>
+    <h3>Upload an Image:</h3>
 
     <div class="main-card">
       <form class="card-form" on:submit|preventDefault={handleSubmit}>

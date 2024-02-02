@@ -30,9 +30,5 @@
   .anchor {
     text-decoration: none;
     color: #fff;
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; */
   }
 </style>
