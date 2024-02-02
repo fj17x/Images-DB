@@ -32,7 +32,10 @@
   }
 
   const onConfirm = () => {
-    goto("/dashboard/myimages")
+    if (alertModalOptions.type === "success") {
+      goto("/dashboard/myimages")
+    }
+    showAlertModal = false
   }
 </script>
 

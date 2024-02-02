@@ -12,7 +12,7 @@
 
     if (password !== confirmPassword) {
       alertModalOptions.header = "Could not register"
-      alertModalOptions.message = "Passwords do not match."
+      alertModalOptions.message = "Password does not match."
       alertModalOptions.type = "failure"
       showAlertModal = true
       return
@@ -28,16 +28,22 @@
     const reply = await response.json()
     if (response.ok) {
       alertModalOptions.header = "Registered successfully"
-      alertModalOptions.message = `${reply.message} Your id is ${reply.userId}`
+      alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
       showAlertModal = true
-      goto("/dashboard/myimages")
     } else {
       alertModalOptions.header = "Could not register"
       alertModalOptions.message = `${reply.error}`
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
+  }
+
+  const onConfirm = () => {
+    if (alertModalOptions.type === "success") {
+      goto("/signin")
+    }
+    showAlertModal = false
   }
 </script>
 
@@ -70,7 +76,7 @@
   </div>
 </div>
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onConfirm}></AlertModal>
 {/if}
 
 <style>
