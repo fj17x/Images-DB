@@ -1,8 +1,12 @@
 <script>
-  import { onMount } from "svelte"
   import Dashboard from "$lib/components/Dashboard.svelte"
+  import AlertModal from "$lib/components/AlertModal.svelte"
+  import { onMount } from "svelte"
 
   let tags = []
+
+  let showAlertModal = false
+  let alertModalOptions = {}
 
   const addTag = () => {
     const tagInput = document.getElementById("tag")
@@ -13,10 +17,16 @@
         tags = [...tags, tagValue]
         tagInput.value = ""
       } else {
-        alert("Tag already exists!")
+        alertModalOptions.header = "Could not add tag"
+        alertModalOptions.message = "Tag already exists!"
+        alertModalOptions.type = "failure"
+        showAlertModal = true
       }
     } else {
-      alert("Please enter a tag!")
+      alertModalOptions.header = "Could not add tag"
+      alertModalOptions.message = "Please enter a tag!"
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 
@@ -46,9 +56,15 @@
     })
     const reply = await response.json()
     if (response.ok) {
-      alert(`${reply.message}`)
+      alertModalOptions.header = "Uploaded successfully"
+      alertModalOptions.message = reply.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
     } else {
-      alert(`${reply.error}`)
+      alertModalOptions.header = "Could not upload"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 
@@ -90,6 +106,10 @@
     </div>
   </div>
 </div>
+
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+{/if}
 
 <style>
   .container {

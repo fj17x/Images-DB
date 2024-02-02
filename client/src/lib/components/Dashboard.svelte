@@ -1,7 +1,11 @@
 <script>
   import { goto } from "$app/navigation"
   import LogoutModal from "./LogoutModal.svelte"
+  import AlertModal from "./AlertModal.svelte"
   let showLogoutModal = false
+
+  let showAlertModal = false
+  let alertModalOptions = {}
 
   const handleLogoutConfirmation = async (confirmed) => {
     showLogoutModal = false
@@ -13,7 +17,10 @@
       if (response.ok) {
         goto("/")
       } else {
-        alert(`Could not logout!`)
+        alertModalOptions.header = "Could not logout"
+        alertModalOptions.message = "Please try again!"
+        alertModalOptions.type = "failure"
+        showAlertModal = true
       }
     }
   }
@@ -42,6 +49,12 @@
   </div>
   {#if showLogoutModal}
     <LogoutModal bind:showModal={showLogoutModal} onConfirm={handleLogoutConfirmation}></LogoutModal>
+  {/if}
+  {#if showLogoutModal}
+    <LogoutModal bind:showModal={showLogoutModal} onConfirm={handleLogoutConfirmation}></LogoutModal>
+  {/if}
+  {#if showAlertModal}
+    <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
   {/if}
 </div>
 

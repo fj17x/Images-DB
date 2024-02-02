@@ -1,5 +1,9 @@
 <script>
+  import AlertModal from "$lib/components/AlertModal.svelte"
   import { goto } from "$app/navigation"
+
+  let showAlertModal = false
+  let alertModalOptions = {}
 
   const handleSubmit = async (event) => {
     const userName = event.target.userName.value.trim()
@@ -7,7 +11,10 @@
     const confirmPassword = event.target.confirmPassword.value.trim()
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match. Please re-enter.")
+      alertModalOptions.header = "Could not register"
+      alertModalOptions.message = "Passwords do not match."
+      alertModalOptions.type = "failure"
+      showAlertModal = true
       return
     }
     const data = { userName, password }
@@ -20,10 +27,16 @@
     })
     const reply = await response.json()
     if (response.ok) {
-      alert(`${reply.message} Your id is ${reply.userId}`)
+      alertModalOptions.header = "Registered successfully"
+      alertModalOptions.message = `${reply.message} Your id is ${reply.userId}`
+      alertModalOptions.type = "success"
+      showAlertModal = true
       goto("/dashboard/myimages")
     } else {
-      alert(`${reply.error}`)
+      alertModalOptions.header = "Could not register"
+      alertModalOptions.message = `${reply.error}`
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 </script>
@@ -56,6 +69,9 @@
     </div>
   </div>
 </div>
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+{/if}
 
 <style>
   .container {

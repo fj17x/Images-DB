@@ -2,11 +2,14 @@
   import Dashboard from "$lib/components/Dashboard.svelte"
   import ImageModal from "$lib/components/ImageModal.svelte"
   import ImagesModal from "$lib/components/ImagesModal.svelte"
+  import AlertModal from "$lib/components/AlertModal.svelte"
 
   let tags = []
-  let showModalForOne = false
-  let showModalForMany = false
+  let showModal = false
+  let showAdvancedModal = false
 
+  let showAlertModal = false
+  let alertModalOptions = {}
   let imageData = {}
   let images = []
 
@@ -19,10 +22,16 @@
         tags = [...tags, tagValue]
         tagInput.value = ""
       } else {
-        alert("Tag already exists!")
+        alertModalOptions.header = "Could not add tag"
+        alertModalOptions.message = "Tag already exists!"
+        alertModalOptions.type = "failure"
+        showAlertModal = true
       }
     } else {
-      alert("Please enter a tag!")
+      alertModalOptions.header = "Could not add tag"
+      alertModalOptions.message = "Please enter a tag!"
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 
@@ -45,9 +54,12 @@
         title: reply.data.title,
         id: reply.data.id,
       }
-      showModalForOne = true
+      showModal = true
     } else {
-      alert(`${reply.error}`)
+      alertModalOptions.header = "Search failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 
@@ -75,9 +87,12 @@
     const reply = await response.json()
     if (response.ok) {
       images = reply.data
-      showModalForMany = true
+      showAdvancedModal = true
     } else {
-      alert(`${reply.error}`)
+      alertModalOptions.header = "Search failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 </script>
@@ -157,11 +172,14 @@
   </div>
 </div>
 
-{#if showModalForOne}
-  <ImageModal bind:showModal={showModalForOne} {...imageData}></ImageModal>
+{#if showModal}
+  <ImageModal bind:showModal {...imageData}></ImageModal>
 {/if}
-{#if showModalForMany}
-  <ImagesModal bind:showModal={showModalForMany} {images}></ImagesModal>
+{#if showAdvancedModal}
+  <ImagesModal bind:showModal={showAdvancedModal} {images}></ImagesModal>
+{/if}
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
 {/if}
 
 <style>

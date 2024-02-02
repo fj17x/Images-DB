@@ -1,5 +1,10 @@
 <script>
+  import AlertModal from "$lib/components/AlertModal.svelte"
   import { goto } from "$app/navigation"
+
+  let showAlertModal = false
+  let alertModalOptions = {}
+
   const handleSubmit = async (event) => {
     const userName = event.target.userName.value.trim()
     const password = event.target.password.value.trim()
@@ -14,10 +19,16 @@
     })
     const reply = await response.json()
     if (response.ok) {
-      alert(`${reply.message}`)
+      alertModalOptions.header = "Sign in successfull"
+      alertModalOptions.message = `${reply.message}`
+      alertModalOptions.type = "success"
+      showAlertModal = true
       goto("/dashboard/myimages")
     } else {
-      alert(`${reply.error}`)
+      alertModalOptions.header = "Sign in failed"
+      alertModalOptions.message = `${reply.error}`
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 </script>
@@ -46,6 +57,9 @@
     </div>
   </div>
 </div>
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+{/if}
 
 <style>
   .container {

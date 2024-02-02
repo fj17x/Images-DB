@@ -1,6 +1,8 @@
 <script>
   export let showModal
-  export let onConfirm
+  export let header = ""
+  export let message = ""
+  export let type = ""
 
   let dialog
 
@@ -11,15 +13,36 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <h2>Confirm logout</h2>
+    <h2>
+      {#if type == "success"}
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x outer" style="color:green;"></i>
+          <i class="fa fa-check fa-shake fa-stack-1x fa-inverse"></i>
+        </span>
+      {:else if type == "failure"}
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x outer" style="color: red;"></i>
+          <i class="fa fa-x fa-shake fa-stack-1x fa-inverse"></i>
+        </span>
+      {:else}
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x outer" style="color: yellow;"></i>
+          <i class="fa fa-check fa-shake fa-exclamation fa-stack-1x fa-inverse"></i>
+        </span>
+      {/if}
+
+      {header}
+    </h2>
     <hr />
-    <p>Are you sure you want to logout?</p>
-    <button class="close-button red" on:click={() => onConfirm(true)}>Yes</button>
-    <button class="close-button green" on:click={() => onConfirm(false)}>No</button>
+    <p>{message}</p>
+    <button class="close-button red" on:click={() => dialog.close()}>Ok</button>
   </div>
 </dialog>
 
 <style>
+  .fa-shake {
+    animation-duration: 3s;
+  }
   dialog {
     max-width: 32em;
     border-radius: 0.2em;
@@ -66,21 +89,10 @@
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-  }
-
-  .green {
-    background-color: rgb(62, 175, 58);
-  }
-  .red {
     background-color: rgb(165, 26, 26);
   }
 
-  .green:hover {
-    background-color: green;
-    transform: scale(1.05);
-  }
-
-  .red:hover {
+  .close-button:hover {
     background-color: red;
     transform: scale(1.05);
   }
