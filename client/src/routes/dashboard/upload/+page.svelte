@@ -53,20 +53,7 @@
     }
   }
 
-  onMount(async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const reply = await response.json()
-    if (response.ok) {
-      userName = reply.data.userName
-      userName = userName[0].toUpperCase() + userName.slice(1)
-    } else {
-      alert("Please sign in!")
-      window.location.href = "/signin"
-    }
-  })
+  onMount(async () => {})
 </script>
 
 <div class="container">
