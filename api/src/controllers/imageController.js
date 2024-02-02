@@ -88,7 +88,7 @@ const createImage = async (req, res) => {
     const newImageId = image.id
 
     const response = {
-      message: `Sucessfully uploaded image!`,
+      message: `Successfully uploaded image!`,
       imageId: Number(newImageId),
       links: createImageLinks(newImageId),
     }
