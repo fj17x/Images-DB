@@ -3,7 +3,6 @@
   import Dashboard from "$lib/components/Dashboard.svelte"
 
   let tags = []
-  let userName = "Unknown User"
 
   const addTag = () => {
     const tagInput = document.getElementById("tag")
@@ -81,12 +80,12 @@
             <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}
           <br />
-          <button class="submit-button" type="button" on:click={addTag}>Add tag</button></span
-        >
+          <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
+        </span>
         <br />
         <input class="upload-file" type="file" name="file" required />
         <br />
-        <button class="submit-button" type="submit">Confirm</button>
+        <button class="submit-button" t ype="submit">Confirm</button>
       </form>
     </div>
   </div>
@@ -129,18 +128,12 @@
   .submit-button {
     margin-bottom: 1rem;
     padding: 0.5rem;
-    border: 1px solid #ccc;
     border-radius: 0.3rem;
     font-size: 1rem;
-  }
-
-  .submit-button {
-    cursor: pointer;
     background-color: #172740;
     color: #fff;
+    cursor: pointer;
     border: none;
-    border-radius: 0.3rem;
     padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease;
   }
 </style>

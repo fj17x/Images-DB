@@ -25,6 +25,7 @@
 
   .title {
     margin-top: 0.4rem;
+    color: black;
   }
 
   .anchor {
