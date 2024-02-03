@@ -1,19 +1,35 @@
 <script>
   import { onMount } from "svelte"
+  import LogoutModal from "$lib/components/LogoutModal.svelte"
   import { goto } from "$app/navigation"
 
   let signedIn = false
+  let showLogoutModal = false
 
   const checkSignedIn = async () => {
     const response = await fetch(`http://localhost:4000/me`, {
       method: "GET",
       credentials: "include",
     })
+
     if (response.ok) {
       signedIn = true
     }
   }
 
+  export const onLogoutConfirm = async (confirmed) => {
+    showLogoutModal = false
+    if (confirmed) {
+      const response = await fetch(`http://localhost:4000/auth/logout`, {
+        method: "GET",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        goto("/")
+      }
+    }
+  }
   const handleRegister = async () => {
     if (signedIn) {
       goto("/dashboard/myimages")
@@ -40,10 +56,26 @@
   <div class="hero-content">
     <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
     <p class="text">Share your life's snapshots.</p>
-    <div on:click={handleRegister} class="get-started-btn">Create an account</div>
-    <div on:click={handleSignIn} class="have-account">Already have an account?</div>
+    {#await checkSignedIn()}
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+    {:then}
+      <div on:click={handleRegister} class="get-started-btn">{signedIn ? "Continue" : "Create an account"}</div>
+      {#if !signedIn}
+        <div on:click={handleSignIn} class="have-account">Already have an account?</div>
+      {:else}
+        <div on:click={() => (showLogoutModal = true)} class="have-account">Logout</div>
+      {/if}
+    {:catch}
+      <p class="have-account">Failed to connect to application.</p>
+    {/await}
   </div>
 </div>
+
+{#if showLogoutModal}
+  <LogoutModal bind:showModal={showLogoutModal} {onLogoutConfirm}></LogoutModal>
+{/if}
 
 <style>
   .hero {
