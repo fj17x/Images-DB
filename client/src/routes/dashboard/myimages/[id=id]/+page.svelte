@@ -2,10 +2,15 @@
   import { onMount } from "svelte"
   import Dashboard from "$lib/components/Dashboard.svelte"
   import FullImageCard from "$lib/components/FullImageCard.svelte"
+  import EditImageModal from "$lib/components/EditImageModal.svelte"
+  import AlertModal from "$lib/components/AlertModal.svelte"
   import { page } from "$app/stores"
 
-  let userName = "Unknown User"
+  let showAlertModal = false
+  let alertModalOptions = {}
+
   let image
+  let showEditImageModal = false
 
   const fetchImageWithId = async () => {
     const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
@@ -15,6 +20,41 @@
 
     const imagesReply = await response.json()
     image = imagesReply.data
+  }
+
+  const onEditConfirm = async (status, data) => {
+    if (!status) {
+      showEditImageModal = false
+      return
+    }
+    if (data) {
+      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+    }
+    console.log("🚀 ~ onEditConfirm ~ data:", data)
+
+    showEditImageModal = false
+
+    const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const reply = await response.json()
+    if (response.ok) {
+      alertModalOptions.header = "Successfully updated"
+      alertModalOptions.message = reply.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
+    } else {
+      alertModalOptions.header = "Could not logout"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
   }
 
   onMount(async () => {
@@ -27,17 +67,56 @@
   <div class="content">
     <div class="main-card">
       {#if image}
-        <h3>Image ID: {image.id}</h3>
-        <FullImageCard {...image} />
+        <div class="header">
+          <h3>Image ID: {image.id}</h3>
+          <button class="edit-button" on:click={() => (showEditImageModal = true)}>Edit</button>
+        </div>
+        <FullImageCard
+          title={image.title}
+          description={image.description}
+          tags={image.tags}
+          url={image.url}
+          createdAt={image.createdAt}
+          modifiedAt={image.modifiedAt}
+          id={image.id}
+        />
       {:else}
         <h1>Image not found!</h1>
       {/if}
     </div>
   </div>
 </div>
+{#if showEditImageModal}
+  <EditImageModal
+    bind:showModal={showEditImageModal}
+    oldTitle={image.title}
+    oldDescription={image.description}
+    oldTags={image.tags}
+    oldUrl={image.url}
+    {onEditConfirm}
+  ></EditImageModal>
+{/if}
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+{/if}
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins:400,700,900");
+
+  .edit-button {
+    background-color: #e01f32;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   .container {
     display: flex;

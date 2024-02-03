@@ -5,8 +5,11 @@
 
   let currentOffset = 0
   let images = []
+  let loading = false
 
   const fetchNextImages = async () => {
+    loading = true
+
     const response = await fetch(`http://localhost:4000/images?offset=${currentOffset}&limit=9&sortBy=id&sortOrder=asc`, {
       method: "GET",
       credentials: "include",
@@ -15,10 +18,12 @@
     const imagesReply = await response.json()
     images = [...images, ...imagesReply.data]
     currentOffset += 9
+
+    loading = false
   }
 
   const handleScroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50 && !loading) {
       fetchNextImages()
     }
   }
@@ -33,21 +38,44 @@
 <div class="container">
   <Dashboard />
   <div class="content">
-    <h2>Your images:</h2>
-
-    <div class="main-card" on:scroll={handleScroll}>
+    {#await fetchNextImages()}
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+    {:then}
       {#if images.length > 0}
-        {#each images as { id, url, title }}
-          <ImageCard {id} {url} {title} />
-        {/each}
+        <h2>Your images:</h2>
+        <div class="main-card" on:scroll={handleScroll}>
+          {#each images as { id, url, title }}
+            <ImageCard {id} {url} {title} />
+          {/each}
+        </div>
+      {:else}
+        <div class="no-images-message">
+          <p>
+            You haven't uploaded any images yet. Start by uploading your favorite images by <a href="/dashboard/upload"
+              >clicking here!</a
+            >
+          </p>
+        </div>
       {/if}
-    </div>
+    {/await}
   </div>
 </div>
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins:400,700,900");
 
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
   .container {
     display: flex;
   }
@@ -71,5 +99,25 @@
     gap: 1rem;
     place-items: center;
     align-items: start;
+  }
+
+  .no-images-message {
+    text-align: center;
+    padding: 2rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin: 2rem;
+    max-width: 400px;
+  }
+
+  .no-images-message p {
+    margin-bottom: 1rem;
+  }
+
+  .no-images-message a {
+    text-decoration: none;
+    color: #1ca496;
+    font-weight: bold;
   }
 </style>

@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation"
   import LogoutModal from "./LogoutModal.svelte"
   import AlertModal from "./AlertModal.svelte"
+  import { page } from "$app/stores"
   let showLogoutModal = false
 
   let showAlertModal = false
@@ -28,19 +29,24 @@
 
 <div class="dashboard">
   <div class="option">
-    <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="dashboard-text"><p>Home</p></a>
+    <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="dashboard-text {$page.route.id === '/' ? 'active' : ''}"
+      ><p>Home</p></a
+    >
   </div>
-  <div class="option">
+  <div class="option {$page.route.id.startsWith('/dashboard/upload') ? 'active' : ''}">
     <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i><a href="/dashboard/upload" class="dashboard-text"><p>Upload</p></a
     >
   </div>
-  <div class="option">
+  <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
     <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="dashboard-text"><p>My Images</p></a>
   </div>
   <div class="option">
-    <i class="fa fa-search fa-lg" aria-hidden="true"></i><a href="/dashboard/search" class="dashboard-text"><p>Search</p></a>
+    <i class="fa fa-search fa-lg {$page.route.id.startsWith('/dashboard/search') ? 'active' : ''}" aria-hidden="true"></i><a
+      href="/dashboard/search"
+      class="dashboard-text"><p>Search</p></a
+    >
   </div>
-  <div class="option">
+  <div class="option {$page.route.id.startsWith('/dashboard/settings') ? 'active' : ''}">
     <i class="fa fa-cog fa-lg" aria-hidden="true"></i><a href="/dashboard/settings" class="dashboard-text"><p>Settings</p></a>
   </div>
   <div class="option logout" on:click={() => (showLogoutModal = true)}>
@@ -88,5 +94,9 @@
 
   .logout {
     cursor: pointer;
+  }
+
+  .active {
+    text-shadow: 0 0 20px #fff;
   }
 </style>

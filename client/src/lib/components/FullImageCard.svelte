@@ -20,16 +20,17 @@
   <a class="anchor" target="_blank" href={url}>
     <img src={url} alt={title} />
   </a>
+
   <div class="details">
     <p class="title">{title}</p>
     {#if description}
-      <p class="description">{description}</p>
+      <p class="description">Description: {description}</p>
     {/if}
     {#if tags}
       <div class="tags">
         <span>Tags:&nbsp;</span>
         {#each tags as tag}
-          <span class="tag">{tag},&nbsp;</span>
+          <span class="tag">{tag}&nbsp;</span>
         {/each}
       </div>
     {/if}
@@ -44,7 +45,7 @@
   .full-image-card {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   img {
@@ -53,7 +54,7 @@
   }
 
   .details {
-    padding: 1rem;
+    padding: 1.5rem;
     background-color: #172740;
     color: #fff;
     border-radius: 0 0 8px 8px;
@@ -61,26 +62,39 @@
 
   .title {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: bold;
   }
 
   .description {
-    margin-top: 0.4rem;
-    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .tags {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background-color: #1ca496;
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
   }
 
   .created-at,
   .modified-at {
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     font-size: 0.8rem;
   }
+
   .anchor {
     text-decoration: none;
     color: #fff;
-  }
-
-  .tags {
-    display: flex;
-    align-items: center;
   }
 </style>
