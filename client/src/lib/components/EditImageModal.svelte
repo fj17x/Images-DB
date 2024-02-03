@@ -56,19 +56,20 @@
         <label for="title">Change title:</label>
         <br />
         <input type="text" class="full" name="title" bind:value={title} placeholder={oldTitle} /></span
-      > <br />
+      ><br /><br />
       <span>
         <span>
           <label for="title">Change description:</label>
           <br />
-          <input type="text" class="full" rows="4" name="description" bind:value={description} /></span
-        > <br />
+          <textarea type="text" class="full" rows="4" name="description" bind:value={description} /></span
+        >
         <span>
           <label for="title">Change URL:</label>
           <br />
           <input type="text" class="full" name="url" bind:value={url} /></span
-        > <br />
-        <span>
+        >
+        <span
+          ><br /><br />
           <label for="title">Modify tags:</label>
           <br />
           <input type="text" name="tag" id="tag" bind:value={toAddTag} />
@@ -140,12 +141,16 @@
     border-radius: 4px;
   }
 
-  input[type="textarea"] {
+  textarea {
+    padding: 0.5rem;
+    max-width: 20rem;
+    min-width: 250px;
+    max-height: 10rem;
+    min-height: 1rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
+    border-radius: 0.3rem;
+    width: 10rem;
   }
-
   button.close-button {
     display: inline-block;
     padding: 0.5em 1em;

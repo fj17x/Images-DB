@@ -88,7 +88,7 @@
         <span>
           <label for="title">Description:</label>
           <br />
-          <input type="text" name="description" /></span
+          <textarea rows="4" cols="20" name="description" /></span
         >
         <span>
           <label for="title">Tags:</label>
@@ -157,5 +157,16 @@
     cursor: pointer;
     border: none;
     padding: 0.5rem 1rem;
+  }
+  textarea {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    max-width: 800px;
+    min-width: 250px;
+    max-height: 300px;
+    max-height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    width: 10rem;
   }
 </style>
