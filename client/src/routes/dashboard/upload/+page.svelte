@@ -8,14 +8,15 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
+  let toAddTag
+
   const addTag = () => {
-    const tagInput = document.getElementById("tag")
-    const tagValue = tagInput.value.trim()
+    const tagValue = toAddTag.trim()
 
     if (tagValue) {
       if (!tags.includes(tagValue)) {
         tags = [...tags, tagValue]
-        tagInput.value = ""
+        toAddTag = ""
       } else {
         alertModalOptions.header = "Could not add tag"
         alertModalOptions.message = "Tag already exists!"
@@ -55,6 +56,7 @@
       credentials: "include",
     })
     const reply = await response.json()
+    tags = []
     if (response.ok) {
       alertModalOptions.header = "Uploaded successfully"
       alertModalOptions.message = reply.message
@@ -91,7 +93,7 @@
         <span>
           <label for="title">Tags:</label>
           <br />
-          <input type="text" name="tag" id="tag" />
+          <input type="text" name="tag" bind:value={toAddTag} id="tag" />
           {#each tags as tag}
             <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}

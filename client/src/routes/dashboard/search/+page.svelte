@@ -13,14 +13,21 @@
   let imageData = {}
   let images = []
 
+  let toAddTag
+
+  let idForSimple
+  let limit = 10
+  let offset = 0
+  let sortOrder
+  let sortBy
+
   const addTag = () => {
-    const tagInput = document.getElementById("tag")
-    const tagValue = tagInput.value.trim()
+    const tagValue = toAddTag.trim()
 
     if (tagValue) {
       if (!tags.includes(tagValue)) {
         tags = [...tags, tagValue]
-        tagInput.value = ""
+        toAddTag = ""
       } else {
         alertModalOptions.header = "Could not add tag"
         alertModalOptions.message = "Tag already exists!"
@@ -40,9 +47,8 @@
     tags = tags.filter((tag) => tag !== toRemoveTag)
   }
 
-  const handleSubmitSingle = async (event) => {
-    const formData = new FormData(event.target)
-    const searchId = formData.get("id").trim()
+  const handleSubmitSingle = async () => {
+    const searchId = idForSimple
     const response = await fetch(`http://localhost:4000/images/${searchId}`, {
       method: "GET",
       credentials: "include",
@@ -64,20 +70,17 @@
   }
 
   const handleSubmitAdvanced = async (event) => {
-    const formData = new FormData(event.target)
-
-    const limit = Number(formData.get("limit").trim() ?? 10)
-    const offset = Number(formData.get("offset")?.trim() ?? 0)
-    const sortOrder = formData.get("sortorder")
-    const sortBy = formData.get("sortby")
-    const tagsWithCommas = tags.join(",")
-
     const params = new URLSearchParams()
     params.append("limit", limit)
     params.append("offset", offset)
     params.append("sortOrder", sortOrder)
     params.append("sortBy", sortBy)
-    params.append("tags", tagsWithCommas)
+    if (tags.length > 0) {
+      const tagsWithCommas = tags.join(",")
+      params.append("tags", tagsWithCommas)
+    }
+
+    console.log(params.toString())
 
     const response = await fetch(`http://localhost:4000/images?${params.toString()}`, {
       method: "GET",
@@ -108,7 +111,7 @@
           <span class="input-normal">
             <span>
               <label for="id">Image ID*:</label>
-              <input type="number" name="id" required />
+              <input type="number" name="id" bind:value={idForSimple} required />
             </span>
             <button class="submit-button" type="submit">Confirm</button>
           </span>
@@ -123,12 +126,12 @@
             <div class="grid-item">
               <label for="limit">Limit:</label>
               <br />
-              <input type="number" name="limit" required value="10" />
+              <input type="number" name="limit" bind:value={limit} required />
             </div>
             <div class="grid-item">
               <label for="sortby">Sort By:</label>
               <br />
-              <select name="sortby" id="sortby">
+              <select name="sortby" id="sortby" bind:value={sortBy}>
                 <option value="id">id</option>
                 <option value="url">url</option>
                 <option value="description">description</option>
@@ -139,12 +142,12 @@
             <div class="grid-item">
               <label for="offset">Offset:</label>
               <br />
-              <input type="number" name="offset" required value="0" />
+              <input type="number" name="offset" bind:value={offset} required />
             </div>
             <div class="grid-item">
               <label for="sortorder">Sort Order:</label>
               <br />
-              <select name="sortorder" id="sortorder">
+              <select name="sortorder" id="sortorder" bind:value={sortOrder}>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
@@ -153,7 +156,7 @@
               <label for="tag">Tags:</label>
               <br />
 
-              <input type="text" name="tag" id="tag" />
+              <input type="text" name="tag" id="tag" bind:value={toAddTag} />
               <br />
               {#each tags as tag}
                 <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times"></i> </button>

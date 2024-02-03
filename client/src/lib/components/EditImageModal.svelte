@@ -2,16 +2,18 @@
   export let showModal
   export let onEditConfirm
   export let oldTitle, oldDescription, oldTags, oldUrl
+  import AlertModal from "$lib/components/AlertModal.svelte"
 
   let dialog
 
-  let title
-  let description
+  let title = oldTitle
+  let description = oldDescription
   let tags = oldTags
-  let url
+  let url = oldUrl
 
-  let errorMessage = ""
-  let isFormValid = true
+  let showAlertModal = false
+  let alertModalOptions = {}
+
   let toAddTag
 
   $: if (dialog && showModal) dialog.showModal()
@@ -53,27 +55,29 @@
       <span>
         <label for="title">Change title:</label>
         <br />
-        <input type="text" name="title" bind:value={title} placeholder={title} /></span
+        <input type="text" class="full" name="title" bind:value={title} placeholder={oldTitle} /></span
       > <br />
       <span>
         <span>
           <label for="title">Change description:</label>
           <br />
-          <input type="textarea" rows="4" name="description" bind:value={description} placeholder={description} /></span
+          <input type="text" class="full" rows="4" name="description" bind:value={description} /></span
         > <br />
         <span>
           <label for="title">Change URL:</label>
           <br />
-          <input type="text" name="url" bind:value={url} placeholder={url} /></span
+          <input type="text" class="full" name="url" bind:value={url} /></span
         > <br />
         <span>
           <label for="title">Modify tags:</label>
           <br />
           <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+
           {#each tags as tag}
             <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}
-          <br />
+          <br /> <br />
+
           <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
         </span> <br />
         <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
@@ -84,6 +88,10 @@
     </div>
   </div>
 </dialog>
+
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+{/if}
 
 <style>
   dialog {
@@ -125,7 +133,7 @@
     font-weight: bold;
   }
 
-  input[type="text"] {
+  .full {
     width: 90%;
     padding: 0.5em;
     border: 1px solid #ccc;
