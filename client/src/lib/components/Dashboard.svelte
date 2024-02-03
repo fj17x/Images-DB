@@ -46,11 +46,11 @@
       class="dashboard-text"><p>Search</p></a
     >
   </div>
-  <div class="option {$page.route.id.startsWith('/dashboard/settings') ? 'active' : ''}">
-    <i class="fa fa-cog fa-lg" aria-hidden="true"></i><a href="/dashboard/settings" class="dashboard-text"><p>Settings</p></a>
+  <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
+    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/settings" class="dashboard-text"><p>My Profile</p></a>
   </div>
   <div class="option logout" on:click={() => (showLogoutModal = true)}>
-    <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
     <p>Log out</p>
   </div>
   {#if showLogoutModal}

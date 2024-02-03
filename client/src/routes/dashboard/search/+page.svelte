@@ -136,7 +136,7 @@
                 <option value="url">url</option>
                 <option value="description">description</option>
                 <option value="createdAt">createdAt</option>
-                <option value="modifiedAt">modifiedAt</option>
+                <option value="updatedAt">updatedAt</option>
               </select>
             </div>
             <div class="grid-item">

@@ -21,6 +21,7 @@
 
     const imagesReply = await response.json()
     image = imagesReply.data
+    console.log("🚀 ~ fetchImageWithId ~ image:", image)
     loading = false
   }
 
@@ -84,7 +85,7 @@
             tags={image.tags}
             url={image.url}
             createdAt={image.createdAt}
-            modifiedAt={image.modifiedAt}
+            updatedAt={image.updatedAt}
             id={image.id}
           />
         {:else}

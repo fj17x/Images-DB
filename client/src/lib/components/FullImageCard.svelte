@@ -5,7 +5,7 @@
     id,
     tags = [],
     createdAt,
-    modifiedAt
+    updatedAt
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" }
@@ -26,17 +26,22 @@
     {#if description}
       <p class="description">Description: {description}</p>
     {/if}
-    {#if tags}
-      <div class="tags">
-        <span>Tags:&nbsp;</span>
+
+    <div class="tags">
+      <span>Tags:&nbsp;</span>
+      {#if tags.length > 0}
         {#each tags as tag}
           <span class="tag">{tag}&nbsp;</span>
         {/each}
-      </div>
-    {/if}
+      {:else}
+        <p>No tags found.</p>
+      {/if}
+    </div>
     <p class="created-at">Created on: {formatDate(createdAt)}</p>
-    {#if modifiedAt}
-      <p class="modified-at">Last modified at: {formatDate(modifiedAt)}</p>
+    {#if updatedAt}
+      {#if updatedAt !== createdAt}
+        <p class="modified-at">Last modified on : {formatDate(updatedAt)}</p>
+      {/if}
     {/if}
   </div>
 </div>
@@ -74,6 +79,7 @@
   .tags {
     margin-top: 0.5rem;
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
   }
 
@@ -83,16 +89,18 @@
     border-radius: 4px;
     padding: 0.2rem 0.5rem;
     margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
     font-size: 0.8rem;
   }
 
-  .created-at,
-  .modified-at {
+  .created-at {
     margin-top: 0.5rem;
+    margin-bottom: 0.1rem;
     font-size: 0.8rem;
   }
-
+  .modified-at {
+    margin-top: 0rem;
+    font-size: 0.8rem;
+  }
   .anchor {
     text-decoration: none;
     color: #fff;
