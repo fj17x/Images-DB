@@ -11,16 +11,26 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <div class="image-grid">
-      {#each images as { id, url, title }}
-        <ImageCard {url} {title} {id} />
-      {/each}
+    <div class="{images.length == 1 ? 'single' : 'image-grid '} ">
+      {#if images.length > 1}
+        {#each images as { id, url, title }}
+          <ImageCard {url} {title} {id} />
+        {/each}
+      {:else if images.length == 1}
+        <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} />
+      {/if}
     </div>
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>
 
 <style>
+  .single {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   dialog {
     width: 90%;
     max-width: 800px;

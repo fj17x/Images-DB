@@ -62,7 +62,7 @@
     margin: auto;
     padding: 0.5em 1em;
     margin-top: 1em;
-    background-color: #007bff; 
+    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 0.2em;
@@ -72,6 +72,6 @@
   }
 
   .close-button:hover {
-    background-color: #0056b3; 
+    background-color: #0056b3;
   }
 </style>
