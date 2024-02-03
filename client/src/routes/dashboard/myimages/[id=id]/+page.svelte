@@ -11,6 +11,7 @@
 
   let image
   let showEditImageModal = false
+  let loading = true
 
   const fetchImageWithId = async () => {
     const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
@@ -20,6 +21,7 @@
 
     const imagesReply = await response.json()
     image = imagesReply.data
+    loading = false
   }
 
   const onEditConfirm = async (status, data) => {
@@ -30,7 +32,6 @@
     if (data) {
       Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
     }
-    console.log("🚀 ~ onEditConfirm ~ data:", data)
 
     showEditImageModal = false
 
@@ -49,8 +50,9 @@
       alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
       showAlertModal = true
+      await fetchImageWithId()
     } else {
-      alertModalOptions.header = "Could not logout"
+      alertModalOptions.header = "Could not update"
       alertModalOptions.message = reply.error
       alertModalOptions.type = "failure"
       showAlertModal = true
@@ -58,34 +60,41 @@
   }
 
   onMount(async () => {
-    fetchImageWithId()
+    await fetchImageWithId()
   })
 </script>
 
 <div class="container">
   <Dashboard />
   <div class="content">
-    <div class="main-card">
-      {#if image}
-        <div class="header">
-          <h3>Image ID: {image.id}</h3>
-          <button class="edit-button" on:click={() => (showEditImageModal = true)}>Edit</button>
-        </div>
-        <FullImageCard
-          title={image.title}
-          description={image.description}
-          tags={image.tags}
-          url={image.url}
-          createdAt={image.createdAt}
-          modifiedAt={image.modifiedAt}
-          id={image.id}
-        />
-      {:else}
-        <h1>Image not found!</h1>
-      {/if}
-    </div>
+    {#if loading}
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+    {:else}
+      <div class="main-card">
+        {#if image}
+          <div class="header">
+            <h3>Image ID: {image.id}</h3>
+            <button class="edit-button" on:click={() => (showEditImageModal = true)}>Edit</button>
+          </div>
+          <FullImageCard
+            title={image.title}
+            description={image.description}
+            tags={image.tags}
+            url={image.url}
+            createdAt={image.createdAt}
+            modifiedAt={image.modifiedAt}
+            id={image.id}
+          />
+        {:else}
+          <h1>Image not found!</h1>
+        {/if}
+      </div>
+    {/if}
   </div>
 </div>
+
 {#if showEditImageModal}
   <EditImageModal
     bind:showModal={showEditImageModal}
@@ -96,12 +105,24 @@
     {onEditConfirm}
   ></EditImageModal>
 {/if}
+
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
 {/if}
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins:400,700,900");
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
 
   .edit-button {
     background-color: #e01f32;

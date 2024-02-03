@@ -67,7 +67,7 @@
             >
           </div>
           <div class="text"><a href="/register">New here? Register first!</a></div>
-          <div class="text"><a href="/"> Home</a></div>
+          <div class="text"><a href="/"> Go Back</a></div>
         </div>
       </form>
     </div>

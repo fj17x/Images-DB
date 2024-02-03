@@ -80,7 +80,7 @@
             >
           </div>
           <div class="text"><a href="/signin">Already registered? Sign in here!</a></div>
-          <div class="text"><a href="/"> Home</a></div>
+          <div class="text"><a href="/"> Go Back</a></div>
         </div>
       </form>
     </div>
