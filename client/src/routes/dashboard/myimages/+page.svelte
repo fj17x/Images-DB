@@ -5,25 +5,23 @@
 
   let currentOffset = 0
   let images = []
-  let loading = false
 
   const fetchNextImages = async () => {
-    loading = true
-
-    const response = await fetch(`http://localhost:4000/images?offset=${currentOffset}&limit=9&sortBy=id&sortOrder=asc`, {
-      method: "GET",
-      credentials: "include",
-    })
+    const response = await fetch(
+      `http://localhost:4000/images?offset=${currentOffset}&limit=9&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    )
 
     const imagesReply = await response.json()
     images = [...images, ...imagesReply.data]
     currentOffset += 9
-
-    loading = false
   }
 
   const handleScroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50 && !loading) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
       fetchNextImages()
     }
   }
@@ -46,8 +44,8 @@
       {#if images.length > 0}
         <h2>Your images:</h2>
         <div class="main-card" on:scroll={handleScroll}>
-          {#each images as { id, url, title }}
-            <ImageCard {id} {url} {title} />
+          {#each images as { id, url, title, destroyTime }}
+            <ImageCard {id} {url} {title} {destroyTime} />
           {/each}
         </div>
       {:else}

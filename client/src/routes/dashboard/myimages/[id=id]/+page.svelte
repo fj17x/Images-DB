@@ -11,7 +11,6 @@
 
   let image
   let showEditImageModal = false
-  let loading = true
 
   const fetchImageWithId = async () => {
     const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
@@ -22,7 +21,6 @@
     const imagesReply = await response.json()
     image = imagesReply.data
     console.log("🚀 ~ fetchImageWithId ~ image:", image)
-    loading = false
   }
 
   const onEditConfirm = async (status, data) => {
@@ -60,6 +58,8 @@
     }
   }
 
+  const handleDelete = async () => {}
+
   onMount(async () => {
     await fetchImageWithId()
   })
@@ -68,16 +68,19 @@
 <div class="container">
   <Dashboard />
   <div class="content">
-    {#if loading}
+    {#await fetchImageWithId()}
       <div class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
       </div>
-    {:else}
+    {:then}
       <div class="main-card">
         {#if image}
           <div class="header">
             <h3>Image ID: {image.id}</h3>
-            <button class="edit-button" on:click={() => (showEditImageModal = true)}>Edit</button>
+            <div>
+              <button class="top-button edit" on:click={() => (showEditImageModal = true)}>Edit</button>
+              <button class="top-button delete" on:click={handleDelete}>Delete</button>
+            </div>
           </div>
           <FullImageCard
             title={image.title}
@@ -86,13 +89,14 @@
             url={image.url}
             createdAt={image.createdAt}
             updatedAt={image.updatedAt}
+            destroyTime={image.destroyTime}
             id={image.id}
           />
         {:else}
           <h1>Image not found!</h1>
         {/if}
       </div>
-    {/if}
+    {/await}
   </div>
 </div>
 
@@ -125,13 +129,19 @@
     width: 100%;
   }
 
-  .edit-button {
-    background-color: #e01f32;
+  .top-button {
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  .edit {
+    background-color: rgb(35, 107, 190);
+  }
+  .delete {
+    background-color: #d72335;
   }
 
   .header {

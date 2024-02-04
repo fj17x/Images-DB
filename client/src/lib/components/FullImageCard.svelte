@@ -3,6 +3,7 @@
     title,
     description,
     id,
+    destroyTime,
     tags = [],
     createdAt,
     updatedAt
@@ -22,7 +23,7 @@
   </a>
 
   <div class="details">
-    <p class="title">{title}</p>
+    <p class="title {destroyTime ? 'destroyed' : ''}">{title} (This image was deleted.)</p>
     {#if description}
       <p class="description">Description: {description}</p>
     {/if}
@@ -47,6 +48,9 @@
 </div>
 
 <style>
+  .destroyed {
+    color: red;
+  }
   .full-image-card {
     border-radius: 8px;
     overflow: hidden;

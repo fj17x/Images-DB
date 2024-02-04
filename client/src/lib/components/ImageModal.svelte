@@ -4,6 +4,7 @@
   export let url
   export let title
   export let id
+  export let destroyTime
   let dialog
 
   $: if (dialog && showModal) dialog.showModal()
@@ -13,7 +14,7 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <ImageCard {url} {title} {id} />
+    <ImageCard {url} {title} {id} {destroyTime} />
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>

@@ -5,6 +5,9 @@
 
   let signedIn = false
   let showChoiceModal = false
+  let choiceModalOptions = {}
+  choiceModalOptions.header = "Confirm logout"
+  choiceModalOptions.text = "Are you sure you want to logout?"
 
   const checkSignedIn = async () => {
     const response = await fetch(`http://localhost:4000/me`, {
@@ -73,8 +76,7 @@
 </div>
 
 {#if showChoiceModal}
-  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} header="Confirm logout" text="Are you sure you want to logout?"
-  ></ChoiceModal>
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
 {/if}
 
 <style>

@@ -13,8 +13,8 @@
   <div on:click|stopPropagation>
     <div class="{images.length == 1 ? 'single' : 'image-grid '} ">
       {#if images.length > 1}
-        {#each images as { id, url, title }}
-          <ImageCard {url} {title} {id} />
+        {#each images as { id, url, title, destroyTime }}
+          <ImageCard {url} {title} {id} {destroyTime} />
         {/each}
       {:else if images.length == 1}
         <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} />

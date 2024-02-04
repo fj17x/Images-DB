@@ -3,8 +3,12 @@
   import ChoiceModal from "./ChoiceModal.svelte"
   import AlertModal from "./AlertModal.svelte"
   import { page } from "$app/stores"
-  let showChoiceModal = false
 
+  let showChoiceModal = false
+  let choiceModalOptions = {}
+  choiceModalOptions.header = "Confirm logout"
+  choiceModalOptions.text = "Are you sure you want to logout?"
+  
   let showAlertModal = false
   let alertModalOptions = {}
 
@@ -55,12 +59,7 @@
     <p>Log out</p>
   </div>
   {#if showChoiceModal}
-    <ChoiceModal
-      bind:showModal={showChoiceModal}
-      {onChoiceConfirm}
-      header="Confirm logout"
-      text="Are you sure you want to logout?"
-    ></ChoiceModal>
+    <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
   {/if}
   {#if showAlertModal}
     <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>

@@ -6,10 +6,10 @@
   import { goto } from "$app/navigation"
 
   let showChoiceModal = false
+  let choiceModalOptions = {}
+
   let userData = {}
   let imagesUploaded = 0
-  let header
-  let text
   let currentOperation
 
   let showAlertModal = false
@@ -35,15 +35,15 @@
 
   const handleDeleteAccount = async () => {
     currentOperation = "deleteAccount"
-    header = "Confirm deletion"
-    text = "Are you sure you want to delete your account?"
+    choiceModalOptions.header = "Confirm deletion"
+    choiceModalOptions.text = "Are you sure you want to delete your account?"
     showChoiceModal = true
   }
 
   const handleDeleteAllImages = async () => {
     currentOperation = "deleteAllImages"
-    header = "Confirm deletion"
-    text = "Are you sure you want to delete all your images?"
+    choiceModalOptions.header = "Confirm deletion"
+    choiceModalOptions.text = "Are you sure you want to delete all your images?"
     showChoiceModal = true
   }
 
@@ -82,6 +82,7 @@
   }
 
   const onAlertConfirm = () => {
+    showAlertModal = false
     if (currentOperation === "deleteAccount") {
       goto("/")
     }
@@ -108,7 +109,7 @@
           </span>
           <hr />
           <span class="bar">
-            <p class="property">Name:</p>
+            <p class="property">Username:</p>
             <p>{userData.userName}</p>
           </span>
           <hr />
@@ -118,7 +119,7 @@
           </span>
           <hr />
           <span class="bar">
-            <p class="property">Profile Last modified on:</p>
+            <p class="property">Profile last modified on:</p>
             <p>{formatDate(userData.updatedAt)}</p>
           </span>
           <hr />
@@ -132,7 +133,7 @@
       <br />
       <div class="options">
         <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
-        <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all images </button>
+        <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all your images </button>
         <button class="submit-button edit">Edit profile </button>
       </div>
     {/await}
@@ -140,7 +141,7 @@
 </div>
 
 {#if showChoiceModal}
-  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {header} {text}></ChoiceModal>
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
 {/if}
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onAlertConfirm}></AlertModal>

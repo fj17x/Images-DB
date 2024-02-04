@@ -1,11 +1,11 @@
 <script>
-  export let url, title, id
+  export let url, title, id, destroyTime
 </script>
 
 <div class="card">
   <a href="/dashboard/myimages/{id}" class="anchor">
     <img src={url} alt={title} />
-    <p class="title">{title}</p>
+    <p class="title {destroyTime ? 'destroyed' : 'normal'}">{title}</p>
   </a>
 </div>
 
@@ -14,6 +14,13 @@
     border-radius: 8px;
     overflow: hidden;
     width: 300px;
+  }
+  .destroyed {
+    color: red;
+  }
+
+  .normal {
+    color: black;
   }
 
   img {
@@ -25,7 +32,6 @@
 
   .title {
     margin-top: 0.4rem;
-    color: black;
   }
 
   .anchor {
