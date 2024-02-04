@@ -174,7 +174,6 @@ const getBatchOfImages = async (req, res) => {
     }
 
     //Filter images based on tags.
-
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()
@@ -277,13 +276,39 @@ const deleteImageById = async (req, res) => {
 
     const response = {
       message: "Image deleted.",
-      links: createImageLinks(imageId),
     }
     res.status(200).json(response)
   } catch (err) {
     console.error("Error during deleting. ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to delete the image.", details: errorMessage })
+  }
+}
+
+const deleteAllImages = async (req, res) => {
+  try {
+    const userId = req.userId
+
+    const deletedCount = await Image.destroy({
+      where: {
+        ownerId: userId,
+      },
+    })
+
+    if (deletedCount === 0) {
+      return res.status(404).json({ error: "No images found to delete." })
+    }
+
+    const response = {
+      message: "All of your images deleted successfully.",
+      deletedCount: deletedCount,
+    }
+
+    return res.status(200).json(response)
+  } catch (err) {
+    console.error("Error during deleting all images. ", err)
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to delete all images.", details: errorMessage })
   }
 }
 
@@ -541,4 +566,4 @@ const updateImage = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, getBatchOfImages, deleteImageById, partiallyUpdateImage, updateImage }
+export { createImage, getImageById, getBatchOfImages, deleteImageById, partiallyUpdateImage, updateImage, deleteAllImages }
