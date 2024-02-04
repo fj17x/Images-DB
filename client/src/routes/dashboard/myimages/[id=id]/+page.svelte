@@ -110,7 +110,7 @@
 
 <div class="container">
   <Dashboard />
-  <div class="content">
+  <div class="content {image === undefined ? 'none-found' : ''}">
     {#await fetchImageWithId()}
       <div class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
@@ -163,6 +163,12 @@
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins:400,700,900");
 
+  .none-found {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .loading-spinner {
     display: flex;
     justify-content: center;

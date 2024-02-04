@@ -88,7 +88,7 @@
         <span>
           <label for="title">Description:</label>
           <br />
-          <textarea rows="4" cols="20" bind:value={description} name="description" /></span
+          <textarea rows="6" cols="40" bind:value={description} name="description" /></span
         >
         <span>
           <label for="title">Tags:</label>
@@ -167,6 +167,6 @@
     max-height: 300px;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
-    width: 10rem;
+    /* width: 10rem;  */
   }
 </style>
