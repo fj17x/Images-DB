@@ -193,6 +193,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    gap: 10px;
   }
 
   .delete {
@@ -259,5 +260,12 @@
   .profile-info {
     display: flex;
     flex-direction: column;
+  }
+
+  @media screen and (max-width: 786px) {
+    .options {
+      flex-direction: column;
+      gap: 7px;
+    }
   }
 </style>

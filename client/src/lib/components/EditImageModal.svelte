@@ -72,8 +72,10 @@
           ><br /><br />
           <label for="title">Modify tags:</label>
           <br />
-          <input type="text" name="tag" id="tag" bind:value={toAddTag} />
-          <button type="button" on:click={addTag}>Add tag</button>
+          <span>
+            <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+            <button type="button" class="tag-button" on:click={addTag}>Add</button>
+          </span>
           <br />
           {#each tags as tag}
             <span class="tag-container">
@@ -164,6 +166,17 @@
     border-radius: 0.3rem;
     width: 10rem;
   }
+
+  .tag-button {
+    font-size: 0.85rem;
+    border-radius: 0.3rem;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    background-color: #172740;
+    padding: 0.1rem 1rem;
+  }
+
   button.close-button {
     display: inline-block;
     padding: 0.5em 1em;
