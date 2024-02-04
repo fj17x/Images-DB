@@ -55,7 +55,7 @@
       <span>
         <label for="title">Change title:</label>
         <br />
-        <input type="text" class="full" name="title" bind:value={title} placeholder={oldTitle} /></span
+        <input type="text" class="full" name="title" bind:value={title} /></span
       ><br /><br />
       <span>
         <span>
@@ -79,7 +79,7 @@
           {/each}
           <br /> <br />
 
-          <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
+          <button type="button" on:click={addTag}>Add tag</button>
         </span> <br />
         <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
         <button class="close-button green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}

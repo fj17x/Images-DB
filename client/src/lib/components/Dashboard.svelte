@@ -1,15 +1,15 @@
 <script>
   import { goto } from "$app/navigation"
-  import LogoutModal from "./LogoutModal.svelte"
+  import ChoiceModal from "./ChoiceModal.svelte"
   import AlertModal from "./AlertModal.svelte"
   import { page } from "$app/stores"
-  let showLogoutModal = false
+  let showChoiceModal = false
 
   let showAlertModal = false
   let alertModalOptions = {}
 
-  const onLogoutConfirm = async (confirmed) => {
-    showLogoutModal = false
+  const onChoiceConfirm = async (confirmed) => {
+    showChoiceModal = false
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/auth/logout`, {
         method: "GET",
@@ -47,14 +47,19 @@
     >
   </div>
   <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
-    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/settings" class="dashboard-text"><p>My Profile</p></a>
+    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="dashboard-text"><p>My Profile</p></a>
   </div>
-  <div class="option logout" on:click={() => (showLogoutModal = true)}>
+  <div class="option logout" on:click={() => (showChoiceModal = true)}>
     <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
     <p>Log out</p>
   </div>
-  {#if showLogoutModal}
-    <LogoutModal bind:showModal={showLogoutModal} {onLogoutConfirm}></LogoutModal>
+  {#if showChoiceModal}
+    <ChoiceModal
+      bind:showModal={showChoiceModal}
+      {onChoiceConfirm}
+      header="Confirm logout"
+      text="Are you sure you want to logout?"
+    ></ChoiceModal>
   {/if}
   {#if showAlertModal}
     <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>

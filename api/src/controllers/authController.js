@@ -31,10 +31,16 @@ const register = async (req, res) => {
     }
 
     const userNameMaxLength = 15
+    const passwordMaxLength = 30
 
     if (userName.length > userNameMaxLength) {
       return res.status(400).json({
-        error: "userName exceeds maximum length (65).",
+        error: "Username exceeds maximum length (15 characters).",
+      })
+    }
+    if (password.length > passwordMaxLength) {
+      return res.status(400).json({
+        error: "Password exceeds maximum length (30 characters).",
       })
     }
 
@@ -83,10 +89,16 @@ const login = async (req, res) => {
     }
 
     const userNameMaxLength = 15
+    const passwordMaxLength = 30
 
     if (userName.length > userNameMaxLength) {
       return res.status(400).json({
-        error: "userName exceeds maximum length(65).",
+        error: "Username exceeds maximum length (15 characters).",
+      })
+    }
+    if (password.length > passwordMaxLength) {
+      return res.status(400).json({
+        error: "Password exceeds maximum length (30 characters).",
       })
     }
 

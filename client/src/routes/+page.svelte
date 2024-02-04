@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte"
-  import LogoutModal from "$lib/components/LogoutModal.svelte"
+  import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import { goto } from "$app/navigation"
 
   let signedIn = false
-  let showLogoutModal = false
+  let showChoiceModal = false
 
   const checkSignedIn = async () => {
     const response = await fetch(`http://localhost:4000/me`, {
@@ -17,8 +17,7 @@
     }
   }
 
-  export const onLogoutConfirm = async (confirmed) => {
-    showLogoutModal = false
+  export const onChoiceConfirm = async (confirmed) => {
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/auth/logout`, {
         method: "GET",
@@ -26,7 +25,7 @@
       })
 
       if (response.ok) {
-        goto("/")
+        goto("/register")
       }
     }
   }
@@ -65,7 +64,7 @@
       {#if !signedIn}
         <div on:click={handleSignIn} class="have-account">Already have an account?</div>
       {:else}
-        <div on:click={() => (showLogoutModal = true)} class="have-account">Logout</div>
+        <div on:click={() => (showChoiceModal = true)} class="have-account">Logout</div>
       {/if}
     {:catch}
       <p class="have-account">Failed to connect to application.</p>
@@ -73,8 +72,9 @@
   </div>
 </div>
 
-{#if showLogoutModal}
-  <LogoutModal bind:showModal={showLogoutModal} {onLogoutConfirm}></LogoutModal>
+{#if showChoiceModal}
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} header="Confirm logout" text="Are you sure you want to logout?"
+  ></ChoiceModal>
 {/if}
 
 <style>

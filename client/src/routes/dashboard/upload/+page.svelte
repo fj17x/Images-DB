@@ -8,6 +8,11 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
+  let title
+  let description
+  let uploadedFile
+  let url
+
   let toAddTag
 
   const addTag = () => {
@@ -38,13 +43,8 @@
     console.log(tags)
   }
 
-  const handleSubmit = async (event) => {
-    const formData = new FormData(event.target)
-
-    const title = formData.get("title").trim()
-    const description = formData.get("description")?.trim() ?? ""
-    const uploadedFile = formData.get("file")
-    const url = uploadedFile.name
+  const handleSubmit = async () => {
+    const url = uploadedFile
 
     const data = { title, description, tags, url }
     const response = await fetch(`http://localhost:4000/images`, {
@@ -83,12 +83,12 @@
         <span>
           <label for="title">Title*:</label>
           <br />
-          <input type="text" name="title" required /></span
+          <input type="text" name="title" bind:value={title} required /></span
         >
         <span>
           <label for="title">Description:</label>
           <br />
-          <textarea rows="4" cols="20" name="description" /></span
+          <textarea rows="4" cols="20" bind:value={description} name="description" /></span
         >
         <span>
           <label for="title">Tags:</label>
@@ -101,9 +101,9 @@
           <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
         </span>
         <br />
-        <input class="upload-file" type="file" name="file" required />
+        <input class="upload-file" type="file" name="file" bind:value={uploadedFile} required />
         <br />
-        <button class="submit-button" t ype="submit">Confirm</button>
+        <button class="submit-button" type="submit">Confirm</button>
       </form>
     </div>
   </div>
@@ -162,7 +162,7 @@
     margin-bottom: 1rem;
     padding: 0.5rem;
     max-width: 800px;
-    min-width: 250px;
+    min-width: 150px;
     max-height: 300px;
     max-height: 300px;
     border: 1px solid #ccc;

@@ -1,6 +1,8 @@
 <script>
   export let showModal
-  export let onLogoutConfirm
+  export let onChoiceConfirm
+  export let header
+  export let text
 
   let dialog
 
@@ -11,11 +13,11 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <h2>Confirm logout</h2>
+    <h2>{header}</h2>
     <hr />
-    <p>Are you sure you want to logout?</p>
-    <button class="close-button red" on:click={() => onLogoutConfirm(true)}>Yes</button>
-    <button class="close-button green" on:click={() => onLogoutConfirm(false)}>No</button>
+    <p>{text}</p>
+    <button class="close-button red" on:click={() => onChoiceConfirm(true)}>Yes</button>
+    <button class="close-button green" on:click={() => onChoiceConfirm(false)}>No</button>
   </div>
 </dialog>
 
