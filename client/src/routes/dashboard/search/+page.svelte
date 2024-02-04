@@ -122,7 +122,7 @@
               <label for="id">Image ID*:</label>
               <input type="number" name="id" bind:value={idForSimple} required />
             </span>
-            <button class="submit-button" type="submit">Confirm</button>
+            <button class="confirm-button" type="submit">Search</button>
           </span>
         </form>
       </div>
@@ -187,7 +187,7 @@
               <br />
             </div>
             <div class="grid-item">
-              <button class="submit-button" type="submit">Confirm</button>
+              <button class="confirm-button" type="submit">Search</button>
             </div>
           </div>
         </form>
@@ -315,13 +315,23 @@
   .tag-input > .left {
     max-width: 10%;
   }
-  .tag-input > button {
+
+  .submit-button {
+    background-color: #172740;
+    border-radius: 0.3rem;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1rem;
     width: 25%;
   }
 
-  .submit-button {
-    font-size: 0.85rem;
-    background-color: #172740;
+  .submit-button:hover {
+    transform: scale(1.05);
+  }
+  .confirm-button {
+    font-size: 1.2rem;
+    background-color: #309329;
     border-radius: 0.3rem;
     color: #fff;
     cursor: pointer;
@@ -329,7 +339,13 @@
     padding: 0.5rem 1rem;
   }
 
-  .submit-button:hover {
+  .confirm-button:hover {
     transform: scale(1.05);
+  }
+
+  @media screen and (max-width: 800px) {
+    .submit-button {
+      padding: 0rem;
+    }
   }
 </style>
