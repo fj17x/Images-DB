@@ -8,7 +8,7 @@ const verifyToken = async (req, res, next) => {
     const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
     const token = req.cookies.jwt
     if (!token) {
-      return res.status(401).json({ error: "Token not provided. Please provide token in http-only cookie." })
+      return res.status(401).json({ error: "Token not provided." })
     }
     const decodedToken = jwt.verify(token, secretKey)
     const userId = decodedToken.userId
