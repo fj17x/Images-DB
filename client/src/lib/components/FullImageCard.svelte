@@ -112,11 +112,13 @@
     margin-bottom: 0.1rem;
     font-size: 0.8rem;
     direction: rtl;
+    color: rgb(154, 154, 154);
   }
   .modified-at {
     margin-top: 0rem;
     font-size: 0.8rem;
     direction: rtl;
+    color: rgb(154, 154, 154);
   }
   .anchor {
     text-decoration: none;
