@@ -17,9 +17,7 @@ const verifyToken = async (req, res, next) => {
     //Check whether user is an admin. If yes, make req.isAdmin true.
     const user = await User.findByPk(userId, { raw: true, attributes: ["userName", "isAdmin"] })
     if (!user) {
-      return res
-        .status(400)
-        .json({ error: `Such a user with id:${userId} does not exist(from JWT token). Please register first.` })
+      return res.status(400).json({ error: `Such a user does not exist(JWT token). Please create an account.` })
     }
     req.userName = user.userName
     req.isAdmin = user.isAdmin ? true : false
