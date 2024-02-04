@@ -17,6 +17,7 @@
 
   let image
   let imageId = $page.params.id
+
   let showEditImageModal = false
 
   const fetchImageWithId = async () => {

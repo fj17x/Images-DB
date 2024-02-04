@@ -16,6 +16,11 @@
     )
 
     const imagesReply = await response.json()
+
+    if (!imagesReply.data) {
+      return
+    }
+
     images = [...images, ...imagesReply.data]
     currentOffset += 9
   }
@@ -26,9 +31,9 @@
     }
   }
 
-  onMount(async () => {
-    fetchNextImages()
-  })
+  // onMount(async () => {
+  //   fetchNextImages()
+  // })
 </script>
 
 <svelte:window on:scroll={handleScroll} />

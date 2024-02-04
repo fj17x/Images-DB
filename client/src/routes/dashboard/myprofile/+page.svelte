@@ -2,6 +2,7 @@
   import Dashboard from "$lib/components/Dashboard.svelte"
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
+  import EditProfileModal from "$lib/components/EditProfileModal.svelte"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
 
@@ -14,6 +15,8 @@
 
   let showAlertModal = false
   let alertModalOptions = {}
+
+  let showEditProfileModal = false
 
   const getUserDetails = async () => {
     const response = await fetch(`http://localhost:4000/me`, {
@@ -87,6 +90,42 @@
       goto("/")
     }
   }
+
+  const onEditConfirm = async (status, data) => {
+    if (!status) {
+      showEditProfileModal = false
+      return
+    }
+    if (data) {
+      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+    }
+
+    showEditProfileModal = false
+
+    const response = await fetch(`http://localhost:4000/me`, {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const reply = await response.json()
+    if (response.ok) {
+      alertModalOptions.header = "Successfully updated"
+      alertModalOptions.message = reply.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
+      await getUserDetails()
+    } else {
+      alertModalOptions.header = "Could not update"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
+
   onMount(async () => {
     await getUserDetails()
   })
@@ -134,7 +173,7 @@
       <div class="options">
         <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
         <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all your images </button>
-        <button class="submit-button edit">Edit profile </button>
+        <button class="submit-button edit" on:click={() => (showEditProfileModal = true)}>Update profile </button>
       </div>
     {/await}
   </div>
@@ -145,6 +184,8 @@
 {/if}
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
+{/if}{#if showEditProfileModal}
+  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUserName={userData.userName}></EditProfileModal>
 {/if}
 
 <style>
