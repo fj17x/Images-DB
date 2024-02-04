@@ -285,7 +285,7 @@ const deleteImageById = async (req, res) => {
   }
 }
 
-const deleteAllImages = async (req, res) => {
+const deleteAllOwnImages = async (req, res) => {
   try {
     const userId = req.userId
 
@@ -566,4 +566,4 @@ const updateImage = async (req, res) => {
   }
 }
 
-export { createImage, getImageById, getBatchOfImages, deleteImageById, partiallyUpdateImage, updateImage, deleteAllImages }
+export { createImage, getImageById, getBatchOfImages, deleteImageById, partiallyUpdateImage, updateImage, deleteAllOwnImages }

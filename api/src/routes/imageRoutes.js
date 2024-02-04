@@ -17,7 +17,7 @@ imageRouter.get("/:imageId(\\d+)", imageController.getImageById)
 imageRouter.delete("/:imageId(\\d+)", imageController.deleteImageById)
 
 // DELETE method to delete all images.
-imageRouter.delete("/", imageController.deleteAllImages)
+imageRouter.delete("/", imageController.deleteAllOwnImages)
 
 // GET method to fetch batch of images.
 imageRouter.get("/", imageController.getBatchOfImages)
