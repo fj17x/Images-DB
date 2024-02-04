@@ -8,7 +8,7 @@
   let choiceModalOptions = {}
   choiceModalOptions.header = "Confirm logout"
   choiceModalOptions.text = "Are you sure you want to logout?"
-  
+
   let showAlertModal = false
   let alertModalOptions = {}
 

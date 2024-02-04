@@ -21,6 +21,7 @@
   }
 
   export const onChoiceConfirm = async (confirmed) => {
+    showChoiceModal = false
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/auth/logout`, {
         method: "GET",
