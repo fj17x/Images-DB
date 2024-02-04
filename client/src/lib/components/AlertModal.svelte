@@ -3,7 +3,7 @@
   export let header = ""
   export let message = ""
   export let type = ""
-  export let onConfirm = () => {
+  export let onAlertConfirm = () => {
     showModal = false
   }
 
@@ -38,7 +38,7 @@
     </h2>
     <hr />
     <p>{message}</p>
-    <button class="close-button red" on:click={() => onConfirm()}>Ok</button>
+    <button class="close-button red" on:click={() => onAlertConfirm()}>Ok</button>
   </div>
 </dialog>
 

@@ -10,19 +10,20 @@
 
   const onChoiceConfirm = async (confirmed) => {
     showChoiceModal = false
-    if (confirmed) {
-      const response = await fetch(`http://localhost:4000/auth/logout`, {
-        method: "GET",
-        credentials: "include",
-      })
-      if (response.ok) {
-        goto("/")
-      } else {
-        alertModalOptions.header = "Could not logout"
-        alertModalOptions.message = "Please try again!"
-        alertModalOptions.type = "failure"
-        showAlertModal = true
-      }
+    if (!confirmed) {
+      return
+    }
+    const response = await fetch(`http://localhost:4000/auth/logout`, {
+      method: "GET",
+      credentials: "include",
+    })
+    if (response.ok) {
+      goto("/")
+    } else {
+      alertModalOptions.header = "Could not logout"
+      alertModalOptions.message = "Please try again!"
+      alertModalOptions.type = "failure"
+      showAlertModal = true
     }
   }
 </script>

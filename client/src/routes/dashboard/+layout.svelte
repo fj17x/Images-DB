@@ -20,7 +20,7 @@
       }
     }
   }
-  const onConfirm = () => {
+  const onAlertConfirm = () => {
     goto("/")
     showAlertModal = false
   }
@@ -31,7 +31,7 @@
 </script>
 
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onConfirm}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onAlertConfirm}></AlertModal>
 {/if}
 
 <slot />

@@ -35,7 +35,7 @@
     isLoading = false
   }
 
-  const onConfirm = () => {
+  const onAlertConfirm = () => {
     if (alertModalOptions.type === "success") {
       goto("/dashboard/myimages")
     }
@@ -74,7 +74,7 @@
   </div>
 </div>
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onConfirm}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onAlertConfirm}></AlertModal>
 {/if}
 
 <style>

@@ -1,12 +1,19 @@
 <script>
   import Dashboard from "$lib/components/Dashboard.svelte"
+  import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { onMount } from "svelte"
+  import { goto } from "$app/navigation"
+
+  let showChoiceModal = false
+  let userData = {}
+  let imagesUploaded = 0
+  let header
+  let text
+  let currentOperation
 
   let showAlertModal = false
   let alertModalOptions = {}
-  let userData = {}
-  let imagesUploaded = 0
 
   const getUserDetails = async () => {
     const response = await fetch(`http://localhost:4000/me`, {
@@ -14,10 +21,9 @@
       credentials: "include",
     })
     const reply = await response.json()
-    userData = reply.data
-    imagesUploaded = userData.imagesUploaded.length
-    console.log("🚀 ~ getUserDetails ~ userData:", userData.imagesUploaded)
     if (response.ok) {
+      userData = reply.data
+      imagesUploaded = userData.imagesUploaded.length
     }
   }
 
@@ -28,10 +34,39 @@
   }
 
   const handleDeleteAccount = async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "DELETE",
-      credentials: "include",
-    })
+    currentOperation = "deleteAccount"
+    header = "Confirm deletion"
+    text = "Are you sure you want to delete your account?"
+    showChoiceModal = true
+  }
+
+  const handleDeleteAllImages = async () => {
+    currentOperation = "deleteAllImages"
+    header = "Confirm deletion"
+    text = "Are you sure you want to delete all your images?"
+    showChoiceModal = true
+  }
+
+  const onChoiceConfirm = async (confirmed) => {
+    showChoiceModal = false
+    if (!confirmed) {
+      return
+    }
+    let response
+    if (currentOperation === "deleteAccount") {
+      response = await fetch(`http://localhost:4000/me`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+    } else if (currentOperation === "deleteAllImages") {
+      response = await fetch(`http://localhost:4000/images`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+    } else {
+      return
+    }
+
     const reply = await response.json()
     if (response.ok) {
       alertModalOptions.header = "Operation succeeded"
@@ -46,6 +81,11 @@
     }
   }
 
+  const onAlertConfirm = () => {
+    if (currentOperation === "deleteAccount") {
+      goto("/")
+    }
+  }
   onMount(async () => {
     await getUserDetails()
   })
@@ -92,15 +132,18 @@
       <br />
       <div class="options">
         <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
-        <button class="submit-button delete">Delete all images </button>
+        <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all images </button>
         <button class="submit-button edit">Edit profile </button>
       </div>
     {/await}
   </div>
 </div>
 
+{#if showChoiceModal}
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {header} {text}></ChoiceModal>
+{/if}
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions} {onAlertConfirm}></AlertModal>
 {/if}
 
 <style>
