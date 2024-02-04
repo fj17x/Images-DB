@@ -36,11 +36,8 @@
     }
   }
 
-  const removeTag = (event) => {
-    const toRemoveTag = event.target.innerText
-    console.log(tags)
+  const removeTag = (toRemoveTag) => {
     tags = tags.filter((tag) => tag !== toRemoveTag)
-    console.log(tags)
   }
 
   const handleSubmit = async () => {
@@ -88,16 +85,25 @@
         <span>
           <label for="title">Description:</label>
           <br />
-          <textarea rows="6" cols="40" bind:value={description} name="description" /></span
+          <textarea rows="6" cols="35" bind:value={description} name="description" /></span
         >
         <span>
           <label for="title">Tags:</label>
           <br />
           <input type="text" name="tag" bind:value={toAddTag} id="tag" />
-          {#each tags as tag}
-            <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
-          {/each}
           <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
+          <br />
+          {#each tags as tag}
+            <span class="tag-container">
+              <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+                {tag}
+                <span class="remove-tag">
+                  <i class="fa fa-times"></i>
+                </span>
+              </button>
+              &nbsp;
+            </span>
+          {/each}
           <br />
         </span>
         <br />
@@ -114,6 +120,14 @@
 {/if}
 
 <style>
+  .tag-toggle {
+    background-color: rgb(207, 59, 59);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
   .container {
     display: flex;
   }
@@ -122,6 +136,7 @@
     flex: 1;
     padding: 0px 2rem;
     margin-left: 14vw;
+    width: 75vw;
   }
 
   .main-card {
@@ -148,16 +163,20 @@
   }
 
   .submit-button {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0rem;
     border-radius: 0.3rem;
-    font-size: 1rem;
+    font-size: 0.85rem;
     background-color: #172740;
     color: #fff;
     cursor: pointer;
     border: none;
     padding: 0.5rem 1rem;
   }
+
+  .submit-button:hover {
+    transform: scale(1.05);
+  }
+  
   textarea {
     margin-bottom: 1rem;
     padding: 0.5rem;

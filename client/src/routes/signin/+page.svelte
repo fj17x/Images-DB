@@ -6,33 +6,41 @@
   let alertModalOptions = {}
 
   let isLoading = false
+  let userName
+  let password
 
   const handleSubmit = async (event) => {
-    isLoading = true
-    const userName = event.target.userName.value.trim()
-    const password = event.target.password.value.trim()
-    const data = { userName, password }
-    const response = await fetch(`http://localhost:4000/auth/signin`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    const reply = await response.json()
-    if (response.ok) {
-      alertModalOptions.header = "Sign in successfull"
-      alertModalOptions.message = `${reply.message}`
-      alertModalOptions.type = "success"
-      showAlertModal = true
-    } else {
+    try {
+      isLoading = true
+      const data = { userName: userName.trim(), password: password.trim() }
+      const response = await fetch(`http://localhost:4000/auth/signin`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const reply = await response.json()
+      if (response.ok) {
+        alertModalOptions.header = "Sign in successfull"
+        alertModalOptions.message = `${reply.message}`
+        alertModalOptions.type = "success"
+        showAlertModal = true
+      } else {
+        alertModalOptions.header = "Sign in failed"
+        alertModalOptions.message = `${reply.error}`
+        alertModalOptions.type = "failure"
+        showAlertModal = true
+      }
+      isLoading = false
+    } catch (err) {
       alertModalOptions.header = "Sign in failed"
-      alertModalOptions.message = `${reply.error}`
+      alertModalOptions.message = `Server may be down!`
       alertModalOptions.type = "failure"
       showAlertModal = true
+      isLoading = false
     }
-    isLoading = false
   }
 
   const onAlertConfirm = () => {
@@ -51,11 +59,11 @@
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Enter your username" name="userName" required />
+            <input type="text" placeholder="Enter your username" bind:value={userName} name="userName" required />
           </div>
           <div class="input-box">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Enter your password" name="password" required />
+            <input type="password" placeholder="Enter your password" bind:value={password} name="password" required />
           </div>
           <div class="submit-button">
             <button type="submit">

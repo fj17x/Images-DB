@@ -6,42 +6,50 @@
   let alertModalOptions = {}
 
   let isLoading = false
+  let userName
+  let password
+  let confirmPassword
 
   const handleSubmit = async (event) => {
-    isLoading = true
-    const userName = event.target.userName.value.trim()
-    const password = event.target.password.value.trim()
-    const confirmPassword = event.target.confirmPassword.value.trim()
+    try {
+      isLoading = true
 
-    if (password !== confirmPassword) {
-      alertModalOptions.header = "Could not register"
-      alertModalOptions.message = "Password does not match."
+      if (password.trim() !== confirmPassword.trim()) {
+        alertModalOptions.header = "Could not register"
+        alertModalOptions.message = "Password does not match."
+        alertModalOptions.type = "failure"
+        showAlertModal = true
+        isLoading = false
+        return
+      }
+      const data = { userName: userName.trim(), password: password.trim() }
+      const response = await fetch(`http://localhost:4000/auth/register`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const reply = await response.json()
+      if (response.ok) {
+        alertModalOptions.header = "Registered successfully"
+        alertModalOptions.message = reply.message
+        alertModalOptions.type = "success"
+        showAlertModal = true
+      } else {
+        alertModalOptions.header = "Could not register"
+        alertModalOptions.message = `${reply.error}`
+        alertModalOptions.type = "failure"
+        showAlertModal = true
+      }
+      isLoading = false
+    } catch (err) {
+      alertModalOptions.header = "Sign in failed"
+      alertModalOptions.message = `Server may be down!`
       alertModalOptions.type = "failure"
       showAlertModal = true
       isLoading = false
-      return
     }
-    const data = { userName, password }
-    const response = await fetch(`http://localhost:4000/auth/register`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    const reply = await response.json()
-    if (response.ok) {
-      alertModalOptions.header = "Registered successfully"
-      alertModalOptions.message = reply.message
-      alertModalOptions.type = "success"
-      showAlertModal = true
-    } else {
-      alertModalOptions.header = "Could not register"
-      alertModalOptions.message = `${reply.error}`
-      alertModalOptions.type = "failure"
-      showAlertModal = true
-    }
-    isLoading = false
   }
 
   const onAlertConfirm = () => {
@@ -60,15 +68,21 @@
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Enter your username" name="userName" required />
+            <input type="text" placeholder="Enter your username" name="userName" bind:value={userName} required />
           </div>
           <div class="input-box">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Enter your password" name="password" required />
+            <input type="password" placeholder="Enter your password" name="password" bind:value={password} required />
           </div>
           <div class="input-box">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Confirm your password" name="confirmPassword" required />
+            <input
+              type="password"
+              placeholder="Confirm your password"
+              name="confirmPassword"
+              bind:value={confirmPassword}
+              required
+            />
           </div>
           <div class="submit-button">
             <button type="submit">

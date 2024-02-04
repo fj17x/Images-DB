@@ -3,7 +3,6 @@
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
-  import { onMount } from "svelte"
   import { goto } from "$app/navigation"
 
   let showChoiceModal = false
@@ -202,11 +201,17 @@
   .edit {
     background-color: rgb(40, 124, 34);
   }
+
   .submit-button {
+    font-size: 0.85rem;
+    border-radius: 0.3rem;
     color: #fff;
     cursor: pointer;
     border: none;
     padding: 0.5rem 1rem;
+  }
+  .submit-button:hover {
+    transform: scale(1.05);
   }
   .loading-spinner {
     display: flex;

@@ -44,6 +44,7 @@
 
   const removeTag = (toRemoveTag) => {
     tags = tags.filter((tag) => tag !== toRemoveTag)
+    console.log("🚀 ~ removeTag ~ tags:", tags)
   }
 
   const handleSubmitSingle = async () => {
@@ -168,7 +169,7 @@
                 <p class="left"></p>
                 <input type="text" name="tag" id="tag" bind:value={toAddTag} />
                 <p class="right"></p>
-                <button type="button" on:click={addTag}>Add</button>
+                <button type="button" class="submit-button" on:click={addTag}>Add</button>
               </div>
               <br />
               {#each tags as tag}
@@ -315,19 +316,20 @@
     max-width: 10%;
   }
   .tag-input > button {
-    width: 15%;
-    background-color: #172740;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 0.01rem;
+    width: 25%;
   }
 
   .submit-button {
+    font-size: 0.85rem;
     background-color: #172740;
+    border-radius: 0.3rem;
     color: #fff;
     cursor: pointer;
     border: none;
     padding: 0.5rem 1rem;
+  }
+
+  .submit-button:hover {
+    transform: scale(1.05);
   }
 </style>

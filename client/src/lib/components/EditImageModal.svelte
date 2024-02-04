@@ -39,8 +39,7 @@
     }
   }
 
-  const removeTag = (event) => {
-    const toRemoveTag = event.target.innerText
+  const removeTag = (toRemoveTag) => {
     tags = tags.filter((tag) => tag !== toRemoveTag)
   }
 </script>
@@ -62,7 +61,8 @@
           <label for="title">Change description:</label>
           <br />
           <textarea type="text" class="full" rows="4" name="description" bind:value={description} /></span
-        >
+        > <br />
+
         <span>
           <label for="title">Change URL:</label>
           <br />
@@ -75,15 +75,21 @@
           <input type="text" name="tag" id="tag" bind:value={toAddTag} />
           <button type="button" on:click={addTag}>Add tag</button>
           <br />
-
           {#each tags as tag}
-            <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
+            <span class="tag-container">
+              <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+                {tag}
+                <span class="remove-tag">
+                  <i class="fa fa-times"></i>
+                </span>
+              </button>
+            </span>
           {/each}
         </span> <br />
         <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
-        <button class="close-button green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}
-          >Confirm</button
-        >
+        <button class="close-button green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}>
+          Confirm
+        </button>
       </span>
     </div>
   </div>
@@ -94,6 +100,14 @@
 {/if}
 
 <style>
+  .tag-toggle {
+    background-color: rgb(207, 59, 59);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.7rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
   dialog {
     max-width: 32em;
     border-radius: 0.2em;

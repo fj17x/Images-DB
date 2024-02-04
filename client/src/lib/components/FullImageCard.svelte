@@ -18,10 +18,11 @@
 </script>
 
 <div class="full-image-card">
-  <a class="anchor" target="_blank" href={url}>
-    <img src={url} alt={title} />
-  </a>
-
+  <div class="image-box">
+    <a class="anchor" target="_blank" href={url}>
+      <img src={url} alt={title} />
+    </a>
+  </div>
   <div class="details">
     <h1 class="title {destroyTime ? 'destroyed' : ''}">{title} {destroyTime ? "This image was deleted" : ""}</h1>
     <hr />
@@ -57,11 +58,19 @@
   .full-image-card {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
   }
 
   img {
-    width: 100%;
+    max-width: 100%;
+    min-height: 400px;
+    max-height: 600px;
     border-radius: 8px 8px 0 0;
   }
 
@@ -69,12 +78,11 @@
     padding: 1.5rem;
     background-color: #172740;
     color: #fff;
-    border-radius: 0 0 8px 8px;
+    border-radius: 50px;
   }
 
   .title {
     margin: 0;
-    /* font-size: 1.3rem; */
     font-weight: bold;
   }
 

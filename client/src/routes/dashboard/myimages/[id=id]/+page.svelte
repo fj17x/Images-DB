@@ -188,6 +188,10 @@
     cursor: pointer;
   }
 
+  .top-button:hover {
+    transform: scale(1.05);
+  }
+
   .edit {
     background-color: rgb(35, 107, 190);
   }
