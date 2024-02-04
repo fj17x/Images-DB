@@ -2,18 +2,25 @@
   import { onMount } from "svelte"
   import Dashboard from "$lib/components/Dashboard.svelte"
   import FullImageCard from "$lib/components/FullImageCard.svelte"
+  import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import EditImageModal from "$lib/components/EditImageModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { page } from "$app/stores"
+  import { goto } from "$app/navigation"
 
   let showAlertModal = false
   let alertModalOptions = {}
+  let currentOperation
+
+  let showChoiceModal = false
+  let choiceModalOptions = {}
 
   let image
+  let imageId = $page.params.id
   let showEditImageModal = false
 
   const fetchImageWithId = async () => {
-    const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
+    const response = await fetch(`http://localhost:4000/images/${imageId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -58,7 +65,46 @@
     }
   }
 
-  const handleDelete = async () => {}
+  const handleDelete = async () => {
+    currentOperation = "delete"
+    choiceModalOptions.header = "Confirm deletion"
+    choiceModalOptions.text = "Are you sure you want to delete this image?"
+    showChoiceModal = true
+  }
+
+  const onChoiceConfirm = async (confirmed) => {
+    showChoiceModal = false
+    if (!confirmed) {
+      return
+    }
+    let response
+
+    response = await fetch(`http://localhost:4000/images/${imageId}`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+
+    const reply = await response.json()
+    if (response.ok) {
+      alertModalOptions.header = "Operation succeeded"
+      alertModalOptions.message = reply.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
+    } else {
+      alertModalOptions.header = "Operation failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
+
+  const onAlertConfirm = () => {
+    showAlertModal = false
+    if (currentOperation === "delete") {
+      goto("/dashboard/myimages")
+      currentOperation = ""
+    }
+  }
 
   onMount(async () => {
     await fetchImageWithId()
@@ -110,9 +156,11 @@
     {onEditConfirm}
   ></EditImageModal>
 {/if}
-
+{#if showChoiceModal}
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
+{/if}
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
 <style>

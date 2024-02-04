@@ -23,7 +23,7 @@
   </a>
 
   <div class="details">
-    <p class="title {destroyTime ? 'destroyed' : ''}">{title} (This image was deleted.)</p>
+    <p class="title {destroyTime ? 'destroyed' : ''}">{title} (This image was deleted)</p>
     {#if description}
       <p class="description">Description: {description}</p>
     {/if}
