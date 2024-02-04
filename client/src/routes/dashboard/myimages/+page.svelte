@@ -84,6 +84,7 @@
   }
   .container {
     display: flex;
+    background-color: rgb(254, 252, 252);
   }
 
   .content {
@@ -93,11 +94,11 @@
   }
 
   .main-card {
-    background-color: #1ca496;
+    background-color: #ffffff;
     font-family: "Poppins", sans-serif;
     font-weight: 300;
     border-radius: 0.8rem;
-    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 2rem;
     display: grid;

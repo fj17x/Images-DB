@@ -38,12 +38,12 @@
       ><p>Home</p></a
     >
   </div>
+  <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
+    <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="dashboard-text"><p>My Images</p></a>
+  </div>
   <div class="option {$page.route.id.startsWith('/dashboard/upload') ? 'active' : ''}">
     <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i><a href="/dashboard/upload" class="dashboard-text"><p>Upload</p></a
     >
-  </div>
-  <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
-    <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="dashboard-text"><p>My Images</p></a>
   </div>
   <div class="option">
     <i class="fa fa-search fa-lg {$page.route.id.startsWith('/dashboard/search') ? 'active' : ''}" aria-hidden="true"></i><a

@@ -97,8 +97,8 @@
           {#each tags as tag}
             <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}
-          <br />
           <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
+          <br />
         </span>
         <br />
         <input class="upload-file" type="file" name="file" bind:value={uploadedFile} required />

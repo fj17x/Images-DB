@@ -73,13 +73,12 @@
           <label for="title">Modify tags:</label>
           <br />
           <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+          <button type="button" on:click={addTag}>Add tag</button>
+          <br />
 
           {#each tags as tag}
             <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times" aria-hidden="true"></i> </button>
           {/each}
-          <br /> <br />
-
-          <button type="button" on:click={addTag}>Add tag</button>
         </span> <br />
         <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
         <button class="close-button green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}

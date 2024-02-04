@@ -185,6 +185,11 @@
 {/if}
 
 <style>
+  .container {
+    display: flex;
+    background-color: rgb(254, 252, 252);
+  }
+
   .options {
     display: flex;
     justify-content: space-around;
@@ -223,10 +228,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     align-items: center;
-  }
-
-  .container {
-    display: flex;
   }
 
   .content {

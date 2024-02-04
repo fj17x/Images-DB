@@ -23,9 +23,11 @@
   </a>
 
   <div class="details">
-    <p class="title {destroyTime ? 'destroyed' : ''}">{title} {destroyTime ? "This image was deleted" : ""}</p>
+    <h1 class="title {destroyTime ? 'destroyed' : ''}">{title} {destroyTime ? "This image was deleted" : ""}</h1>
+    <hr />
     {#if description}
       <p class="description">Description: {description}</p>
+      <hr />
     {/if}
 
     <div class="tags">
@@ -38,6 +40,7 @@
         <p>No tags found.</p>
       {/if}
     </div>
+
     <p class="created-at">Created on: {formatDate(createdAt)}</p>
     {#if updatedAt}
       {#if updatedAt !== createdAt}
@@ -71,7 +74,7 @@
 
   .title {
     margin: 0;
-    font-size: 1.3rem;
+    /* font-size: 1.3rem; */
     font-weight: bold;
   }
 
@@ -100,10 +103,12 @@
     margin-top: 0.5rem;
     margin-bottom: 0.1rem;
     font-size: 0.8rem;
+    direction: rtl;
   }
   .modified-at {
     margin-top: 0rem;
     font-size: 0.8rem;
+    direction: rtl;
   }
   .anchor {
     text-decoration: none;

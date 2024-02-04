@@ -203,6 +203,7 @@
 
   .container {
     display: flex;
+    background-color: rgb(254, 252, 252);
   }
 
   .content {
@@ -212,12 +213,12 @@
   }
 
   .main-card {
-    background-color: #1ca496;
+    background-color: white;
     font-family: "Poppins", sans-serif;
     font-weight: 300;
     border-radius: 0.8rem;
-    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-bottom: 2rem;
+    box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
+    padding: 0rem 2rem 2rem 2rem;
+    margin: 2rem 0rem;
   }
 </style>

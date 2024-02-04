@@ -42,8 +42,7 @@
     }
   }
 
-  const removeTag = (event) => {
-    const toRemoveTag = event.target.innerText
+  const removeTag = (toRemoveTag) => {
     tags = tags.filter((tag) => tag !== toRemoveTag)
   }
 
@@ -75,6 +74,15 @@
     params.append("offset", offset)
     params.append("sortOrder", sortOrder)
     params.append("sortBy", sortBy)
+
+    // if (toAddTag !== "") {
+    //   alertModalOptions.header = "Please add or remove tag input"
+    //   alertModalOptions.message = "Check your input box"
+    //   alertModalOptions.type = "other"
+    //   showAlertModal = true
+    //   return
+    // }
+
     if (tags.length > 0) {
       const tagsWithCommas = tags.join(",")
       params.append("tags", tagsWithCommas)
@@ -128,7 +136,7 @@
               <br />
               <input type="number" name="limit" bind:value={limit} required />
             </div>
-            <div class="grid-item">
+            <div class="grid-item xx">
               <label for="sortby">Sort By:</label>
               <br />
               <select name="sortby" id="sortby" bind:value={sortBy}>
@@ -156,14 +164,26 @@
               <label for="tag">Tags:</label>
               <br />
 
-              <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+              <div class="tag-input">
+                <p class="left"></p>
+                <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+                <p class="right"></p>
+                <button type="button" on:click={addTag}>Add</button>
+              </div>
               <br />
               {#each tags as tag}
-                <button type="button" on:click={removeTag}>{tag}<i class="fa fa-times"></i> </button>
+                <span class="tag-container">
+                  <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+                    {tag}
+                    <span class="remove-tag">
+                      <i class="fa fa-times"></i>
+                    </span>
+                  </button>
+                  &nbsp;
+                </span>
               {/each}
               <br />
               <br />
-              <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
             </div>
             <div class="grid-item">
               <button class="submit-button" type="submit">Confirm</button>
@@ -186,6 +206,26 @@
 {/if}
 
 <style>
+  .tag-toggle {
+    background-color: rgb(207, 59, 59);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  #sortby,
+  #sortorder {
+    width: 10rem;
+    padding: 0.1rem;
+    font-size: 1rem;
+    border: 1px solid #999;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: #333;
+  }
+
   .container {
     display: flex;
   }
@@ -244,12 +284,43 @@
     border: 1px solid #ccc;
     border-radius: 0.3rem;
   }
-  .grid-item input {
+
+  .grid-item > input {
     width: 50%;
-    margin-bottom: 1rem;
+    padding: 0;
+    border: 0;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
+  }
+
+  .tag-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+    padding: 0;
+  }
+  .tag-input > input {
+    width: 30%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+  }
+  .tag-input > .right {
+    min-width: 3%;
+  }
+  .tag-input > .left {
+    max-width: 10%;
+  }
+  .tag-input > button {
+    width: 15%;
+    background-color: #172740;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 0.01rem;
   }
 
   .submit-button {
