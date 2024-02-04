@@ -125,10 +125,6 @@
       showAlertModal = true
     }
   }
-
-  onMount(async () => {
-    await getUserDetails()
-  })
 </script>
 
 <div class="container">

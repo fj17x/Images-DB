@@ -30,10 +30,6 @@
       fetchNextImages()
     }
   }
-
-  // onMount(async () => {
-  //   fetchNextImages()
-  // })
 </script>
 
 <svelte:window on:scroll={handleScroll} />

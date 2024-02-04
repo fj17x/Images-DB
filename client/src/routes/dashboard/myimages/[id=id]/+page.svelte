@@ -106,10 +106,6 @@
       currentOperation = ""
     }
   }
-
-  onMount(async () => {
-    await fetchImageWithId()
-  })
 </script>
 
 <div class="container">

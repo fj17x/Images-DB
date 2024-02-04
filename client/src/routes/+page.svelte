@@ -48,10 +48,6 @@
       goto("/signin")
     }
   }
-
-  onMount(async () => {
-    await checkSignedIn()
-  })
 </script>
 
 <div class="hero">
