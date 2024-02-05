@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte"
   import Dashboard from "$lib/components/Dashboard.svelte"
   import ImageCard from "$lib/components/ImageCard.svelte"
 
@@ -17,17 +16,21 @@
 
     const imagesReply = await response.json()
 
-    if (!imagesReply.data) {
+    if (!imagesReply.data || imagesReply.data.length === 0) {
       return
     }
 
-    images = [...images, ...imagesReply.data]
+    const uniqueImages = imagesReply.data.filter((newImage) => {
+      return !images.some((existingImage) => existingImage.id === newImage.id)
+    })
+    images = [...images, ...uniqueImages]
+    console.log("🚀 ~ fetchNextImages ~ images:", images)
     currentOffset += 9
   }
 
-  const handleScroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
-      fetchNextImages()
+  const handleScroll = async () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 70) {
+      await fetchNextImages()
     }
   }
 </script>
