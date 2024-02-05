@@ -13,6 +13,16 @@
   let images = []
   let totalImages = 0
 
+  let clickedBox = null
+
+  const handleClick = (box) => {
+    clickedBox = box
+  }
+
+  const clearClickedBox = () => {
+    clickedBox = null
+  }
+
   const getNumberOfUsers = async () => {
     const responseUsers = await fetch(`http://localhost:4000/users`, {
       method: "GET",
@@ -47,7 +57,7 @@
   })
 
   const onAlertConfirm = () => {
-      goto("/dashboard/myimages")
+    goto("/dashboard/myimages")
     showAlertModal = false
   }
 </script>
@@ -59,16 +69,16 @@
       <h3>Statistics</h3>
       <div class="main-card">
         <div class="statistics">
-          <div class="box blue">
+          <button class="box blue" on:click={() => handleClick("users")}>
             <i class="fa-solid fa-users icon"></i>
             <p class="total-info">Total users</p>
             <p class="total-num">{totalUsers}</p>
-          </div>
-          <div class="box green">
+          </button>
+          <button class="box green" on:click={() => handleClick("images")}>
             <i class="fa-regular fa-images icon"></i>
             <p class="total-info">Total images</p>
             <p class="total-num">{totalImages}</p>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -104,14 +114,17 @@
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
-    background-color: #ff4a42;
     height: 10rem;
     width: 20rem;
     color: white;
-    border-radius: 4px;
+    border-radius: 40%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
   }
+
   .blue {
-    background-color: #22bef0;
+    background-color: #ff4a42;
   }
 
   .green {
