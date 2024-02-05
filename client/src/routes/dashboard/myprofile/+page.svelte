@@ -5,7 +5,6 @@
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
   import { goto } from "$app/navigation"
 
-
   let showChoiceModal = false
   let choiceModalOptions = {}
 

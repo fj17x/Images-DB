@@ -64,7 +64,7 @@
   {#if $userDetails.isAdmin}
     <div class="option {$page.route.id.startsWith('/dashboard/admin') ? 'active' : ''}">
       <i class="fa-solid fa-gears"></i><a href="/dashboard/admin" class="dashboard-text"
-        ><p>Admin Panel</p>
+        ><p class="admin-text">Admin Panel</p>
         <br />
       </a>
     </div>
@@ -88,13 +88,14 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-align: center;
   }
 
   .dashboard {
     width: 15rem;
     background-color: #172740;
     height: 100vh;
-    width: 10vw;
+    width: 11vw;
     display: flex;
     flex-direction: column;
     align-items: center;
