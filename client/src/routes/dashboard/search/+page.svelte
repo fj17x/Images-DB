@@ -46,7 +46,7 @@
     tags = tags.filter((tag) => tag !== toRemoveTag)
   }
 
-  const handleSubmitSingle = async () => {
+  const handleSearchSingle = async () => {
     const searchId = idForSimple
     const response = await fetch(`http://localhost:4000/images/${searchId}`, {
       method: "GET",
@@ -68,7 +68,7 @@
     }
   }
 
-  const handleSubmitAdvanced = async (event) => {
+  const handleSearchAdvanced = async () => {
     const params = new URLSearchParams()
     params.append("limit", limit)
     params.append("offset", offset)
@@ -107,7 +107,7 @@
       <h3>Search for an image using ID:</h3>
 
       <div class="main-card">
-        <form class="card-form" on:submit|preventDefault={handleSubmitSingle}>
+        <form class="card-form" on:submit|preventDefault={handleSearchSingle}>
           <span class="input-normal">
             <span>
               <label for="id">Image ID*:</label>
@@ -121,7 +121,7 @@
     <div class="content">
       <h3>Advanced search:</h3>
       <div class="main-card">
-        <form on:submit|preventDefault={handleSubmitAdvanced}>
+        <form on:submit|preventDefault={handleSearchAdvanced}>
           <div class="grid">
             <div class="grid-item">
               <label for="limit">Limit:</label>

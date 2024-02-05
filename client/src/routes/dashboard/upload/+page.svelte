@@ -40,7 +40,7 @@
     tags = tags.filter((tag) => tag !== toRemoveTag)
   }
 
-  const handleSubmit = async () => {
+  const handleUpload = async () => {
     if (uploadedFile === undefined && url === undefined) {
       alertModalOptions.header = "Could not upload"
       alertModalOptions.message = "Please upload the image or enter URL."
@@ -82,7 +82,7 @@
     <h3>Upload an Image:</h3>
 
     <div class="main-card">
-      <form class="card-form" on:submit|preventDefault={handleSubmit}>
+      <form class="card-form" on:submit|preventDefault={handleUpload}>
         <span>
           <label for="title">Title*:</label>
           <br />

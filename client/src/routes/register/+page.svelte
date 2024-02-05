@@ -10,7 +10,7 @@
   let password
   let confirmPassword
 
-  const handleSubmit = async (event) => {
+  const handleRegister = async () => {
     try {
       isLoading = true
 
@@ -64,7 +64,7 @@
   <div class="form-content">
     <div class="login-form">
       <p class="title">Register</p>
-      <form on:submit|preventDefault={handleSubmit}>
+      <form on:submit|preventDefault={handleRegister}>
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>

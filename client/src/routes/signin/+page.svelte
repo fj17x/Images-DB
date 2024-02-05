@@ -9,7 +9,7 @@
   let userName
   let password
 
-  const handleSubmit = async () => {
+  const handleSignIn = async () => {
     try {
       isLoading = true
       const data = { userName: userName.trim(), password: password.trim() }
@@ -55,7 +55,7 @@
   <div class="form-content">
     <div class="login-form">
       <div class="title">Sign in</div>
-      <form on:submit|preventDefault={handleSubmit}>
+      <form on:submit|preventDefault={handleSignIn}>
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>
