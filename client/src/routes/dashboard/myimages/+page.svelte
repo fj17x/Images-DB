@@ -24,7 +24,6 @@
       return !images.some((existingImage) => existingImage.id === newImage.id)
     })
     images = [...images, ...uniqueImages]
-    console.log("🚀 ~ fetchNextImages ~ images:", images)
     currentOffset += 9
   }
 
