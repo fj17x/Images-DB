@@ -219,6 +219,5 @@
     max-height: 300px;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
-    /* width: 10rem;  */
   }
 </style>
