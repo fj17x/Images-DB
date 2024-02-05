@@ -52,7 +52,10 @@
     >
   </div>
   <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
-    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="dashboard-text"><p>My Profile</p></a>
+    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="dashboard-text"
+      ><p>My Profile</p>
+      <br />
+    </a>
   </div>
   <div class="option logout" on:click={() => (showChoiceModal = true)}>
     <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
