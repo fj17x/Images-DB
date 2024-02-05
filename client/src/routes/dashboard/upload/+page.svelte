@@ -97,7 +97,7 @@
           <label for="title">Tags:</label>
           <br />
           <input type="text" name="tag" class="normal-input" bind:value={toAddTag} id="tag" />
-          <button class="submit-button" type="button" on:click={addTag}>Add tag</button>
+          <button class="submit-button tag-button" type="button" on:click={addTag}>Add tag</button>
           <br />
           {#each tags as tag}
             <span class="tag-container">
@@ -126,7 +126,9 @@
         </div>
         <br />
 
-        <button class="submit-button" type="submit">Confirm</button>
+        <div class="confirm-div">
+          <button class="submit-button confirm" type="submit">Confirm</button>
+        </div>
       </form>
     </div>
   </div>
@@ -142,6 +144,34 @@
     justify-content: space-around;
     align-items: center;
     margin-bottom: 10px;
+    gap: 15px;
+  }
+
+  .confirm-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm {
+    background-color: #309329;
+    border-radius: 0.3rem;
+    font-size: 0.85rem;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1rem;
+    width: 50%;
+  }
+
+  .tag-button {
+    background-color: #172740;
+    border-radius: 0.3rem;
+    font-size: 0.85rem;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1rem;
   }
 
   .or-separator {
@@ -195,17 +225,6 @@
     padding: 0.5rem;
   }
 
-  .submit-button {
-    padding: 0.5rem 0rem;
-    border-radius: 0.3rem;
-    font-size: 0.85rem;
-    background-color: #172740;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
-  }
-
   .submit-button:hover {
     transform: scale(1.05);
   }
@@ -219,5 +238,12 @@
     max-height: 300px;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
+  }
+
+  @media screen and (max-width: 800px) {
+    .upload-options {
+      flex-direction: column;
+      gap: 15px;
+    }
   }
 </style>
