@@ -76,12 +76,12 @@ const updateCurrentUserDetails = async (req, res) => {
     const userNameMaxLength = 15
     const passwordMaxLength = 30
 
-    if (userName.length > userNameMaxLength) {
+    if (userName && userName.length > userNameMaxLength) {
       return res.status(400).json({
         error: "userName exceeds maximum length(65).",
       })
     }
-    if (password.length > passwordMaxLength) {
+    if (password && password.length > passwordMaxLength) {
       return res.status(400).json({
         error: "Password exceeds maximum length (30 characters).",
       })

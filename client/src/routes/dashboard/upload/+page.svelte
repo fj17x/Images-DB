@@ -11,7 +11,7 @@
   let title
   let description
   let uploadedFile
-  let url
+  let url = "https://"
 
   let toAddTag
 
