@@ -9,7 +9,7 @@
   let userName
   let password
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
     try {
       isLoading = true
       const data = { userName: userName.trim(), password: password.trim() }

@@ -3,6 +3,7 @@
   import ChoiceModal from "./ChoiceModal.svelte"
   import AlertModal from "./AlertModal.svelte"
   import { page } from "$app/stores"
+  import { userDetails } from "../../stores/userDetails.js"
 
   let showChoiceModal = false
   let choiceModalOptions = {}
@@ -13,6 +14,8 @@
   let alertModalOptions = {}
 
   const onChoiceConfirm = async (confirmed) => {
+    console.log("🚀 ~ userDetails:", $userDetails)
+
     showChoiceModal = false
     if (!confirmed) {
       return
@@ -57,6 +60,15 @@
       <br />
     </a>
   </div>
+
+  {#if $userDetails.isAdmin}
+    <div class="option {$page.route.id.startsWith('/dashboard/admin') ? 'active' : ''}">
+      <i class="fa-solid fa-gears"></i><a href="/dashboard/admin" class="dashboard-text"
+        ><p>Admin Panel</p>
+        <br />
+      </a>
+    </div>
+  {/if}
   <div class="option logout" on:click={() => (showChoiceModal = true)}>
     <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
     <p>Log out</p>

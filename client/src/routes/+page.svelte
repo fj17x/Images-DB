@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte"
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import { goto } from "$app/navigation"
 

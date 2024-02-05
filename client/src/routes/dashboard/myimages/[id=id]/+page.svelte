@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte"
   import Dashboard from "$lib/components/Dashboard.svelte"
   import FullImageCard from "$lib/components/FullImageCard.svelte"
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"

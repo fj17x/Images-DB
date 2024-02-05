@@ -2,6 +2,7 @@
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { goto } from "$app/navigation"
   import { onMount } from "svelte"
+  import { userDetails } from "../../stores/userDetails.js"
 
   let showAlertModal = false
   let alertModalOptions = {}
@@ -17,8 +18,11 @@
         alertModalOptions.message = `Please sign in.`
         alertModalOptions.type = "failure"
         showAlertModal = true
+        return
       }
     }
+    const reply = await response.json()
+    userDetails.set(reply.data)
   }
   const onAlertConfirm = () => {
     goto("/")
