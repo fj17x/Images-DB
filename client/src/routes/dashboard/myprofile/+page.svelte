@@ -85,6 +85,7 @@
     if (data) {
       Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
     }
+    console.log("🚀 ~ onEditConfirm ~ data:", data)
 
     showEditProfileModal = false
 
@@ -103,6 +104,9 @@
       alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
       showAlertModal = true
+      userDetails.update((user) => {
+        return { ...user, ...data }
+      })
     } else {
       alertModalOptions.header = "Could not update"
       alertModalOptions.message = reply.error
