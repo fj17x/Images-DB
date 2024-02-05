@@ -28,7 +28,6 @@
 
     const imagesReply = await response.json()
     image = imagesReply.data
-    console.log("🚀 ~ fetchImageWithId ~ image:", image)
   }
 
   const onEditConfirm = async (status, data) => {
