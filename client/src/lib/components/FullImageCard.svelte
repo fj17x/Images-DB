@@ -14,7 +14,6 @@
     return formattedDate
   }
 
-  console.log(tags)
 </script>
 
 <div class="full-image-card">

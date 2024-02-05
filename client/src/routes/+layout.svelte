@@ -10,10 +10,7 @@
     })
     if (!response.ok) {
       {
-        alertModalOptions.header = "Cannot access page"
-        alertModalOptions.message = `Please sign in.`
-        alertModalOptions.type = "failure"
-        showAlertModal = true
+        userDetails.set({})
         return
       }
     }

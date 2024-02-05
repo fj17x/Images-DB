@@ -80,8 +80,6 @@
       params.append("tags", tagsWithCommas)
     }
 
-    console.log(params.toString())
-
     const response = await fetch(`http://localhost:4000/images?${params.toString()}`, {
       method: "GET",
 

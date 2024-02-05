@@ -1,23 +1,13 @@
 <script>
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import { goto } from "$app/navigation"
+  import { userDetails } from "../stores/userDetails.js"
 
-  let signedIn = false
+  let signedIn = $userDetails.id ? true : false
   let showChoiceModal = false
   let choiceModalOptions = {}
   choiceModalOptions.header = "Confirm logout"
   choiceModalOptions.text = "Are you sure you want to logout?"
-
-  const checkSignedIn = async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "GET",
-      credentials: "include",
-    })
-
-    if (response.ok) {
-      signedIn = true
-    }
-  }
 
   export const onChoiceConfirm = async (confirmed) => {
     showChoiceModal = false
@@ -28,12 +18,13 @@
       })
 
       if (response.ok) {
+        userDetails.set({})
         goto("/register")
       }
     }
   }
   const handleRegister = async () => {
-    if (signedIn ) {
+    if (signedIn) {
       goto("/dashboard/myimages")
     } else {
       goto("/register")
@@ -41,7 +32,7 @@
   }
 
   const handleSignIn = async () => {
-    if (signedIn ) {
+    if (signedIn) {
       goto("/dashboard/myimages")
     } else {
       goto("/signin")
@@ -54,20 +45,13 @@
   <div class="hero-content">
     <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
     <p class="text">Share your life's snapshots.</p>
-    {#await checkSignedIn()}
-      <div class="loading-spinner">
-        <i class="fas fa-spinner fa-spin"></i>
-      </div>
-    {:then}
-      <div on:click={handleRegister} class="get-started-btn">{signedIn ? "Continue" : "Create an account"}</div>
-      {#if !signedIn}
-        <div on:click={handleSignIn} class="have-account">Already have an account?</div>
-      {:else}
-        <div on:click={() => (showChoiceModal = true)} class="have-account">Logout</div>
-      {/if}
-    {:catch}
-      <p class="have-account">Failed to connect to application.</p>
-    {/await}
+
+    <div on:click={handleRegister} class="get-started-btn">{signedIn ? "Continue" : "Create an account"}</div>
+    {#if !signedIn}
+      <div on:click={handleSignIn} class="have-account">Already have an account?</div>
+    {:else}
+      <div on:click={() => (showChoiceModal = true)} class="have-account">Logout</div>
+    {/if}
   </div>
 </div>
 

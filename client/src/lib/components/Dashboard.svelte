@@ -13,7 +13,7 @@
   let showAlertModal = false
   let alertModalOptions = {}
 
-  const onChoiceConfirm = async (confirmed) => {
+  const onChoiceConfirmForLogout = async (confirmed) => {
     showChoiceModal = false
     if (!confirmed) {
       return
@@ -23,6 +23,7 @@
       credentials: "include",
     })
     if (response.ok) {
+      userDetails.set({})
       goto("/")
     } else {
       alertModalOptions.header = "Could not logout"
@@ -72,7 +73,8 @@
     <p>Log out</p>
   </div>
   {#if showChoiceModal}
-    <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
+    <ChoiceModal bind:showModal={showChoiceModal} onChoiceConfirm={onChoiceConfirmForLogout} {...choiceModalOptions}
+    ></ChoiceModal>
   {/if}
   {#if showAlertModal}
     <AlertModal bind:showModal={showAlertModal} {...alertModalOptions}></AlertModal>

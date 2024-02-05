@@ -5,6 +5,7 @@
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
   import { goto } from "$app/navigation"
   import { userDetails } from "../../../stores/userDetails.js"
+  import { onMount } from "svelte"
 
   let showChoiceModal = false
   let choiceModalOptions = {}
@@ -62,6 +63,7 @@
       alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
       showAlertModal = true
+      userDetails.set({})
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
@@ -113,6 +115,8 @@
       showAlertModal = true
     }
   }
+
+  onMount(() => {})
 </script>
 
 <div class="container">
@@ -133,7 +137,7 @@
           </span>
           <hr />
           <span class="bar">
-            <p class="property">Profile created on</p>
+            <p class="property">Profile created on:</p>
             <p>{formatDate($userDetails.createdAt)}</p>
           </span>
           <hr />
@@ -168,7 +172,8 @@
 {/if}
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
-{/if}{#if showEditProfileModal}
+{/if}
+{#if showEditProfileModal}
   <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUserName={$userDetails.userName}></EditProfileModal>
 {/if}
 
