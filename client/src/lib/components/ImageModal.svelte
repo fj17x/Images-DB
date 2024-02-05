@@ -14,7 +14,7 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <ImageCard {url} {title} {id} {destroyTime} />
+    <ImageCard {url} {title} {id} {destroyTime} isSingleImage={true}/>
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>

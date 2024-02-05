@@ -17,7 +17,7 @@
           <ImageCard {url} {title} {id} {destroyTime} />
         {/each}
       {:else if images.length == 1}
-        <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} />
+        <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} isSingleImage={true} />
       {/if}
     </div>
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
