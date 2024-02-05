@@ -5,7 +5,7 @@
   import AlertModal from "$lib/components/AlertModal.svelte"
 
   let tags = []
-  let showModal = false
+  let showSimpleModal = false
   let showAdvancedModal = false
 
   let showAlertModal = false
@@ -59,7 +59,7 @@
         title: reply.data.title,
         id: reply.data.id,
       }
-      showModal = true
+      showSimpleModal = true
     } else {
       alertModalOptions.header = "Search failed"
       alertModalOptions.message = reply.error
@@ -187,8 +187,8 @@
   </div>
 </div>
 
-{#if showModal}
-  <ImageModal bind:showModal {...imageData}></ImageModal>
+{#if showSimpleModal}
+  <ImageModal bind:showModal={showSimpleModal} {...imageData}></ImageModal>
 {/if}
 {#if showAdvancedModal}
   <ImagesModal bind:showModal={showAdvancedModal} {images}></ImagesModal>

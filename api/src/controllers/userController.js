@@ -107,7 +107,6 @@ const fetchBatchOfUsers = async (req, res) => {
       })
     }
 
-    //Try to use findAndCountAll
     const batchOfUsers = await User.findAll({
       limit,
       offset,
@@ -129,11 +128,14 @@ const fetchBatchOfUsers = async (req, res) => {
       return { ...user }
     })
 
+    const totalUsers = await User.count()
+
     const response = {
       message: `Successfully fetched users!`,
       fetched: userData.length,
       data: userData,
       userLinks: userLinks,
+      totalUsers,
     }
     res.status(200).json(response)
   } catch (err) {

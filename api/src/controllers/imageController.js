@@ -229,11 +229,14 @@ const getBatchOfImages = async (req, res) => {
       return { ...image }
     })
 
+    let totalImages = await Image.count()
+
     const response = {
       message: `Successfully fetched images!`,
       fetched: batchOfImages.length,
       data: imageData,
       links: imageLinks,
+      totalImages,
     }
 
     res.status(200).json(response)
