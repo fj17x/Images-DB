@@ -68,6 +68,8 @@
       </a>
     </div>
   {/if}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="option logout" on:click={() => (showChoiceModal = true)}>
     <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
     <p>Log out</p>

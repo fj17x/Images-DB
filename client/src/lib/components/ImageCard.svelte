@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte"
   export let url, title, id, destroyTime
+  export let isSingleImage = false
   let isLoading = true
 
   function handleImageLoad() {
@@ -21,8 +22,8 @@
         <i class="fas fa-spinner fa-spin"></i>
       </div>
     {:else}
-      <img src={url} alt={title} on:load={handleImageLoad} />
-      <p class="title {destroyTime ? 'destroyed' : 'normal'}">{title}</p>
+      <img src={url} alt={title} on:load={handleImageLoad} class={isSingleImage ? "single" : "multiple"} />
+      <p class="title {destroyTime ? 'destroyed' : 'normal'} {isSingleImage ? 'singleText' : 'multipleText'}">{title}</p>
     {/if}
   </a>
 </div>
@@ -38,11 +39,25 @@
     width: 100%;
     height: 200px;
   }
+
   .card {
     border-radius: 8px;
     overflow: hidden;
+  }
+
+  .multiple {
     width: 300px;
   }
+  .single {
+    max-width: 800px;
+    height: 400px;
+    object-fit: contain;
+  }
+
+  .singleText {
+    font-size: 1.5rem;
+  }
+
   .destroyed {
     color: red;
   }
