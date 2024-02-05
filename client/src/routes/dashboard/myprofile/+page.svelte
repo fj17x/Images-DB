@@ -85,7 +85,6 @@
     if (data) {
       Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
     }
-    console.log("🚀 ~ onEditConfirm ~ data:", data)
 
     showEditProfileModal = false
 

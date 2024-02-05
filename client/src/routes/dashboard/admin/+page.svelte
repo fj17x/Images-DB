@@ -30,7 +30,6 @@
     })
     const replyUsers = await responseUsers.json()
     const replyImages = await responseImages.json()
-    console.log("🚀 ~ getNumberOfUsers ~ replyImages:", replyImages)
 
     if (responseUsers.ok) {
       users = [...replyUsers.data]
@@ -66,12 +65,14 @@
       <div class="main-card">
         <div class="statistics">
           <div class="box blue">
-            <i class="fa-solid fa-users"></i>Total users
-            <h3>{totalUsers}</h3>
+            <i class="fa-solid fa-users icon"></i>
+            <p class="total-info">Total users</p>
+            <p class="total-num">{totalUsers}</p>
           </div>
           <div class="box green">
-            <i class="fa-regular fa-images"></i>Total images
-            <h3>{totalImages}</h3>
+            <i class="fa-regular fa-images icon"></i>
+            <p class="total-info">Total images</p>
+            <p class="total-num">{totalImages}</p>
           </div>
         </div>
       </div>
@@ -84,6 +85,19 @@
 {/if}
 
 <style>
+  .total-num {
+    font-size: 1.2rem;
+    margin: 0px;
+  }
+  .total-info {
+    font-size: 1.2rem;
+  }
+
+  .icon {
+    font-size: 2.7rem;
+    margin-top: 1 rem;
+  }
+
   .statistics {
     display: flex;
     justify-content: space-around;
@@ -96,8 +110,8 @@
     align-items: center;
     flex-direction: column;
     background-color: #ff4a42;
-    height: 200px;
-    width: 400px;
+    height: 10rem;
+    width: 20rem;
     color: white;
     border-radius: 4px;
   }
