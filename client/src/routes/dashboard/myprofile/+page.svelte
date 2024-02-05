@@ -120,7 +120,7 @@
   <div class="content">
     <h3>Your Profile:</h3>
     <div class="main-card">
-      {#if $userDetails}
+      {#if $userDetails.id}
         <div class="profile-info">
           <span class="bar">
             <p class="property">User ID:</p>
@@ -147,6 +147,10 @@
             <p>{$userDetails?.imagesUploaded?.length}</p>
           </span>
         </div>
+      {:else}
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
       {/if}
     </div>
     <br />
@@ -169,6 +173,16 @@
 {/if}
 
 <style>
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+  }
   .container {
     display: flex;
     background-color: rgb(254, 252, 252);
