@@ -1,5 +1,8 @@
 <script>
   import { goto } from "$app/navigation"
+  import { onMount } from "svelte"
 
-  goto("/dashboard/myimages")
+  onMount(() => {
+    goto("/dashboard/myimages")
+  })
 </script>

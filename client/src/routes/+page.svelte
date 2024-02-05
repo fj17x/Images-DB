@@ -33,7 +33,7 @@
     }
   }
   const handleRegister = async () => {
-    if (signedIn) {
+    if (signedIn ) {
       goto("/dashboard/myimages")
     } else {
       goto("/register")
@@ -41,7 +41,7 @@
   }
 
   const handleSignIn = async () => {
-    if (signedIn) {
+    if (signedIn ) {
       goto("/dashboard/myimages")
     } else {
       goto("/signin")

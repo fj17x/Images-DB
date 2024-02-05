@@ -14,7 +14,6 @@
   let alertModalOptions = {}
 
   const onChoiceConfirm = async (confirmed) => {
-
     showChoiceModal = false
     if (!confirmed) {
       return

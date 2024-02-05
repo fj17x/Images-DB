@@ -1,18 +1,12 @@
 <script>
   import Dashboard from "$lib/components/Dashboard.svelte"
-  import ImageModal from "$lib/components/ImageModal.svelte"
-  import ImagesModal from "$lib/components/ImagesModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
   import { onMount } from "svelte"
-
-  let tags = []
-  let showModal = false
-  let showAdvancedModal = false
+  import { goto } from "$app/navigation"
 
   let showAlertModal = false
   let alertModalOptions = {}
-  let imageData = {}
 
   let users = []
   let totalUsers = 0
@@ -42,7 +36,8 @@
   }
 
   onMount(async () => {
-    if (!$userDetails?.isAdmin) {
+    await getNumberOfUsers()
+    if (!$userDetails.isAdmin) {
       alertModalOptions.header = "Cannot access page"
       alertModalOptions.message = "This page is only accessible by an admin."
       alertModalOptions.type = "failure"
@@ -51,10 +46,10 @@
     await getNumberOfUsers()
   })
 
-  // const onAlertConfirm = () => {
-  //   goto("/dashboard/myimages")
-  //   showAlertModal = false
-  // }
+  const onAlertConfirm = () => {
+      goto("/dashboard/myimages")
+    showAlertModal = false
+  }
 </script>
 
 <div class="container">
