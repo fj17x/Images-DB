@@ -221,7 +221,7 @@
     font-weight: 300;
     border-radius: 0.8rem;
     box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 0rem 2rem 2rem 2rem;
+    padding: 1rem 2rem 2rem 2rem;
     margin: 2rem 0rem;
   }
 </style>

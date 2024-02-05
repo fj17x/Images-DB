@@ -44,7 +44,6 @@
 
   const removeTag = (toRemoveTag) => {
     tags = tags.filter((tag) => tag !== toRemoveTag)
-    console.log("🚀 ~ removeTag ~ tags:", tags)
   }
 
   const handleSubmitSingle = async () => {
@@ -75,14 +74,6 @@
     params.append("offset", offset)
     params.append("sortOrder", sortOrder)
     params.append("sortBy", sortBy)
-
-    // if (toAddTag !== "") {
-    //   alertModalOptions.header = "Please add or remove tag input"
-    //   alertModalOptions.message = "Check your input box"
-    //   alertModalOptions.type = "other"
-    //   showAlertModal = true
-    //   return
-    // }
 
     if (tags.length > 0) {
       const tagsWithCommas = tags.join(",")

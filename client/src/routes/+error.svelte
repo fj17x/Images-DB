@@ -7,10 +7,13 @@
   }
 </script>
 
-<main>
-  <div class="error-div">
+<main class="error-main">
+  <img class="error-img" src="/error.jpg" alt="error sign" />
+  <div>
     <h1 class="error-title">Error: {$page.status}</h1>
-    <p class="error-message">{$page.error.message}</p>
+    <h4 class="error-message">{$page.error.message}</h4>
+    <hr />
+    <br />
     <div class="button-container">
       <button on:click={goBack} class="back-button">Go Back</button>
       <p class="or-text">Or</p>
@@ -20,7 +23,7 @@
 </main>
 
 <style>
-  main {
+  .error-main {
     text-align: center;
     display: flex;
     justify-content: center;
@@ -29,6 +32,13 @@
     padding: 20px;
   }
 
+  .error-img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    opacity: 0.09;
+  }
   .error-title {
     color: #d9534f;
     font-size: 24px;
