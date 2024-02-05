@@ -72,12 +72,12 @@
           <button class="box blue" on:click={() => handleClick("users")}>
             <i class="fa-solid fa-users icon"></i>
             <p class="total-info">Total users</p>
-            <p class="total-num">{totalUsers}</p>
+            <p class="total-num">{totalUsers || ""}</p>
           </button>
           <button class="box green" on:click={() => handleClick("images")}>
             <i class="fa-regular fa-images icon"></i>
             <p class="total-info">Total images</p>
-            <p class="total-num">{totalImages}</p>
+            <p class="total-num">{totalImages || ""}</p>
           </button>
         </div>
       </div>
@@ -86,7 +86,7 @@
 </div>
 
 {#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {onAlertConfirm}></AlertModal>
+  <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
 <style>
