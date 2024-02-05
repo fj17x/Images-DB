@@ -4,30 +4,17 @@
   import AlertModal from "$lib/components/AlertModal.svelte"
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
   import { goto } from "$app/navigation"
+  import { userDetails } from "../../../stores/userDetails.js"
 
   let showChoiceModal = false
   let choiceModalOptions = {}
 
-  let userData = {}
-  let imagesUploaded = 0
   let currentOperation
 
   let showAlertModal = false
   let alertModalOptions = {}
 
   let showEditProfileModal = false
-
-  const getUserDetails = async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const reply = await response.json()
-    if (response.ok) {
-      userData = reply.data
-      imagesUploaded = userData.imagesUploaded.length
-    }
-  }
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" }
@@ -116,7 +103,6 @@
       alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
       showAlertModal = true
-      await getUserDetails()
     } else {
       alertModalOptions.header = "Could not update"
       alertModalOptions.message = reply.error
@@ -129,48 +115,44 @@
 <div class="container">
   <Dashboard />
   <div class="content">
-    {#await getUserDetails()}
-      <div class="loading-spinner">
-        <i class="fas fa-spinner fa-spin"></i>
-      </div>
-    {:then}
-      <h3>Your Profile:</h3>
-      <div class="main-card">
+    <h3>Your Profile:</h3>
+    <div class="main-card">
+      {#if $userDetails}
         <div class="profile-info">
           <span class="bar">
             <p class="property">User ID:</p>
-            <p>{userData.id}</p>
+            <p>{$userDetails.id}</p>
           </span>
           <hr />
           <span class="bar">
             <p class="property">Username:</p>
-            <p>{userData.userName}</p>
+            <p>{$userDetails.userName}</p>
           </span>
           <hr />
           <span class="bar">
             <p class="property">Profile created on</p>
-            <p>{formatDate(userData.createdAt)}</p>
+            <p>{formatDate($userDetails.createdAt)}</p>
           </span>
           <hr />
           <span class="bar">
             <p class="property">Profile last modified on:</p>
-            <p>{formatDate(userData.updatedAt)}</p>
+            <p>{formatDate($userDetails.updatedAt)}</p>
           </span>
           <hr />
           <span class="bar">
             <p class="property">Images uploaded:</p>
-            <p>{imagesUploaded}</p>
+            <p>{$userDetails?.imagesUploaded?.length}</p>
           </span>
         </div>
-      </div>
-      <br />
-      <br />
-      <div class="options">
-        <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
-        <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all your images </button>
-        <button class="submit-button edit" on:click={() => (showEditProfileModal = true)}>Update profile </button>
-      </div>
-    {/await}
+      {/if}
+    </div>
+    <br />
+    <br />
+    <div class="options">
+      <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
+      <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all your images </button>
+      <button class="submit-button edit" on:click={() => (showEditProfileModal = true)}>Update profile </button>
+    </div>
   </div>
 </div>
 
@@ -180,7 +162,7 @@
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}{#if showEditProfileModal}
-  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUserName={userData.userName}></EditProfileModal>
+  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUserName={$userDetails.userName}></EditProfileModal>
 {/if}
 
 <style>
@@ -214,16 +196,7 @@
   .submit-button:hover {
     transform: scale(1.05);
   }
-  .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
+
   .property {
     font-weight: bold;
     color: rgb(53, 67, 37);

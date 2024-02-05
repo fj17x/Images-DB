@@ -95,7 +95,7 @@
     width: 15rem;
     background-color: #172740;
     height: 100vh;
-    width: 11vw;
+    width: 10vw;
     display: flex;
     flex-direction: column;
     align-items: center;
