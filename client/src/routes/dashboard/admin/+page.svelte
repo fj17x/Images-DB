@@ -32,7 +32,7 @@
       method: "GET",
       credentials: "include",
     })
-    const responseImages = await fetch(`http://localhost:4000/images`, {
+    const responseImages = await fetch(`http://localhost:4000/images?sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`, {
       method: "GET",
       credentials: "include",
     })
@@ -80,13 +80,13 @@
       alertModalOptions.message = flag ? "Image has been flagged." : "Image has been unflagged."
       alertModalOptions.type = "success"
       showAlertModal = true
+      await getUsersAndImages()
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
-    await getUsersAndImages()
   }
 
   const handleImageDeletion = async (del) => {
@@ -471,7 +471,7 @@
     flex: 1;
     padding: 0px 0.5rem;
     margin-left: 11vw;
-    width: 85vw;
+    width: 86vw;
   }
 
   .contents {

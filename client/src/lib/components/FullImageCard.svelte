@@ -25,7 +25,7 @@
   <div class="details">
     <h1 class="title {destroyTime ? 'destroyed' : isFlagged ? 'flagged' : ''}">
       {title}
-      {destroyTime ? "(This image was deleted)" : ""}
+      {destroyTime ? "(This image was deleted)" : isFlagged ? "(This image is flagged)" : ""}
     </h1>
     <hr />
     {#if description}
