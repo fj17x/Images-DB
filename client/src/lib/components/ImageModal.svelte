@@ -1,10 +1,8 @@
 <script>
   import ImageCard from "./ImageCard.svelte"
   export let showModal
-  export let url
-  export let title
-  export let id
-  export let destroyTime
+  export let url, title, id, destroyTime, isFlagged
+
   let dialog
 
   $: if (dialog && showModal) dialog.showModal()
@@ -14,7 +12,7 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <ImageCard {url} {title} {id} {destroyTime} isSingleImage={true}/>
+    <ImageCard {url} {title} {id} {destroyTime} {isFlagged} isSingleImage={true} />
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>

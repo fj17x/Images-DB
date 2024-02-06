@@ -47,8 +47,8 @@
       {#if images.length > 0}
         <h2>Your images:</h2>
         <div class="main-card" on:scroll={handleScroll}>
-          {#each images as { id, url, title, destroyTime }}
-            <ImageCard {id} {url} {title} {destroyTime} />
+          {#each images as { id, url, title, destroyTime, isFlagged }}
+            <ImageCard {id} {url} {title} {destroyTime} {isFlagged} />
           {/each}
         </div>
       {:else}

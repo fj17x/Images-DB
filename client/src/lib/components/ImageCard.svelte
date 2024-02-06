@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte"
-  export let url, title, id, destroyTime
+  export let url, title, id, destroyTime, isFlagged
   export let isSingleImage = false
   let isLoading = true
 
@@ -23,7 +23,13 @@
       </div>
     {:else}
       <img src={url} alt={title} on:load={handleImageLoad} class={isSingleImage ? "single" : "multiple"} />
-      <p class="title {destroyTime ? 'destroyed' : 'normal'} {isSingleImage ? 'singleText' : 'multipleText'}">{title}</p>
+      <p
+        class="title {destroyTime ? 'destroyed' : isFlagged ? 'flagged' : 'normal'} {isSingleImage
+          ? 'singleText'
+          : 'multipleText'}"
+      >
+        {title}
+      </p>
     {/if}
   </a>
 </div>
@@ -60,6 +66,10 @@
 
   .destroyed {
     color: red;
+  }
+
+  .flagged {
+    color: orange;
   }
 
   .normal {

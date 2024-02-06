@@ -3,6 +3,7 @@
     title,
     description,
     id,
+    isFlagged,
     destroyTime,
     tags = [],
     createdAt,
@@ -13,7 +14,6 @@
     const formattedDate = new Date(dateString).toLocaleDateString("en-US", options)
     return formattedDate
   }
-
 </script>
 
 <div class="full-image-card">
@@ -23,7 +23,10 @@
     </a>
   </div>
   <div class="details">
-    <h1 class="title {destroyTime ? 'destroyed' : ''}">{title} {destroyTime ? "This image was deleted" : ""}</h1>
+    <h1 class="title {destroyTime ? 'destroyed' : isFlagged ? 'flagged' : ''}">
+      {title}
+      {destroyTime ? "(This image was deleted)" : ""}
+    </h1>
     <hr />
     {#if description}
       <p class="description">Description: {description}</p>
@@ -54,6 +57,11 @@
   .destroyed {
     color: red;
   }
+
+  .flagged {
+    color: orange;
+  }
+
   .full-image-card {
     border-radius: 8px;
     overflow: hidden;

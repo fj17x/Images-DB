@@ -9,7 +9,7 @@
   choiceModalOptions.header = "Confirm logout"
   choiceModalOptions.text = "Are you sure you want to logout?"
 
-  export const onChoiceConfirm = async (confirmed) => {
+  export const onChoiceConfirmForLogout = async (confirmed) => {
     showChoiceModal = false
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/auth/logout`, {
@@ -60,7 +60,7 @@
 </div>
 
 {#if showChoiceModal}
-  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
+  <ChoiceModal bind:showModal={showChoiceModal} onChoiceConfirm={onChoiceConfirmForLogout} {...choiceModalOptions}></ChoiceModal>
 {/if}
 
 <style>

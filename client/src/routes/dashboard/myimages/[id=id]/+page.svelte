@@ -130,6 +130,7 @@
             url={image.url}
             createdAt={image.createdAt}
             updatedAt={image.updatedAt}
+            isFlagged={image.isFlagged}
             destroyTime={image.destroyTime}
             id={image.id}
           />
