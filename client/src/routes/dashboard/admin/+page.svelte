@@ -3,18 +3,21 @@
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
   import { onMount } from "svelte"
-  import { goto } from "$app/navigation"
   import EditImageModal from "$lib/components/EditImageModal.svelte"
 
   let showAlertModal = false
   let alertModalOptions = {}
 
   let users = []
-  let totalUsers = 0
   let images = []
+  let totalUsers = 0
   let totalImages = 0
 
   let clickedBox = "users"
+  let first = true
+
+  let currentOffsetForUsers = 0
+  let currentOffsetForImages = 0
 
   let imageIdGiven
   let userIdGiven
@@ -23,46 +26,74 @@
 
   let showEditImageModal = false
 
-  const handleClick = (box) => {
-    clickedBox = box
+  const handleScroll = async (entity) => {
+    console.log("🚀 ~ handleScroll ~ entity:", entity)
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 70) {
+      await fetchUsersOrImages()
+    }
   }
 
-  const getUsersAndImages = async () => {
-    const responseUsers = await fetch(`http://localhost:4000/users`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const responseImages = await fetch(`http://localhost:4000/images?sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const replyUsers = await responseUsers.json()
-    const replyImages = await responseImages.json()
+  const fetchUsersOrImages = async () => {
+    if (first || clickedBox === "users") {
+      const response = await fetch(`http://localhost:4000/users?offset=${currentOffsetForUsers}&sortBy=id&sortOrder=asc`, {
+        method: "GET",
+        credentials: "include",
+      })
 
-    if (responseUsers.ok) {
-      users = [...replyUsers.data]
-      totalUsers = replyUsers.totalUsers
+      const usersReply = await response.json()
+
+      if (!usersReply.data || usersReply.data.length === 0) {
+        return
+      }
+
+      const uniqueUsers = usersReply.data.filter((newUser) => {
+        return !users.some((user) => user.id === newUser.id)
+      })
+      users = [...users, ...uniqueUsers]
+      currentOffsetForUsers += 50
     }
-    if (responseImages.ok) {
-      images = [...replyImages.data]
-      totalImages = replyImages.totalImages
+    if (first || clickedBox === "images") {
+      const response = await fetch(
+        `http://localhost:4000/images?offset=${currentOffsetForImages}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      )
+      const imagesReply = await response.json()
+
+      if (!imagesReply.data || imagesReply.data.length === 0) {
+        return
+      }
+
+      const uniqueImages = imagesReply.data.filter((newImage) => {
+        return !images.some((image) => image.id === newImage.id)
+      })
+      images = [...images, ...uniqueImages]
+      currentOffsetForImages += 50
     }
+
+    first = false
+  }
+
+  const handleClick = (box) => {
+    clickedBox = box
   }
 
   const onAlertConfirm = () => {
     showAlertModal = false
   }
 
-  const handleImageEdit = async () => {
-    const responseGET = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
-      method: "GET",
-      credentials: "include",
-    })
-    const replyGET = await responseGET.json()
-    console.log("🚀 ~ handleImageEdit ~ replyGET:", replyGET)
-    imageToEdit = replyGET.data
-    showEditImageModal = true
-  }
+  // const handleImageEdit = async () => {
+  //   const responseGET = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+  //     method: "GET",
+  //     credentials: "include",
+  //   })
+  //   const replyGET = await responseGET.json()
+  //   console.log("🚀 ~ handleImageEdit ~ replyGET:", replyGET)
+  //   imageToEdit = replyGET.data
+  //   showEditImageModal = true
+  // }
 
   const handleImageFlagging = async (flag) => {
     const response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
@@ -192,16 +223,19 @@
       showAlertModal = true
     }
   }
+
   onMount(async () => {
-    await getUsersAndImages()
-    if (!$userDetails.isAdmin) {
-      alertModalOptions.header = "Cannot access page"
-      alertModalOptions.message = "This page is only accessible by an admin."
-      alertModalOptions.type = "failure"
-      showAlertModal = true
-    }
+    await fetchUsersOrImages()
+    // if (!$userDetails.isAdmin) {
+    //   alertModalOptions.header = "Cannot access page"
+    //   alertModalOptions.message = "This page is only accessible by an admin."
+    //   alertModalOptions.type = "failure"
+    //   showAlertModal = true
+    // }
   })
 </script>
+
+<svelte:window on:scroll={handleScroll} />
 
 <div class="container">
   <Dashboard />
@@ -225,20 +259,20 @@
               <p class="total-info">Enter User ID:</p>
               <div class="edit-div">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
-                <button class="edit-button">Edit</button>
-                <button class="edit-button" on:click={() => handleUserDeletion(true)}>Delete</button>
-                <button class="edit-button" on:click={() => handleUserDeletion(false)}>Restore</button>
+                <!-- <button class="edit-button">Edit</button> -->
+                <button class="edit-button delete-button" on:click={() => handleUserDeletion(true)}>Delete</button>
+                <button class="edit-button restore-button" on:click={() => handleUserDeletion(false)}>Restore</button>
               </div>
             </div>
             <div class="small-box">
               <p class="total-info">Enter Image ID:</p>
               <div class="edit-div">
                 <input type="text" bind:value={imageIdGiven} class="edit-input" />
-                <button class="edit-button" on:click={handleImageEdit}>Edit</button>
-                <button class="edit-button" on:click={() => handleImageFlagging(true)}>Flag</button>
-                <button class="edit-button" on:click={() => handleImageFlagging(false)}>Unflag</button>
-                <button class="edit-button" on:click={() => handleImageDeletion(true)}>Delete</button>
-                <button class="edit-button" on:click={() => handleImageDeletion(false)}>Restore</button>
+                <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
+                <button class="edit-button flag-button" on:click={() => handleImageFlagging(true)}>Flag</button>
+                <button class="edit-button unflag-button" on:click={() => handleImageFlagging(false)}>Unflag</button>
+                <button class="edit-button delete-button" on:click={() => handleImageDeletion(true)}>Delete</button>
+                <button class="edit-button restore-button" on:click={() => handleImageDeletion(false)}>Restore</button>
               </div>
             </div>
           </div>
@@ -342,6 +376,21 @@
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
+
+  .flag-button {
+    color: orange;
+  }
+  .unflag-button {
+    color: darkslateblue;
+  }
+
+  .delete-button {
+    color: red;
+  }
+
+  .restore-button {
+    color: green;
+  }
 
   td {
     padding: 1rem 0.4rem;

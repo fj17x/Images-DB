@@ -7,7 +7,7 @@
 
   const fetchNextImages = async () => {
     const response = await fetch(
-      `http://localhost:4000/images?offset=${currentOffset}&limit=9&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
+      `http://localhost:4000/images?offset=${currentOffset}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
       {
         method: "GET",
         credentials: "include",
@@ -46,7 +46,7 @@
     {:then}
       {#if images.length > 0}
         <h2>Your images:</h2>
-        <div class="main-card" on:scroll={handleScroll}>
+        <div class="main-card">
           {#each images as { id, url, title, destroyTime, isFlagged }}
             <ImageCard {id} {url} {title} {destroyTime} {isFlagged} />
           {/each}
