@@ -53,16 +53,16 @@
     showAlertModal = false
   }
 
-  // const handleImageEdit = async () => {
-  //   const responseGET = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
-  //     method: "GET",
-  //     credentials: "include",
-  //   })
-  //   const replyGET = await responseGET.json()
-  //   console.log("🚀 ~ handleImageEdit ~ replyGET:", replyGET)
-  //   imageToEdit = replyGET.data
-  //   showEditImageModal = true
-  // }
+  const handleImageEdit = async () => {
+    const responseGET = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
+      method: "GET",
+      credentials: "include",
+    })
+    const replyGET = await responseGET.json()
+    console.log("🚀 ~ handleImageEdit ~ replyGET:", replyGET)
+    imageToEdit = replyGET.data
+    showEditImageModal = true
+  }
 
   const handleImageFlagging = async (flag) => {
     const response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
@@ -157,41 +157,41 @@
     await getUsersAndImages()
   }
 
-  // const onEditConfirm = async (status, data) => {
-  //   if (!status) {
-  //     showEditImageModal = false
-  //     return
-  //   }
-  //   if (data) {
-  //     Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
-  //   }
+  const onEditConfirm = async (status, data) => {
+    if (!status) {
+      showEditImageModal = false
+      return
+    }
+    if (data) {
+      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+    }
 
-  //   showEditImageModal = false
+    showEditImageModal = false
 
-  //   const responsePatch = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
-  //     method: "PATCH",
-  //     credentials: "include",
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
+    const responsePatch = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
-  //   console.log("🚀 ~ onEditConfirm ~ imageToEdit:", imageToEdit)
+    console.log("🚀 ~ onEditConfirm ~ imageToEdit:", imageToEdit)
 
-  //   const replyPATCH = await responsePatch.json()
-  //   if (responsePatch.ok) {
-  //     alertModalOptions.header = "Successfully updated"
-  //     alertModalOptions.message = replyPATCH.message
-  //     alertModalOptions.type = "success"
-  //     showAlertModal = true
-  //   } else {
-  //     alertModalOptions.header = "Could not update"
-  //     alertModalOptions.message = replyPATCH.error
-  //     alertModalOptions.type = "failure"
-  //     showAlertModal = true
-  //   }
-  // }
+    const replyPATCH = await responsePatch.json()
+    if (responsePatch.ok) {
+      alertModalOptions.header = "Successfully updated"
+      alertModalOptions.message = replyPATCH.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
+    } else {
+      alertModalOptions.header = "Could not update"
+      alertModalOptions.message = replyPATCH.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
   onMount(async () => {
     await getUsersAndImages()
     if (!$userDetails.isAdmin) {
@@ -220,12 +220,12 @@
             <p class="total-info">Total images</p>
             <p class="total-num">{totalImages || " "}</p>
           </button>
-          <div>
+          <div class="main-inputs">
             <div class="small-box">
               <p class="total-info">Enter User ID:</p>
               <div class="edit-div">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
-                <!-- <button class="edit-button">Edit</button> -->
+                <button class="edit-button">Edit</button>
                 <button class="edit-button" on:click={() => handleUserDeletion(true)}>Delete</button>
                 <button class="edit-button" on:click={() => handleUserDeletion(false)}>Restore</button>
               </div>
@@ -234,7 +234,7 @@
               <p class="total-info">Enter Image ID:</p>
               <div class="edit-div">
                 <input type="text" bind:value={imageIdGiven} class="edit-input" />
-                <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
+                <button class="edit-button" on:click={handleImageEdit}>Edit</button>
                 <button class="edit-button" on:click={() => handleImageFlagging(true)}>Flag</button>
                 <button class="edit-button" on:click={() => handleImageFlagging(false)}>Unflag</button>
                 <button class="edit-button" on:click={() => handleImageDeletion(true)}>Delete</button>
@@ -252,7 +252,7 @@
       {#if clickedBox === "images"}
         <div class="images-table">
           <table>
-            <thead class="table-head-row">
+            <thead>
               <tr>
                 <th>Image ID</th>
                 <th>Title</th>
@@ -273,7 +273,7 @@
                     <td>{image.id}</td>
                     <td>{image.title}</td>
                     <td>{image.url}</td>
-                    <td>{image.description && image.description.length > 20 ? "..." : image.description}</td>
+                    <td>{image.description}</td>
                     <td>{image.ownerId}</td>
                     <td>
                       {#each image.tags as tag}
@@ -292,7 +292,7 @@
         </div>{:else}
         <div class="user-table">
           <table class="table-head">
-            <thead class="table-head-row">
+            <thead>
               <tr>
                 <th>User ID</th>
                 <th>Username</th>
@@ -329,7 +329,7 @@
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
-<!-- {#if showEditImageModal}
+{#if showEditImageModal}
   <EditImageModal
     bind:showModal={showEditImageModal}
     {onEditConfirm}
@@ -338,10 +338,40 @@
     oldTags={imageToEdit.tags}
     oldUrl={imageToEdit.url}
   ></EditImageModal>
-{/if} -->
+{/if}
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
+
+  td {
+    padding: 1rem 0.4rem;
+  }
+  th {
+    padding: 1rem 0rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    border: 1px solid #ddd;
+    /* word-break: break-word; */
+  }
+
+  .images-table {
+    width: 100%;
+  }
+
+  thead {
+    background-color: black;
+    color: white;
+    font-family: "Source Sans Pro", sans-serif;
+    text-transform: capitalize;
+  }
+
+  .main-inputs {
+    padding-left: 0.7rem;
+  }
 
   @media screen and (max-width: 1050px) {
     .statistics {
@@ -364,7 +394,7 @@
   }
 
   .edit-button {
-    font-size: 1.2rem;
+    font-size: 0.6rem;
     background-color: #309329;
     border-radius: 0.3rem;
     color: #fff;
@@ -382,32 +412,6 @@
 
   .edit-button:hover {
     transform: scale(1.05);
-  }
-  td {
-    /* white-space: nowrap; */
-    padding: 1rem 1rem;
-  }
-  tr {
-    padding: 16px 0;
-  }
-
-  th {
-    padding: 1rem 1rem;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 0.45rem;
-    border: 1px solid #ddd;
-  }
-  .table-head-row {
-    background-color: black;
-    color: white;
-    font-family: "Source Sans Pro", sans-serif;
-    /* white-space: nowrap; */
-    text-transform: capitalize;
   }
 
   .total-num {
@@ -466,8 +470,8 @@
   .content {
     flex: 1;
     padding: 0px 0.5rem;
-    margin-left: 14vw;
-    width: 75vw;
+    margin-left: 11vw;
+    width: 85vw;
   }
 
   .contents {
@@ -480,6 +484,6 @@
     background-color: #ebebeb;
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 1.5rem 2rem 1.5rem 2rem;
+    padding: 2rem 0.5rem 3rem 0.5rem;
   }
 </style>
