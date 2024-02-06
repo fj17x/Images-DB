@@ -107,7 +107,7 @@ const getImageById = async (req, res) => {
     let { imageId } = req.params
     imageId = Number(imageId)
     const userId = req.userId
-    const isAdmin = req.isAdmin
+    let isAdmin = req.isAdmin
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
     }
@@ -120,13 +120,14 @@ const getImageById = async (req, res) => {
       },
       raw: true,
       paranoid: isAdmin ? false : true,
+      isFlagged: isAdmin ? { [Op.or]: [true, false] } : false,
     })
 
     if (!foundImage) {
       return res.status(404).json({ error: "Image not found." })
     }
 
-    if (foundImage.isFlagged) {
+    if (!isAdmin && foundImage.isFlagged) {
       return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
     }
 

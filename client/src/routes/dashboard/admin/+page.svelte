@@ -399,16 +399,16 @@
   }
 
   table {
-    border-spacing: 18px 10px;
+    /* border-spacing: 18px 10px; */
     width: 100%;
-    border-collapse: separate;
+    /* border-collapse: separate; */
     font-size: 0.5rem;
   }
   .table-head-row {
     background-color: black;
     color: white;
     font-family: "Source Sans Pro", sans-serif;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     text-transform: capitalize;
   }
 
