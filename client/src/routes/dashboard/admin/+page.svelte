@@ -3,7 +3,7 @@
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
   import { onMount } from "svelte"
-  import EditImageModal from "$lib/components/EditImageModal.svelte"
+  //import EditImageModal from "$lib/components/EditImageModal.svelte"
 
   let showAlertModal = false
   let alertModalOptions = {}
@@ -41,6 +41,7 @@
       })
 
       const usersReply = await response.json()
+      totalUsers = usersReply.totalUsers
 
       if (!usersReply.data || usersReply.data.length === 0) {
         return
@@ -61,6 +62,7 @@
         }
       )
       const imagesReply = await response.json()
+      totalImages = imagesReply.totalImages
 
       if (!imagesReply.data || imagesReply.data.length === 0) {
         return
@@ -188,50 +190,50 @@
     await getUsersAndImages()
   }
 
-  const onEditConfirm = async (status, data) => {
-    if (!status) {
-      showEditImageModal = false
-      return
-    }
-    if (data) {
-      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
-    }
+  // const onEditConfirm = async (status, data) => {
+  //   if (!status) {
+  //     showEditImageModal = false
+  //     return
+  //   }
+  //   if (data) {
+  //     Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+  //   }
 
-    showEditImageModal = false
+  //   showEditImageModal = false
 
-    const responsePatch = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  //   const responsePatch = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
+  //     method: "PATCH",
+  //     credentials: "include",
+  //     body: JSON.stringify(data),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
 
-    console.log("🚀 ~ onEditConfirm ~ imageToEdit:", imageToEdit)
+  //   console.log("🚀 ~ onEditConfirm ~ imageToEdit:", imageToEdit)
 
-    const replyPATCH = await responsePatch.json()
-    if (responsePatch.ok) {
-      alertModalOptions.header = "Successfully updated"
-      alertModalOptions.message = replyPATCH.message
-      alertModalOptions.type = "success"
-      showAlertModal = true
-    } else {
-      alertModalOptions.header = "Could not update"
-      alertModalOptions.message = replyPATCH.error
-      alertModalOptions.type = "failure"
-      showAlertModal = true
-    }
-  }
+  //   const replyPATCH = await responsePatch.json()
+  //   if (responsePatch.ok) {
+  //     alertModalOptions.header = "Successfully updated"
+  //     alertModalOptions.message = replyPATCH.message
+  //     alertModalOptions.type = "success"
+  //     showAlertModal = true
+  //   } else {
+  //     alertModalOptions.header = "Could not update"
+  //     alertModalOptions.message = replyPATCH.error
+  //     alertModalOptions.type = "failure"
+  //     showAlertModal = true
+  //   }
+  // }
 
   onMount(async () => {
     await fetchUsersOrImages()
-    // if (!$userDetails.isAdmin) {
-    //   alertModalOptions.header = "Cannot access page"
-    //   alertModalOptions.message = "This page is only accessible by an admin."
-    //   alertModalOptions.type = "failure"
-    //   showAlertModal = true
-    // }
+    if (!$userDetails.isAdmin) {
+      alertModalOptions.header = "Cannot access page"
+      alertModalOptions.message = "This page is only accessible by an admin."
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
   })
 </script>
 
@@ -241,7 +243,7 @@
   <Dashboard />
   <div class="contents">
     <div class="content">
-      <h3>Statistics</h3>
+      <h3>Admin Panel</h3>
       <div class="main-card">
         <div class="statistics">
           <button class="box blue {clickedBox === 'users' ? 'selected' : ''}" on:click={() => handleClick("users")}>
@@ -363,6 +365,7 @@
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
+<!-- 
 {#if showEditImageModal}
   <EditImageModal
     bind:showModal={showEditImageModal}
@@ -372,7 +375,7 @@
     oldTags={imageToEdit.tags}
     oldUrl={imageToEdit.url}
   ></EditImageModal>
-{/if}
+{/if} -->
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
