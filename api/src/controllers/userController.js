@@ -96,7 +96,7 @@ const fetchBatchOfUsers = async (req, res) => {
     }
 
     //Get limit and offset.
-    let { limit = 10, offset = 0, sortBy = "id", sortOrder = "ASC", showDeleted = "false" } = req.query
+    let { limit = 50, offset = 0, sortBy = "id", sortOrder = "ASC", showDeleted = "false" } = req.query
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()

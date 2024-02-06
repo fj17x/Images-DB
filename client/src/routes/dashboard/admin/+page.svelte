@@ -252,8 +252,8 @@
       {#if clickedBox === "images"}
         <div class="images-table">
           <table>
-            <thead class="table-head">
-              <tr class="table-head-row">
+            <thead class="table-head-row">
+              <tr>
                 <th>Image ID</th>
                 <th>Title</th>
                 <th>URL</th>
@@ -273,11 +273,11 @@
                     <td>{image.id}</td>
                     <td>{image.title}</td>
                     <td>{image.url}</td>
-                    <!-- <td class={image.description && image.description.length > 7 ? "ellipsis" : ""}>{image.description}</td> -->
+                    <td>{image.description && image.description.length > 20 ? "..." : image.description}</td>
                     <td>{image.ownerId}</td>
                     <td>
                       {#each image.tags as tag}
-                        {tag} &nbsp;
+                        {tag};
                       {/each}
                     </td>
                     <td>{image.isFlagged}</td>
@@ -343,12 +343,6 @@
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 
-  .ellipsis {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   @media screen and (max-width: 1050px) {
     .statistics {
       flex-direction: column;
@@ -390,8 +384,11 @@
     transform: scale(1.05);
   }
   td {
-    white-space: nowrap;
+    /* white-space: nowrap; */
     padding: 1rem 1rem;
+  }
+  tr {
+    padding: 16px 0;
   }
 
   th {
@@ -399,10 +396,11 @@
   }
 
   table {
-    /* border-spacing: 18px 10px; */
     width: 100%;
-    /* border-collapse: separate; */
-    font-size: 0.5rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.45rem;
+    border: 1px solid #ddd;
   }
   .table-head-row {
     background-color: black;
@@ -410,10 +408,6 @@
     font-family: "Source Sans Pro", sans-serif;
     /* white-space: nowrap; */
     text-transform: capitalize;
-  }
-
-  tr {
-    padding: 18px 0;
   }
 
   .total-num {
