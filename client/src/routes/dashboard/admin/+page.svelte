@@ -23,7 +23,6 @@
   let userIdGiven
 
   let imageToEdit = {}
-
   let showEditImageModal = false
 
   const handleScroll = async (entity) => {

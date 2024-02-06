@@ -1,6 +1,10 @@
 <script>
   import { onMount } from "svelte"
+<<<<<<< HEAD
   export let url, title, id, destroyTime, isFlagged
+=======
+  export let url, title, id, destroyTime
+>>>>>>> fcf123b3ae2a4648a94b5928dc53cff344d5724c
   export let isSingleImage = false
   let isLoading = true
 
