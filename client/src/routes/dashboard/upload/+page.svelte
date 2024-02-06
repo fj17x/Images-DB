@@ -86,7 +86,8 @@
         <span>
           <label for="title">Title*:</label>
           <br />
-          <input type="text" name="title" class="normal-input" bind:value={title} required /></span
+          <!-- svelte-ignore a11y-autofocus -->
+          <input autofocus type="text" name="title" class="normal-input" bind:value={title} required /></span
         >
         <span>
           <label for="title">Description:</label>

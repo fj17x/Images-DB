@@ -59,7 +59,8 @@
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Enter your username" bind:value={userName} name="userName" required />
+            <!-- svelte-ignore a11y-autofocus -->
+            <input autofocus type="text" placeholder="Enter your username" bind:value={userName} name="userName" required />
           </div>
           <div class="input-box">
             <i class="fas fa-lock"></i>

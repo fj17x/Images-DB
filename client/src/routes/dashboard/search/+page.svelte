@@ -109,7 +109,8 @@
           <span class="input-normal">
             <span>
               <label for="id">Image ID*:</label>
-              <input type="number" name="id" bind:value={idForSimple} required />
+              <!-- svelte-ignore a11y-autofocus -->
+              <input autofocus type="number" name="id" bind:value={idForSimple} required />
             </span>
             <button class="confirm-button" type="submit">Search</button>
           </span>

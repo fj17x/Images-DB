@@ -45,11 +45,15 @@
   <div class="hero-content">
     <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
     <p class="text">Share your life's snapshots.</p>
-
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div on:click={handleRegister} class="get-started-btn">{signedIn ? "Continue" : "Create an account"}</div>
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     {#if !signedIn}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div on:click={handleSignIn} class="have-account">Already have an account?</div>
     {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div on:click={() => (showChoiceModal = true)} class="have-account">Logout</div>
     {/if}
   </div>
