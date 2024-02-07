@@ -32,8 +32,8 @@
     }
   }
 
-  const fetchUsersOrImages = async () => {
-    if (first || clickedBox === "users") {
+  const fetchUsersOrImages = async (select) => {
+    if (first || select === "users" || clickedBox === "users") {
       const response = await fetch(
         `http://localhost:4000/users?offset=${currentOffsetForUsers}&sortBy=id&sortOrder=asc&showDeleted=true`,
         {
@@ -55,7 +55,7 @@
       users = [...users, ...uniqueUsers]
       currentOffsetForUsers += 50
     }
-    if (first || clickedBox === "images") {
+    if (first || select === "images" || clickedBox === "images") {
       const response = await fetch(
         `http://localhost:4000/images?offset=${currentOffsetForImages}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
         {
@@ -78,6 +78,7 @@
     }
 
     first = false
+    select = "none"
   }
 
   const handleClick = (box) => {
@@ -117,7 +118,7 @@
       showAlertModal = true
       currentOffsetForImages = 0
       images = []
-      await fetchUsersOrImages()
+      await fetchUsersOrImages("images")
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
@@ -159,7 +160,7 @@
     }
     currentOffsetForImages = 0
     images = []
-    await fetchUsersOrImages()
+    await fetchUsersOrImages("images")
   }
 
   const handleUserDeletion = async (del) => {
@@ -189,7 +190,7 @@
       showAlertModal = true
       currentOffsetForUsers = 0
       users = []
-      await fetchUsersOrImages()
+      await fetchUsersOrImages("users")
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
