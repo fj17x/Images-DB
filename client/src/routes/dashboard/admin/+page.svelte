@@ -112,7 +112,9 @@
       alertModalOptions.message = flag ? "Image has been flagged." : "Image has been unflagged."
       alertModalOptions.type = "success"
       showAlertModal = true
-      await getUsersAndImages()
+      currentOffsetForImages = 0
+      images = []
+      await fetchUsersOrImages()
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
@@ -152,7 +154,9 @@
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
-    await getUsersAndImages()
+    currentOffsetForImages = 0
+    images = []
+    await fetchUsersOrImages()
   }
 
   const handleUserDeletion = async (del) => {
@@ -180,13 +184,15 @@
       alertModalOptions.message = del ? "User has been deleted." : "User has been restored."
       alertModalOptions.type = "success"
       showAlertModal = true
+      currentOffsetForUsers = 0
+      users = []
+      await fetchUsersOrImages()
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
-    await getUsersAndImages()
   }
 
   // const onEditConfirm = async (status, data) => {
