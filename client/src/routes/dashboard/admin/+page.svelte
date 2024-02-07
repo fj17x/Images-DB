@@ -4,7 +4,6 @@
   import { userDetails } from "../../../stores/userDetails.js"
   import { goto } from "$app/navigation"
   import { onMount } from "svelte"
-  //import EditImageModal from "$lib/components/EditImageModal.svelte"
 
   let showAlertModal = false
   let alertModalOptions = {}
@@ -15,17 +14,17 @@
   let totalUsers = 0
   let totalImages = 0
 
+  let currentPageForUsers = 1
+  let currentPageForImages = 1
+  let customPage
+  let resultsPerPage = 10
+  let customResultsPerPage
+
   let clickedBox = "users"
   let first = true
 
-  let currentOffsetForUsers = 0
-  let currentOffsetForImages = 0
-
   let imageIdGiven
   let userIdGiven
-
-  let imageToEdit = {}
-  let showEditImageModal = false
 
   const handleScroll = async (entity) => {
     console.log("🚀 ~ handleScroll ~ entity:", entity)
@@ -35,9 +34,11 @@
   }
 
   const fetchUsersOrImages = async (select) => {
+    let offset
     if (first || select === "users" || clickedBox === "users") {
+      offset = (currentPageForUsers - 1) * resultsPerPage
       const response = await fetch(
-        `http://localhost:4000/users?offset=${currentOffsetForUsers}&sortBy=id&sortOrder=asc&showDeleted=true`,
+        `http://localhost:4000/users?offset=${offset}&limit=${resultsPerPage}&sortBy=id&sortOrder=asc&showDeleted=true`,
         {
           method: "GET",
           credentials: "include",
@@ -51,15 +52,12 @@
         return
       }
 
-      const uniqueUsers = usersReply.data.filter((newUser) => {
-        return !users.some((user) => user.id === newUser.id)
-      })
-      users = [...users, ...uniqueUsers]
-      currentOffsetForUsers += 50
+      users = usersReply.data
     }
     if (first || select === "images" || clickedBox === "images") {
+      offset = (currentPageForImages - 1) * resultsPerPage
       const response = await fetch(
-        `http://localhost:4000/images?offset=${currentOffsetForImages}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
+        `http://localhost:4000/images?offset=${offset}&limit=${resultsPerPage}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
         {
           method: "GET",
           credentials: "include",
@@ -71,12 +69,7 @@
       if (!imagesReply.data || imagesReply.data.length === 0) {
         return
       }
-
-      const uniqueImages = imagesReply.data.filter((newImage) => {
-        return !images.some((image) => image.id === newImage.id)
-      })
-      images = [...images, ...uniqueImages]
-      currentOffsetForImages += 50
+      images = imagesReply.data
     }
 
     first = false
@@ -87,23 +80,92 @@
     clickedBox = box
   }
 
+  const nextPage = async () => {
+    if (clickedBox === "users") {
+      currentPageForUsers++
+      await fetchUsersOrImages()
+    } else if (clickedBox === "images") {
+      currentPageForImages++
+      await fetchUsersOrImages()
+    }
+    fetchUsersOrImages()
+  }
+
+  const prevPage = async () => {
+    if (clickedBox === "users") {
+      if (currentPageForUsers > 1) {
+        currentPageForUsers--
+        await fetchUsersOrImages()
+      }
+    } else if (clickedBox === "images") {
+      if (currentPageForImages > 1) {
+        currentPageForImages--
+        await fetchUsersOrImages()
+      }
+    }
+  }
+
+  const toStartPage = async () => {
+    if (clickedBox === "users") {
+      currentPageForUsers = 1
+      await fetchUsersOrImages()
+    } else if (clickedBox === "images") {
+      currentPageForImages = 1
+      await fetchUsersOrImages()
+    }
+  }
+  const toEndPage = async () => {
+    if (clickedBox === "users") {
+      currentPageForUsers = Math.ceil(totalUsers / resultsPerPage)
+      await fetchUsersOrImages()
+    } else if (clickedBox === "images") {
+      currentPageForImages = Math.ceil(totalImages / resultsPerPage)
+      await fetchUsersOrImages()
+    }
+  }
+
+  const changeResultsPerPage = async () => {
+    resultsPerPage = customResultsPerPage
+    if (clickedBox === "users") {
+      await fetchUsersOrImages()
+    } else if (clickedBox === "images") {
+      await fetchUsersOrImages()
+    }
+  }
+
+  const toCustomPage = async () => {
+    let totalPages
+    if (clickedBox === "users") {
+      totalPages = Math.ceil(totalUsers / resultsPerPage)
+      if (customPage >= 1 && customPage <= totalPages) {
+        currentPageForUsers = customPage
+        await fetchUsersOrImages()
+      } else {
+        alertModalOptions.header = "Page not found"
+        alertModalOptions.message = "Total number of pages for users is: " + totalPages
+        alertModalOptions.type = "others"
+        showAlertModal = true
+      }
+    } else if (clickedBox === "images") {
+      totalPages = Math.ceil(totalImages / resultsPerPage)
+      if (customPage >= 1 && customPage <= totalPages) {
+        currentPageForImages = customPage
+        await fetchUsersOrImages()
+      } else {
+        alertModalOptions.header = "Page not found"
+        alertModalOptions.message = "Total number of pages for images is: " + totalPages
+        alertModalOptions.type = "others"
+        showAlertModal = true
+      }
+    }
+  }
+
   const onAlertConfirm = () => {
     if (alertReason === "noAccess") {
       goto("/")
     }
     showAlertModal = false
   }
-
-  // const handleImageEdit = async () => {
-  //   const responseGET = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
-  //     method: "GET",
-  //     credentials: "include",
-  //   })
-  //   const replyGET = await responseGET.json()
-  //   console.log("🚀 ~ handleImageEdit ~ replyGET:", replyGET)
-  //   imageToEdit = replyGET.data
-  //   showEditImageModal = true
-  // }
 
   const handleImageFlagging = async (flag) => {
     const response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
@@ -121,7 +183,6 @@
       alertModalOptions.message = flag ? "Image has been flagged." : "Image has been unflagged."
       alertModalOptions.type = "success"
       showAlertModal = true
-      currentOffsetForImages = 0
       images = []
       await fetchUsersOrImages("images")
     } else {
@@ -163,7 +224,6 @@
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
-    currentOffsetForImages = 0
     images = []
     await fetchUsersOrImages("images")
   }
@@ -193,7 +253,6 @@
       alertModalOptions.message = del ? "User has been deleted." : "User has been restored."
       alertModalOptions.type = "success"
       showAlertModal = true
-      currentOffsetForUsers = 0
       users = []
       await fetchUsersOrImages("users")
     } else {
@@ -204,44 +263,7 @@
     }
   }
 
-  // const onEditConfirm = async (status, data) => {
-  //   if (!status) {
-  //     showEditImageModal = false
-  //     return
-  //   }
-  //   if (data) {
-  //     Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
-  //   }
-
-  //   showEditImageModal = false
-
-  //   const responsePatch = await fetch(`http://localhost:4000/images/${imageIdToEdit}`, {
-  //     method: "PATCH",
-  //     credentials: "include",
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-
-  //   console.log("🚀 ~ onEditConfirm ~ imageToEdit:", imageToEdit)
-
-  //   const replyPATCH = await responsePatch.json()
-  //   if (responsePatch.ok) {
-  //     alertModalOptions.header = "Successfully updated"
-  //     alertModalOptions.message = replyPATCH.message
-  //     alertModalOptions.type = "success"
-  //     showAlertModal = true
-  //   } else {
-  //     alertModalOptions.header = "Could not update"
-  //     alertModalOptions.message = replyPATCH.error
-  //     alertModalOptions.type = "failure"
-  //     showAlertModal = true
-  //   }
-  // }
-
-  onMount(async () => {
-    await fetchUsersOrImages()
+  const checkWhetherAdmin = async () => {
     if (!$userDetails.isAdmin) {
       alertModalOptions.header = "Cannot access page"
       alertModalOptions.message = "This page is only accessible by an admin."
@@ -249,6 +271,12 @@
       showAlertModal = true
       alertReason = "noAccess"
     }
+  }
+
+  onMount(async () => {
+    await fetchUsersOrImages()
+
+    await checkWhetherAdmin()
   })
 </script>
 
@@ -299,6 +327,46 @@
     <br />
     <br />
     <br />
+    <div class="pagination">
+      <div class="custom-div">
+        <label for="custom" class="custom-label">Custom page:</label>
+        <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
+        <button on:click={toCustomPage} class="custom-button">Go</button>
+      </div>
+
+      <div>
+        <button
+          on:click={toStartPage}
+          disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
+          class="custom-button"><i class="fa-solid fa-fast-backward"></i></button
+        >
+        <button
+          on:click={prevPage}
+          disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
+          class="custom-button"><i class="fa-solid fa-backward-step"></i></button
+        >
+        <span>Page {clickedBox === "images" ? currentPageForImages : currentPageForUsers}</span>
+        <button
+          on:click={nextPage}
+          disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
+            totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+          class="custom-button"
+          ><i class="fa-solid fa-forward-step"></i>
+        </button>
+        <button
+          on:click={toEndPage}
+          disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
+            totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+          class="custom-button"><i class="fa-solid fa-fast-forward"></i></button
+        >
+      </div>
+      <div class="custom-div">
+        <label for="custom" class="custom-label">Results per page:</label>
+        <input type="number" class="custom-input" name="custom" bind:value={customResultsPerPage} min="1" />
+        <button on:click={changeResultsPerPage} class="custom-button">Go</button>
+      </div>
+    </div>
+
     <div class="content">
       {#if clickedBox === "images"}
         <div class="images-table">
@@ -319,8 +387,8 @@
             </thead>
             <tbody>
               {#if images}
-                {#each images as image (image.id)}
-                  <tr>
+                {#each images as image, i (image.id)}
+                  <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
                     <td>{image.id}</td>
                     <td>{image.title}</td>
                     <td>{image.url}</td>
@@ -356,8 +424,8 @@
             </thead>
             <tbody>
               {#if users}
-                {#each users as user (user.id)}
-                  <tr>
+                {#each users as user, i (user.id)}
+                  <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
                     <td>{user.id}</td>
                     <td>{user.userName}</td>
                     <td>{user.isAdmin}</td>
@@ -380,20 +448,48 @@
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
-<!-- 
-{#if showEditImageModal}
-  <EditImageModal
-    bind:showModal={showEditImageModal}
-    {onEditConfirm}
-    oldTitle={imageToEdit.title}
-    oldDescription={imageToEdit.description}
-    oldTags={imageToEdit.tags}
-    oldUrl={imageToEdit.url}
-  ></EditImageModal>
-{/if} -->
-
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
+
+  .custom-label {
+    color: grey;
+    font-size: 0.9rem;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0rem 0 2rem 0;
+    gap: 6rem;
+  }
+
+  .custom-button,
+  .custom-input {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+
+  .custom-button:hover {
+    background-color: #eaeaea;
+  }
+
+  .custom-input {
+    width: 4rem;
+    text-align: center;
+  }
+
+  .pagination .custom-div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
 
   .flag-button {
     background-color: red;
@@ -422,7 +518,6 @@
     border-collapse: collapse;
     font-size: 0.75rem;
     border: 1px solid #ddd;
-    /* word-break: break-word; */
   }
 
   .images-table {
@@ -455,6 +550,14 @@
     }
   }
 
+  .even-row {
+    background-color: #f6f6f6;
+  }
+
+  .odd-row {
+    background-color: #ffffff;
+  }
+
   .edit-div {
     display: flex;
     gap: 10px;
@@ -462,7 +565,6 @@
 
   .edit-button {
     font-size: 0.6rem;
-    /* background-color: #309329; */
     border-radius: 0.3rem;
     color: #fff;
     cursor: pointer;
@@ -545,6 +647,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin: 0px 0px 2rem 0;
   }
 
   .main-card {
