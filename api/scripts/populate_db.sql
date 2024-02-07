@@ -25,6 +25,5 @@ CREATE TABLE "Images" (
 "destroyTime" TIMESTAMP WITH TIME ZONE, PRIMARY KEY ("id")
 );
 
-
-\i populate_users_only.sql
-\i populate_images_only.sql
+\ir populate_users_only.sql
+\ir populate_images_only.sql

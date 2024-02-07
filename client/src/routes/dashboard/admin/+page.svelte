@@ -34,10 +34,13 @@
 
   const fetchUsersOrImages = async () => {
     if (first || clickedBox === "users") {
-      const response = await fetch(`http://localhost:4000/users?offset=${currentOffsetForUsers}&sortBy=id&sortOrder=asc`, {
-        method: "GET",
-        credentials: "include",
-      })
+      const response = await fetch(
+        `http://localhost:4000/users?offset=${currentOffsetForUsers}&sortBy=id&sortOrder=asc&showDeleted=true`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      )
 
       const usersReply = await response.json()
       totalUsers = usersReply.totalUsers
