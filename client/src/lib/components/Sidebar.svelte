@@ -35,44 +35,47 @@
 </script>
 
 <div class="sidebar">
-  <div class="option">
-    <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="sidebar-text {$page.route.id === '/' ? 'active' : ''}"
-      ><p>Home</p></a
-    >
-  </div>
-  <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
-    <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="sidebar-text"><p>My Images</p></a>
-  </div>
-  <div class="option {$page.route.id.startsWith('/dashboard/upload') ? 'active' : ''}">
-    <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i><a href="/dashboard/upload" class="sidebar-text"><p>Upload</p></a>
-  </div>
-  <div class="option">
-    <i class="fa fa-search fa-lg {$page.route.id.startsWith('/dashboard/search') ? 'active' : ''}" aria-hidden="true"></i><a
-      href="/dashboard/search"
-      class="sidebar-text"><p>Search</p></a
-    >
-  </div>
-  <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
-    <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="sidebar-text"
-      ><p>My Profile</p>
-      <br />
-    </a>
-  </div>
-
-  {#if $userDetails.isAdmin}
-    <div class="option {$page.route.id.startsWith('/dashboard/admin') ? 'active' : ''}">
-      <i class="fa-solid fa-gears"></i><a href="/dashboard/admin" class="sidebar-text"
-        ><p class="admin-text">Admin Panel</p>
+  {#if $userDetails}
+    <div class="option">
+      <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="sidebar-text {$page.route.id === '/' ? 'active' : ''}"
+        ><p>Home</p></a
+      >
+    </div>
+    <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
+      <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="sidebar-text"><p>My Images</p></a>
+    </div>
+    <div class="option {$page.route.id.startsWith('/dashboard/upload') ? 'active' : ''}">
+      <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i><a href="/dashboard/upload" class="sidebar-text"><p>Upload</p></a
+      >
+    </div>
+    <div class="option">
+      <i class="fa fa-search fa-lg {$page.route.id.startsWith('/dashboard/search') ? 'active' : ''}" aria-hidden="true"></i><a
+        href="/dashboard/search"
+        class="sidebar-text"><p>Search</p></a
+      >
+    </div>
+    <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
+      <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="sidebar-text"
+        ><p>My Profile</p>
         <br />
       </a>
     </div>
+
+    {#if $userDetails.isAdmin}
+      <div class="option {$page.route.id.startsWith('/dashboard/admin') ? 'active' : ''}">
+        <i class="fa-solid fa-gears"></i><a href="/dashboard/admin" class="sidebar-text"
+          ><p class="admin-text">Admin Panel</p>
+          <br />
+        </a>
+      </div>
+    {/if}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="option logout" on:click={() => (showChoiceModal = true)}>
+      <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+      <p>Log out</p>
+    </div>
   {/if}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="option logout" on:click={() => (showChoiceModal = true)}>
-    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
-    <p>Log out</p>
-  </div>
   {#if showChoiceModal}
     <ChoiceModal bind:showModal={showChoiceModal} onChoiceConfirm={onChoiceConfirmForLogout} {...choiceModalOptions}
     ></ChoiceModal>

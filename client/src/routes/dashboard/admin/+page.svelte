@@ -396,18 +396,18 @@
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 
   .flag-button {
-    color: orange;
+    background-color: red;
   }
   .unflag-button {
-    color: darkslateblue;
+    background-color: green;
   }
 
   .delete-button {
-    color: red;
+    background-color: red;
   }
 
   .restore-button {
-    color: green;
+    background-color: green;
   }
 
   td {
@@ -440,7 +440,7 @@
     padding-left: 0.7rem;
   }
 
-  @media screen and (max-width: 1050px) {
+  @media screen and (max-width: 1150px) {
     .statistics {
       flex-direction: column;
     }
@@ -462,7 +462,7 @@
 
   .edit-button {
     font-size: 0.6rem;
-    background-color: #309329;
+    /* background-color: #309329; */
     border-radius: 0.3rem;
     color: #fff;
     cursor: pointer;
