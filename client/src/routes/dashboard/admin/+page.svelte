@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
   import { onMount } from "svelte"
@@ -239,7 +239,7 @@
 <svelte:window on:scroll={handleScroll} />
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="contents">
     <div class="content">
       <h3>Admin Panel</h3>

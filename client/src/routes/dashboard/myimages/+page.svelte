@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import ImageCard from "$lib/components/ImageCard.svelte"
 
   let currentOffset = 0
@@ -37,7 +37,7 @@
 <svelte:window on:scroll={handleScroll} />
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="content {images.length < 1 ? 'none-found' : ''}">
     {#await fetchNextImages()}
       <div class="loading-spinner">

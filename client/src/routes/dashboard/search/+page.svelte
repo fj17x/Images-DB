@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import ImageModal from "$lib/components/ImageModal.svelte"
   import ImagesModal from "$lib/components/ImagesModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
@@ -99,7 +99,7 @@
 </script>
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="contents">
     <div class="content">
       <h3>Search for an image using ID:</h3>

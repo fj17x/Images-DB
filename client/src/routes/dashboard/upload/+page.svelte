@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { onMount } from "svelte"
 
@@ -77,7 +77,7 @@
 </script>
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="content">
     <h3>Upload an Image:</h3>
 

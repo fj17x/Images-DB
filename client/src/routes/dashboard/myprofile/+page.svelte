@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
@@ -120,7 +120,7 @@
 </script>
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="content">
     <h3>Your Profile:</h3>
     <div class="main-card">

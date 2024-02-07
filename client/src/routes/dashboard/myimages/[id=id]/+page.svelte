@@ -1,5 +1,5 @@
 <script>
-  import Dashboard from "$lib/components/Dashboard.svelte"
+  import Sidebar from "$lib/components/Sidebar.svelte"
   import FullImageCard from "$lib/components/FullImageCard.svelte"
   import ChoiceModal from "$lib/components/ChoiceModal.svelte"
   import EditImageModal from "$lib/components/EditImageModal.svelte"
@@ -107,7 +107,7 @@
 </script>
 
 <div class="container">
-  <Dashboard />
+  <Sidebar />
   <div class="content {image === undefined ? 'none-found' : ''}">
     {#await fetchImageWithId()}
       <div class="loading-spinner">
