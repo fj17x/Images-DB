@@ -2,11 +2,13 @@
   import Sidebar from "$lib/components/Sidebar.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
+  import { goto } from "$app/navigation"
   import { onMount } from "svelte"
   //import EditImageModal from "$lib/components/EditImageModal.svelte"
 
   let showAlertModal = false
   let alertModalOptions = {}
+  let alertReason
 
   let users = []
   let images = []
@@ -86,6 +88,9 @@
   }
 
   const onAlertConfirm = () => {
+    if (alertReason === "noAccess") {
+      goto("/")
+    }
     showAlertModal = false
   }
 
@@ -242,6 +247,7 @@
       alertModalOptions.message = "This page is only accessible by an admin."
       alertModalOptions.type = "failure"
       showAlertModal = true
+      alertReason = "noAccess"
     }
   })
 </script>

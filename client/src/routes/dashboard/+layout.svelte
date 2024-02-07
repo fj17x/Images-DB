@@ -12,13 +12,18 @@
       method: "GET",
       credentials: "include",
     })
+
+    const reply = await response.json()
     if (!response.ok) {
       {
         userDetails.set({})
+        alertModalOptions.header = "Cannot access page"
+        alertModalOptions.type = "failure"
+        alertModalOptions.message = "Please login to access."
+        showAlertModal = true
         return
       }
     }
-    const reply = await response.json()
     userDetails.set(reply.data)
   }
 
