@@ -26,5 +26,5 @@ CREATE TABLE "Images" (
 );
 
 
-\i api/scripts/populate_users_only.sql
-\i api/scripts/populate_images_only.sql
+\i populate_users_only.sql
+\i populate_images_only.sql
