@@ -133,6 +133,8 @@
             isFlagged={image.isFlagged}
             destroyTime={image.destroyTime}
             id={image.id}
+            ownerUserName={image["owner.userName"]}
+            ownerId={image.ownerId}
           />
         {:else}
           <h1>Image not found!</h1>

@@ -329,7 +329,7 @@
     <br />
     <div class="pagination">
       <div class="custom-div">
-        <label for="custom" class="custom-label">Custom page:</label>
+        <label for="custom" class="custom-label">Search page number:</label>
         <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
         <button on:click={toCustomPage} class="custom-button">Go</button>
       </div>
@@ -366,7 +366,7 @@
         <button on:click={changeResultsPerPage} class="custom-button">Go</button>
       </div>
     </div>
-
+    <h4>{clickedBox == "images" ? "Images" : "Users"}</h4>
     <div class="content">
       {#if clickedBox === "images"}
         <div class="images-table">

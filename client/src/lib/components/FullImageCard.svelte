@@ -1,4 +1,5 @@
 <script>
+  import { userDetails } from "../../stores/userDetails.js"
   export let url,
     title,
     description,
@@ -7,7 +8,9 @@
     destroyTime,
     tags = [],
     createdAt,
-    updatedAt
+    updatedAt,
+    ownerUserName,
+    ownerId
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" }
@@ -48,6 +51,14 @@
     {#if updatedAt}
       {#if updatedAt !== createdAt}
         <p class="modified-at">Last modified on : {formatDate(updatedAt)}</p>
+      {/if}
+    {/if}
+    {#if $userDetails.isAdmin}
+      {#if updatedAt !== createdAt}
+        <div>
+          <p class="owner-details">Owner ID : {ownerId}</p>
+          <p class="owner-details">Owner Name : {ownerUserName}</p>
+        </div>
       {/if}
     {/if}
   </div>
@@ -127,6 +138,14 @@
     direction: rtl;
     color: rgb(154, 154, 154);
   }
+
+  .owner-details {
+    margin: 0rem;
+    font-size: 0.8rem;
+    direction: rtl;
+    color: rgb(154, 154, 154);
+  }
+
   .anchor {
     text-decoration: none;
     color: #fff;
