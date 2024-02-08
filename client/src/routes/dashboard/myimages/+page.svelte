@@ -36,16 +36,16 @@
 
 <svelte:window on:scroll={handleScroll} />
 
-<div class="container">
+<div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content {images.length < 1 ? 'none-found' : ''}">
+  <div class="content pt-4 {images.length < 1 ? 'none-found' : ''}">
     {#await fetchNextImages()}
       <div class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
       </div>
     {:then}
       {#if images.length > 0}
-        <h2>Your images:</h2>
+        <h2 class="pb-4">Your images:</h2>
         <div class="main-card">
           {#each images as { id, url, title, destroyTime, isFlagged }}
             <ImageCard {id} {url} {title} {destroyTime} {isFlagged} />
@@ -83,10 +83,6 @@
     top: 0;
     left: 0;
     width: 100%;
-  }
-  .container {
-    display: flex;
-    background-color: rgb(254, 252, 252);
   }
 
   .content {

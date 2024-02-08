@@ -15,16 +15,16 @@
   })
 </script>
 
-<div class="card">
+<div class="card border-0">
   <a href="/dashboard/myimages/{id}" class="anchor">
     {#if isLoading}
-      <div class="loading-spinner">
+      <div class="loading-spinner d-flex justify-content-center align-items-center text-dark">
         <i class="fas fa-spinner fa-spin"></i>
       </div>
     {:else}
-      <img src={url} alt={title} on:load={handleImageLoad} class={isSingleImage ? "single" : "multiple"} />
+      <img src={url} alt={title} on:load={handleImageLoad} class="image {isSingleImage ? 'single' : ''}" />
       <p
-        class="title {destroyTime ? 'destroyed' : isFlagged ? 'flagged' : 'normal'} {isSingleImage
+        class="card-title {destroyTime ? 'destroyed' : isFlagged ? 'flagged' : 'normal'} {isSingleImage
           ? 'singleText'
           : 'multipleText'}"
       >
@@ -36,32 +36,15 @@
 
 <style>
   .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    top: 0;
-    left: 0;
-    width: 100%;
     height: 200px;
   }
 
-  .card {
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .multiple {
-    width: 300px;
-  }
-  .single {
-    max-width: 800px;
-    height: 400px;
-    object-fit: contain;
-  }
-
   .singleText {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+  }
+
+  .multipleText {
+    margin-top: 1rem;
   }
 
   .destroyed {
@@ -76,19 +59,20 @@
     color: black;
   }
 
-  img {
+  .image {
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 0.5rem;
   }
 
-  .title {
-    margin-top: 0.4rem;
+  .single {
+    max-width: 800px;
+    height: 400px;
+    object-fit: contain;
   }
 
   .anchor {
     text-decoration: none;
-    color: #fff;
   }
 </style>

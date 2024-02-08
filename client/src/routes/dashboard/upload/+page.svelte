@@ -76,7 +76,7 @@
   onMount(async () => {})
 </script>
 
-<div class="container">
+<div class="container-fluid p-0 m-0">
   <Sidebar />
   <div class="content">
     <h3>Upload an Image:</h3>

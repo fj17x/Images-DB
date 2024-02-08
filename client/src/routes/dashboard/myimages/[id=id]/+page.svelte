@@ -106,23 +106,23 @@
   }
 </script>
 
-<div class="container">
+<div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content {image === undefined ? 'none-found' : ''}">
+  <div class="content pt-4 {image === undefined ? 'none-found' : ''}">
     {#await fetchImageWithId()}
       <div class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
       </div>
     {:then}
-      <div class="main-card">
+      <div class="header pb-3">
+        <h2>Image ID: {image.id}</h2>
+        <div>
+          <button class="btn top-button delete text-white" on:click={handleDelete}>Delete</button>
+          <button class="btn top-button edit text-white" on:click={() => (showEditImageModal = true)}>Edit</button>
+        </div>
+      </div>
+      <div class="main-card p-4">
         {#if image}
-          <div class="header">
-            <h3>Image ID: {image.id}</h3>
-            <div>
-              <button class="top-button edit" on:click={() => (showEditImageModal = true)}>Edit</button>
-              <button class="top-button delete" on:click={handleDelete}>Delete</button>
-            </div>
-          </div>
           <FullImageCard
             title={image.title}
             description={image.description}
@@ -181,18 +181,6 @@
     width: 100%;
   }
 
-  .top-button {
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .top-button:hover {
-    transform: scale(1.05);
-  }
-
   .edit {
     background-color: rgb(35, 107, 190);
   }
@@ -206,24 +194,21 @@
     justify-content: space-between;
   }
 
-  .container {
-    display: flex;
-    background-color: rgb(254, 252, 252);
-  }
-
   .content {
     margin-left: 14vw;
     flex: 1;
     padding: 0px 2rem;
+    font-weight: 300;
   }
 
   .main-card {
     background-color: white;
-    font-family: "Poppins", sans-serif;
-    font-weight: 300;
     border-radius: 0.8rem;
     box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 1rem 2rem 2rem 2rem;
-    margin: 2rem 0rem;
+    padding: 1rem 2remrgb (26, 26, 26) 2rem;
+  }
+
+  .top-button:hover {
+    transform: scale(1.05);
   }
 </style>

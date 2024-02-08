@@ -56,7 +56,7 @@
       {#if updatedAt !== createdAt}
         <div>
           <p class="owner-details">Owner ID : {ownerId}</p>
-          <p class="owner-details">Owner Name : {ownerUserName}</p>
+          <p class="owner-details text-capitalize">Owner Name : {ownerUserName}</p>
         </div>
       {/if}
     {/if}
