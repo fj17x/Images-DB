@@ -3,7 +3,6 @@
   export let url,
     title,
     description,
-    id,
     isFlagged,
     destroyTime,
     tags = [],

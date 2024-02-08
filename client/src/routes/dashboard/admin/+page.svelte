@@ -125,7 +125,7 @@
   }
 
   const changeResultsPerPage = async () => {
-    resultsPerPage = customResultsPerPage
+    resultsPerPage = customResultsPerPage > 0 ? customResultsPerPage : 10
     if (clickedBox === "users") {
       await fetchUsersOrImages()
     } else if (clickedBox === "images") {
@@ -329,7 +329,9 @@
     <br />
     <div class="pagination">
       <div class="custom-div">
-        <label for="custom" class="custom-label">Search page number:</label>
+        <label for="custom" class="custom-label"
+          >Search page number(MAX:{Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
+        </label>
         <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
         <button on:click={toCustomPage} class="custom-button">Go</button>
       </div>
@@ -361,7 +363,7 @@
         >
       </div>
       <div class="custom-div">
-        <label for="custom" class="custom-label">Results per page:</label>
+        <label for="custom" class="custom-label">Results per page(CURRENT: {resultsPerPage}):</label>
         <input type="number" class="custom-input" name="custom" bind:value={customResultsPerPage} min="1" />
         <button on:click={changeResultsPerPage} class="custom-button">Go</button>
       </div>

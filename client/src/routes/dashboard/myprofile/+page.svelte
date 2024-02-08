@@ -5,7 +5,6 @@
   import EditProfileModal from "$lib/components/EditProfileModal.svelte"
   import { goto } from "$app/navigation"
   import { userDetails } from "../../../stores/userDetails.js"
-  import { onMount } from "svelte"
 
   let showChoiceModal = false
   let choiceModalOptions = {}
@@ -106,7 +105,7 @@
       alertModalOptions.type = "success"
       showAlertModal = true
       userDetails.update((user) => {
-        return { ...user, ...data }
+        return { ...user, ...data, updatedAt: formatDate(Date.now()) }
       })
     } else {
       alertModalOptions.header = "Could not update"
@@ -115,8 +114,6 @@
       showAlertModal = true
     }
   }
-
-  onMount(() => {})
 </script>
 
 <div class="container">
