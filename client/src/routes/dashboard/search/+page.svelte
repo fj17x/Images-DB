@@ -100,19 +100,22 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="contents">
-    <div class="content">
+  <div class="d-flex align-items-center flex-column pt-2">
+    <div class="content my-3">
       <h3>Search for an image using ID:</h3>
 
       <div class="main-card">
-        <form class="card-form" on:submit|preventDefault={handleSearchSingle}>
+        <form
+          class="card-form d-flex justify-content-center align-items-between flex-column text-white"
+          on:submit|preventDefault={handleSearchSingle}
+        >
           <span class="input-normal">
             <span>
               <label for="id">Image ID*:</label>
               <!-- svelte-ignore a11y-autofocus -->
-              <input autofocus type="number" name="id" bind:value={idForSimple} required />
+              <input autofocus type="number" class="form-control" name="id" bind:value={idForSimple} required />
             </span>
-            <button class="confirm-button" type="submit">Search</button>
+            <button class="btn text-white confirm-button" type="submit">Search</button>
           </span>
         </form>
       </div>
@@ -124,13 +127,11 @@
           <div class="grid">
             <div class="grid-item">
               <label for="limit">Limit:</label>
-              <br />
-              <input type="number" name="limit" bind:value={limit} required />
+              <input type="number" name="limit" class="form-control" bind:value={limit} required />
             </div>
             <div class="grid-item xx">
               <label for="sortby">Sort By:</label>
-              <br />
-              <select name="sortby" id="sortby" bind:value={sortBy}>
+              <select name="sortby" id="sortby" class="form-select" bind:value={sortBy}>
                 <option value="id">id</option>
                 <option value="url">url</option>
                 <option value="description">description</option>
@@ -140,44 +141,39 @@
             </div>
             <div class="grid-item">
               <label for="offset">Offset:</label>
-              <br />
-              <input type="number" name="offset" bind:value={offset} required />
+              <input type="number" name="offset" class="form-control" bind:value={offset} required />
             </div>
             <div class="grid-item">
               <label for="sortorder">Sort Order:</label>
-              <br />
-              <select name="sortorder" id="sortorder" bind:value={sortOrder}>
+              <select name="sortorder" id="sortorder" class="form-select" bind:value={sortOrder}>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
             </div>
             <div class="grid-item">
               <label for="tag">Tags:</label>
-              <br />
 
               <div class="tag-input">
                 <p class="left"></p>
-                <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+                <input type="text" name="tag" id="tag" class="form-control" bind:value={toAddTag} />
                 <p class="right"></p>
-                <button type="button" class="submit-button" on:click={addTag}>Add</button>
+                <button type="button" class="btn tag-button text-white" on:click={addTag}>Add</button>
               </div>
               <br />
-              {#each tags as tag}
-                <span class="tag-container">
-                  <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+              <span>
+                {#each tags as tag}
+                  <button type="button" class="btn tag-toggle" on:click={() => removeTag(tag)}>
                     {tag}
                     <span class="remove-tag">
                       <i class="fa fa-times"></i>
                     </span>
                   </button>
                   &nbsp;
-                </span>
-              {/each}
-              <br />
-              <br />
+                {/each}</span
+              >
             </div>
             <div class="grid-item">
-              <button class="confirm-button" type="submit">Search</button>
+              <button class="btn text-white confirm-button" type="submit">Search</button>
             </div>
           </div>
         </form>
@@ -207,9 +203,6 @@
   }
   #sortby,
   #sortorder {
-    width: 10rem;
-    padding: 0.1rem;
-    font-size: 1rem;
     border: 1px solid #999;
     border-radius: 0.5rem;
     cursor: pointer;
@@ -217,21 +210,11 @@
     color: #333;
   }
 
-  .container {
-    display: flex;
-  }
-
   .content {
     flex: 1;
     padding: 0px 2rem;
     margin-left: 14vw;
     width: 75vw;
-  }
-
-  .contents {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
   }
 
   .input-normal {
@@ -245,15 +228,6 @@
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem 2rem 1rem 2rem;
-  }
-
-  .card-form {
-    display: flex;
-    justify-content: center;
-    align-items: space-between;
-    flex-direction: column;
-    color: white;
-    padding: 0 2.5rem;
   }
 
   .grid {
@@ -306,36 +280,19 @@
     max-width: 10%;
   }
 
-  .submit-button {
+  .tag-button {
     background-color: #172740;
     border-radius: 0.3rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
-    width: 25%;
   }
 
-  .submit-button:hover {
+  .tag-button:hover {
     transform: scale(1.05);
   }
   .confirm-button {
-    font-size: 1.2rem;
     background-color: #309329;
-    border-radius: 0.3rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
   }
 
   .confirm-button:hover {
     transform: scale(1.05);
-  }
-
-  @media screen and (max-width: 800px) {
-    .submit-button {
-      padding: 0rem;
-    }
   }
 </style>
