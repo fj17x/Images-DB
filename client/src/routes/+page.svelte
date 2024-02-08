@@ -40,21 +40,19 @@
   }
 </script>
 
-<div class="hero">
+<div class="hero text-white vh-100">
   <div class="overlay"></div>
-  <div class="hero-content">
-    <h1><span class="title-light">Images</span><span class="title-strong">DB</span></h1>
+  <div class="container position-relative z-index-1">
+    <h2 class="hero-text"><span class="title-light fw-light">Images</span><span class="title-strong fw-bold">DB</span></h2>
     <p class="text">Share your life's snapshots.</p>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={handleRegister} class="get-started-btn">{signedIn ? "Continue" : "Create an account"}</div>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+
+    <button on:click={handleRegister} class="btn get-started-btn">{signedIn ? "Continue" : "Create an account"}</button>
     {#if !signedIn}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div on:click={handleSignIn} class="have-account">Already have an account?</div>
+      <div on:click={handleSignIn} class="have-account" role="button" tabindex="0">Already have an account?</div>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div on:click={() => (showChoiceModal = true)} class="have-account">Logout</div>
+      <div on:click={() => (showChoiceModal = true)} class="have-account" role="button" tabindex="0">Logout</div>
     {/if}
   </div>
 </div>
@@ -64,11 +62,18 @@
 {/if}
 
 <style>
+  .get-started-btn {
+    padding: 1rem 1.8rem;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: #1baa9e;
+    border-radius: 0.5rem;
+    transition: transform 0.25s ease-in-out;
+  }
+
   .hero {
-    height: 100vh;
     position: relative;
     text-align: center;
-    color: #fff;
     background: url("/background.jpg") center/cover no-repeat;
     overflow: hidden;
     display: flex;
@@ -85,43 +90,16 @@
     background: rgba(0, 0, 0, 0.4);
   }
 
-  .hero-content {
-    position: relative;
-    z-index: 1;
-  }
-
-  .title-light {
-    font-weight: lighter;
-  }
-  .title-strong {
-    font-weight: bold;
-  }
-
-  .hero h1 {
+  .hero-text {
     font-size: 4.5rem;
-    margin: 0px auto;
   }
 
   .text {
     font-size: 1.8rem;
     margin-top: 0px;
-    margin-bottom: 3.4rem;
+    margin-bottom: 1.8rem;
     font-family: cursive;
     letter-spacing: -2px;
-  }
-
-  .get-started-btn {
-    display: inline-block;
-    padding: 1rem 1.8rem;
-    font-size: 1.5rem;
-    text-decoration: none;
-    color: #fff;
-    background-color: #1baa9e;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition:
-      background-color 0.3s ease-in-out,
-      transform 0.3s ease-in-out;
   }
 
   .get-started-btn:hover {
@@ -133,7 +111,6 @@
     text-decoration: none;
     display: block;
     margin-top: 0.7rem;
-    color: white;
     font-size: 0.9rem;
     font-weight: lighter;
     cursor: pointer;

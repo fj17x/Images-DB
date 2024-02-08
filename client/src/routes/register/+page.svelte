@@ -187,10 +187,6 @@
     text-decoration: none;
   }
 
-  a:hover {
-    text-decoration: underline;
-  }
-
   button {
     color: #fff;
     background: #85c482;
