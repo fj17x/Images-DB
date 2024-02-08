@@ -118,48 +118,54 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content">
+  <div class="content d-flex align-items-center flex-column pt-5">
     <h3>Your Profile:</h3>
-    <div class="main-card">
+    <div class="main-card p-4 mt-2">
       {#if $userDetails.id}
-        <div class="profile-info">
-          <span class="bar">
-            <p class="property">User ID:</p>
-            <p>{$userDetails.id}</p>
-          </span>
+        <div class="d-flex flex-column">
+          <div class="bar">
+            <p class="fw-bold m-0">User ID:</p>
+            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">{$userDetails.id}</p>
+          </div>
           <hr />
-          <span class="bar">
-            <p class="property">Username:</p>
-            <p>{$userDetails.userName}</p>
-          </span>
+          <div class="bar">
+            <p class="fw-bold m-0">Username:</p>
+            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">{$userDetails.userName}</p>
+          </div>
           <hr />
-          <span class="bar">
-            <p class="property">Profile created on:</p>
-            <p>{formatDate($userDetails.createdAt)}</p>
-          </span>
+          <div class="bar">
+            <p class="fw-bold m-0">Profile created on:</p>
+            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+              {formatDate($userDetails.createdAt)}
+            </p>
+          </div>
           <hr />
-          <span class="bar">
-            <p class="property">Profile last modified on:</p>
-            <p>{formatDate($userDetails.updatedAt)}</p>
-          </span>
+          <div class="bar">
+            <p class="fw-bold m-0">Profile last modified on:</p>
+            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+              {formatDate($userDetails.updatedAt)}
+            </p>
+          </div>
           <hr />
-          <span class="bar">
-            <p class="property">Images uploaded:</p>
-            <p>{$userDetails?.imagesUploaded?.length}</p>
-          </span>
+          <div class="bar">
+            <p class="fw-bold m-0">Images uploaded:</p>
+            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+              {$userDetails?.imagesUploaded?.length}
+            </p>
+          </div>
         </div>
       {:else}
-        <div class="loading-spinner">
+        <div class="loading-spinner d-flex justify-content-center align-items-center text-dark">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
       {/if}
     </div>
     <br />
     <br />
-    <div class="options">
-      <button class="submit-button delete" on:click={handleDeleteAccount}>Delete account</button>
-      <button class="submit-button delete" on:click={handleDeleteAllImages}>Delete all your images </button>
-      <button class="submit-button edit" on:click={() => (showEditProfileModal = true)}>Update profile </button>
+    <div class="options d-flex justify-content-around align-items-center gap-2">
+      <button class="btn delete text-white" on:click={handleDeleteAccount}>Delete account</button>
+      <button class="btn delete text-white" on:click={handleDeleteAllImages}>Delete all your images </button>
+      <button class="btn edit text-white" on:click={() => (showEditProfileModal = true)}>Update profile </button>
     </div>
   </div>
 </div>
@@ -176,25 +182,15 @@
 
 <style>
   .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
     top: 0;
     left: 0;
     width: 100%;
     height: 200px;
   }
-  .container {
-    display: flex;
-    background-color: rgb(254, 252, 252);
-  }
-
-  .options {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 10px;
+  .content {
+    flex: 1;
+    margin-left: 14vw;
+    width: 75vw;
   }
 
   .delete {
@@ -204,28 +200,20 @@
     background-color: rgb(40, 124, 34);
   }
 
-  .submit-button {
-    font-size: 0.85rem;
-    border-radius: 0.3rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
-  }
-  .submit-button:hover {
-    transform: scale(1.05);
+  .btn:hover {
+    transform: scale(1.04);
   }
 
-  .property {
-    font-weight: bold;
+  .result {
     color: rgb(53, 67, 37);
-    margin: 0;
   }
+
   .bar {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
   }
 
   .content {
@@ -238,20 +226,7 @@
     background-color: #1ca496;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
     color: white;
-  }
-
-  hr {
-    border: 0;
-    width: 100%;
-    background-color: rgb(168, 162, 162);
-    height: 1px;
-  }
-
-  .profile-info {
-    display: flex;
-    flex-direction: column;
   }
 
   @media screen and (max-width: 786px) {
