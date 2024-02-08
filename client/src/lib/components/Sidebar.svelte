@@ -36,37 +36,76 @@
 
 <div class="sidebar">
   {#if $userDetails}
-    <div class="option">
-      <i class="fa fa-home fa-lg" aria-hidden="true"></i><a
+    <div class="d-flex text-white justify-content-center align-items-center flex-column text-center">
+      <i class="fa fa-home fa-xl mb-2" aria-hidden="true"></i><a
         href="/"
-        class="sidebar-text {$page.route.id === '/' ? 'active' : ''}"
+        class="sidebar-text text-white d-flex justify-content-center align-items-center {$page.route.id === '/' ? 'active' : ''}"
       >
         <p>Home</p></a
       >
     </div>
-    <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">
-      <i class="fa fa-images fa-lg" aria-hidden="true"></i><a href="/dashboard/myimages" class="sidebar-text"><p>My Images</p></a>
-    </div>
-    <div class="option {$page.route.id.startsWith('/dashboard/upload') ? 'active' : ''}">
-      <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i><a href="/dashboard/upload" class="sidebar-text"><p>Upload</p></a
+    <div
+      class="d-flex text-white justify-content-center align-items-center flex-column text-center {$page.route.id.startsWith(
+        '/dashboard/myimages'
+      )
+        ? 'active'
+        : ''}"
+    >
+      <i class="fa fa-images fa-xl mb-2" aria-hidden="true"></i><a
+        href="/dashboard/myimages"
+        class="sidebar-text text-white d-flex justify-content-center align-items-center"><p>My Images</p></a
       >
     </div>
-    <div class="option">
-      <i class="fa fa-search fa-lg {$page.route.id.startsWith('/dashboard/search') ? 'active' : ''}" aria-hidden="true"></i><a
+    <div
+      class="d-flex text-white justify-content-center align-items-center flex-column text-center {$page.route.id.startsWith(
+        '/dashboard/upload'
+      )
+        ? 'active'
+        : ''}"
+    >
+      <i class="fa fa-cloud-upload fa-xl mb-2" aria-hidden="true"></i><a
+        href="/dashboard/upload"
+        class="sidebar-text text-white d-flex justify-content-center align-items-center"><p>Upload</p></a
+      >
+    </div>
+    <div
+      class="d-flex text-white justify-content-center align-items-center flex-column text-center {$page.route.id.startsWith(
+        '/dashboard/search'
+      )
+        ? 'active'
+        : ''}"
+    >
+      <i class="fa fa-search fa-xl mb-2" aria-hidden="true"></i><a
         href="/dashboard/search"
-        class="sidebar-text"><p>Search</p></a
+        class="sidebar-text text-white d-flex justify-content-center align-items-center"><p>Search</p></a
       >
     </div>
-    <div class="option {$page.route.id.startsWith('/dashboard/myprofile') ? 'active' : ''}">
-      <i class="fa fa-user fa-lg" aria-hidden="true"></i><a href="/dashboard/myprofile" class="sidebar-text"
+    <div
+      class="d-flex text-white justify-content-center align-items-center flex-column text-center {$page.route.id.startsWith(
+        '/dashboard/myprofile'
+      )
+        ? 'active'
+        : ''}"
+    >
+      <i class="fa fa-user fa-xl mb-2" aria-hidden="true"></i><a
+        href="/dashboard/myprofile"
+        class="sidebar-text text-white d-flex justify-content-center align-items-center"
         ><p>My Profile</p>
         <br />
       </a>
     </div>
 
     {#if $userDetails.isAdmin}
-      <div class="option {$page.route.id.startsWith('/dashboard/admin') ? 'active' : ''}">
-        <i class="fa-solid fa-gears"></i><a href="/dashboard/admin" class="sidebar-text"
+      <div
+        class="d-flex text-white justify-content-center align-items-center flex-column text-center {$page.route.id.startsWith(
+          '/dashboard/admin'
+        )
+          ? 'active'
+          : ''}"
+      >
+        <i class="fa-solid fa-gears fa-xl mb-2"></i><a
+          href="/dashboard/admin"
+          class="sidebar-text text-white d-flex justify-content-center align-items-center"
           ><p class="admin-text">Admin Panel</p>
           <br />
         </a>
@@ -74,8 +113,11 @@
     {/if}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="option logout" on:click={() => (showChoiceModal = true)}>
-      <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+    <div
+      class="d-flex text-white justify-content-center align-items-center flex-column text-center logout"
+      on:click={() => (showChoiceModal = true)}
+    >
+      <i class="fa fa-sign-out fa-lg fa-xl mb-2" aria-hidden="true"></i>
       <p>Log out</p>
     </div>
   {/if}
@@ -89,15 +131,6 @@
 </div>
 
 <style>
-  .option {
-    display: flex;
-    color: #fff;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-  }
-
   .sidebar {
     width: 15rem;
     background-color: #172740;
@@ -113,11 +146,7 @@
 
   .sidebar-text {
     font-size: 1rem;
-    color: #fff;
     text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .logout {
