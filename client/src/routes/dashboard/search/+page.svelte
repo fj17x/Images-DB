@@ -102,7 +102,7 @@
   <Sidebar />
   <div class="d-flex align-items-center flex-column pt-2">
     <div class="content my-3">
-      <h3>Search for an image using ID:</h3>
+      <h4>Search for an image using ID:</h4>
 
       <div class="main-card">
         <form
@@ -121,7 +121,7 @@
       </div>
     </div>
     <div class="content">
-      <h3>Advanced search:</h3>
+      <h4>Advanced search:</h4>
       <div class="main-card">
         <form on:submit|preventDefault={handleSearchAdvanced}>
           <div class="grid">

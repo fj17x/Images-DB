@@ -284,11 +284,11 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="contents">
-    <div class="content">
+  <div class="d-flex align-items-center flex-column pt-2">
+    <div class="content my-3">
       <h3>Admin Panel</h3>
       <div class="main-card">
-        <div class="statistics">
+        <div class="d-flex justify-content-around align-items-center gap-3">
           <button class="box blue {clickedBox === 'users' ? 'selected' : ''}" on:click={() => handleClick("users")}>
             <i class="fa-solid fa-users icon"></i>
             <p class="total-info">Total users</p>
@@ -299,14 +299,17 @@
             <p class="total-info">Total images</p>
             <p class="total-num">{totalImages || " "}</p>
           </button>
-          <div class="main-inputs">
+          <div class="pl-1">
             <div class="small-box">
               <p class="total-info">Enter User ID:</p>
               <div class="edit-div">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
                 <!-- <button class="edit-button">Edit</button> -->
-                <button class="edit-button delete-button" on:click={() => handleUserDeletion(true)}>Delete</button>
-                <button class="edit-button restore-button" on:click={() => handleUserDeletion(false)}>Restore</button>
+
+                <button class="btn edit-button delete-button text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
+                <button class="btn edit-button restore-button text-white" on:click={() => handleUserDeletion(false)}
+                  >Restore</button
+                >
               </div>
             </div>
             <div class="small-box">
@@ -314,58 +317,61 @@
               <div class="edit-div">
                 <input type="text" bind:value={imageIdGiven} class="edit-input" />
                 <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
-                <button class="edit-button flag-button" on:click={() => handleImageFlagging(true)}>Flag</button>
-                <button class="edit-button unflag-button" on:click={() => handleImageFlagging(false)}>Unflag</button>
-                <button class="edit-button delete-button" on:click={() => handleImageDeletion(true)}>Delete</button>
-                <button class="edit-button restore-button" on:click={() => handleImageDeletion(false)}>Restore</button>
+                <button class="btn edit-button flag-button text-white" on:click={() => handleImageFlagging(true)}>Flag</button>
+                <button class="btn edit-button unflag-button text-white" on:click={() => handleImageFlagging(false)}
+                  >Unflag</button
+                >
+                <button class="btn edit-button delete-button text-white" on:click={() => handleImageDeletion(true)}>Delete</button
+                >
+                <button class="btn edit-button restore-button text-white" on:click={() => handleImageDeletion(false)}
+                  >Restore</button
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <br />
-    <br />
-    <br />
-    <div class="pagination">
-      <div class="custom-div">
+
+    <div class="w-75 d-flex align-items-center justify-content-around my-4 gap-2">
+      <div class="d-flex align-items-center justify-content-between flex-column">
         <label for="custom" class="custom-label"
-          >Search page number(MAX:{Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
+          >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
         </label>
         <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
-        <button on:click={toCustomPage} class="custom-button">Go</button>
+        <button on:click={toCustomPage} class="btn custom-button mt-2">Go</button>
       </div>
 
       <div>
         <button
           on:click={toStartPage}
           disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
-          class="custom-button"><i class="fa-solid fa-fast-backward"></i></button
+          class="btn custom-button"><i class="fa-solid fa-fast-backward"></i></button
         >
         <button
           on:click={prevPage}
           disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
-          class="custom-button"><i class="fa-solid fa-backward-step"></i></button
+          class="btn custom-button"><i class="fa-solid fa-backward-step"></i></button
         >
         <span>Page {clickedBox === "images" ? currentPageForImages : currentPageForUsers}</span>
         <button
           on:click={nextPage}
           disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
             totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
-          class="custom-button"
+          class="btn custom-button"
           ><i class="fa-solid fa-forward-step"></i>
         </button>
         <button
           on:click={toEndPage}
           disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
             totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
-          class="custom-button"><i class="fa-solid fa-fast-forward"></i></button
+          class="btn custom-button"><i class="fa-solid fa-fast-forward"></i></button
         >
       </div>
-      <div class="custom-div">
-        <label for="custom" class="custom-label">Results per page(CURRENT: {resultsPerPage}):</label>
+      <div class="d-flex align-items-center justify-content-between flex-column">
+        <label for="custom" class="custom-label">Results per page(CURRENT={resultsPerPage}):</label>
         <input type="number" class="custom-input" name="custom" bind:value={customResultsPerPage} min="1" />
-        <button on:click={changeResultsPerPage} class="custom-button">Go</button>
+        <button on:click={changeResultsPerPage} class="custom-button mt-2">Go</button>
       </div>
     </div>
     <h4>{clickedBox == "images" ? "Images" : "Users"}</h4>
@@ -453,19 +459,6 @@
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 
-  .custom-label {
-    color: grey;
-    font-size: 0.9rem;
-  }
-
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0rem 0 2rem 0;
-    gap: 6rem;
-  }
-
   .custom-button,
   .custom-input {
     margin: 0 5px;
@@ -476,21 +469,9 @@
     cursor: pointer;
   }
 
-  .custom-button:hover {
-    background-color: #eaeaea;
-  }
-
   .custom-input {
     width: 4rem;
     text-align: center;
-  }
-
-  .pagination .custom-div {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
   }
 
   .flag-button {
@@ -522,10 +503,6 @@
     border: 1px solid #ddd;
   }
 
-  .images-table {
-    width: 100%;
-  }
-
   thead {
     background-color: black;
     color: white;
@@ -533,23 +510,8 @@
     text-transform: capitalize;
   }
 
-  .main-inputs {
-    padding-left: 0.7rem;
-  }
-
-  @media screen and (max-width: 1150px) {
-    .statistics {
-      flex-direction: column;
-    }
-
-    .box {
-      width: 100%;
-    }
-
-    .small-box {
-      display: block;
-      width: 100%;
-    }
+  .images-table {
+    width: 100%;
   }
 
   .even-row {
@@ -563,15 +525,6 @@
   .edit-div {
     display: flex;
     gap: 10px;
-  }
-
-  .edit-button {
-    font-size: 0.6rem;
-    border-radius: 0.3rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
   }
 
   .edit-input {
@@ -601,13 +554,6 @@
     color: #54697b;
   }
 
-  .statistics {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 10px;
-  }
-
   .box {
     display: flex;
     justify-content: space-evenly;
@@ -634,10 +580,6 @@
     background-color: white;
   }
 
-  .container {
-    display: flex;
-  }
-
   .content {
     flex: 1;
     padding: 0px 0.5rem;
@@ -645,17 +587,14 @@
     width: 86vw;
   }
 
-  .contents {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin: 0px 0px 2rem 0;
-  }
-
   .main-card {
     background-color: #ebebeb;
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem 0.5rem 3rem 0.5rem;
+  }
+
+  .custom-button:hover {
+    background-color: #eaeaea;
   }
 </style>
