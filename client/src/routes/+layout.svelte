@@ -1,6 +1,7 @@
 <script>
   import { userDetails } from "../stores/userDetails.js"
   import { onMount } from "svelte"
+  import "bootstrap/dist/css/bootstrap.min.css"
   import "@fortawesome/fontawesome-free/css/all.min.css"
 
   const checkSignedIn = async () => {
