@@ -60,24 +60,40 @@
   }
 </script>
 
-<div class="container">
-  <div class="form-content">
+<div class="outer-section container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <div class="form-content bg-white p-4">
     <div class="login-form">
-      <p class="title">Register</p>
+      <p class="title mt-0 fw-semibold">Register</p>
       <form on:submit|preventDefault={handleRegister}>
         <div class="input-boxes">
           <div class="input-box">
             <i class="fas fa-user"></i>
             <!-- svelte-ignore a11y-autofocus -->
-            <input autofocus type="text" placeholder="Enter your username" name="userName" bind:value={userName} required />
-          </div>
-          <div class="input-box">
-            <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Enter your password" name="password" bind:value={password} required />
+            <input
+              class="input-field"
+              autofocus
+              type="text"
+              placeholder="Enter your username"
+              name="userName"
+              bind:value={userName}
+              required
+            />
           </div>
           <div class="input-box">
             <i class="fas fa-lock"></i>
             <input
+              class="input-field"
+              type="password"
+              placeholder="Enter your password"
+              name="password"
+              bind:value={password}
+              required
+            />
+          </div>
+          <div class="input-box">
+            <i class="fas fa-lock"></i>
+            <input
+              class="input-field"
               type="password"
               placeholder="Confirm your password"
               name="confirmPassword"
@@ -85,8 +101,8 @@
               required
             />
           </div>
-          <div class="submit-button">
-            <button type="submit">
+          <div class="submit-div">
+            <button type="submit" class="btn submit-button w-100 p-2 text-white">
               {#if isLoading}
                 <i class="fas fa-spinner fa-spin"></i>
               {:else}
@@ -94,8 +110,8 @@
               {/if}</button
             >
           </div>
-          <div class="text"><a href="/signin">Already registered? Sign in here!</a></div>
-          <div class="text"><a href="/"> Go Back</a></div>
+          <div class="text"><a href="/signin" class="links">Already registered? Sign in here!</a></div>
+          <div class="text"><a href="/" class="links"> Go Back</a></div>
         </div>
       </form>
     </div>
@@ -106,49 +122,21 @@
 {/if}
 
 <style>
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  .outer-section {
     animation: continuousBackground 4.5s infinite alternate;
   }
 
-  @keyframes continuousBackground {
-    0% {
-      background-color: #198f94;
-    }
-    100% {
-      background-color: #19af94;
-    }
-  }
-
   .title {
-    margin-top: 0px;
     font-size: 1.5rem;
-    font-weight: 500;
     color: #333;
-    margin-bottom: 2rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
     white-space: nowrap;
     animation: typewriter 0.5s steps(20);
-  }
-
-  @keyframes typewriter {
-    from {
-      width: 0;
-    }
-    to {
-      width: 100%;
-    }
   }
 
   .form-content {
     max-width: 500px;
     width: 100%;
-    background: #fff;
-    padding: 40px 30px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     border-radius: 1%;
   }
@@ -159,51 +147,62 @@
     margin: 1.5rem 1rem;
   }
 
-  input {
+  .input-field {
     width: 100%;
     outline: none;
     border: none;
     padding: 10px;
     font-size: 0.9rem;
-    font-weight: 500;
     border-bottom: 2px solid rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
   }
 
-  input:focus,
-  input:valid {
+  .input-field {
     border-color: #199f94;
   }
 
   .text {
     font-size: 14px;
     font-weight: 500;
-    color: #333;
     text-align: center;
     margin-top: 1rem;
-  }
-
-  a {
     text-decoration: none;
   }
 
-  button {
-    color: #fff;
-    background: #85c482;
-    border-radius: 1%;
-    padding: 0.7rem;
-    cursor: pointer;
-    transition: all 1s ease;
-    border: none;
-    width: 100%;
+  .links {
+    text-decoration: none;
   }
 
-  .submit-button:hover {
+  .submit-button {
+    background: #85c482;
+    border-radius: 1%;
+    transition: all 1s ease;
+    border: none;
+  }
+
+  .submit-div:hover {
     background: green;
     transform: scale(1.01);
   }
-  .submit-button:active {
+  .submit-div:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
+
+  @keyframes continuousBackground {
+    0% {
+      background-color: #198f94;
+    }
+    100% {
+      background-color: #19af94;
+    }
+  }
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
   }
 </style>

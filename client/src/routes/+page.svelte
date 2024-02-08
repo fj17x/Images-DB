@@ -102,11 +102,6 @@
     letter-spacing: -2px;
   }
 
-  .get-started-btn:hover {
-    background-color: #1dcfc0;
-    transform: scale(1.05);
-  }
-
   .have-account {
     text-decoration: none;
     display: block;
@@ -116,6 +111,10 @@
     cursor: pointer;
   }
 
+  .get-started-btn:hover {
+    background-color: #1dcfc0;
+    transform: scale(1.05);
+  }
   .have-account:hover {
     text-decoration: underline;
   }
