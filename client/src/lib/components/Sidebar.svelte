@@ -37,8 +37,11 @@
 <div class="sidebar">
   {#if $userDetails}
     <div class="option">
-      <i class="fa fa-home fa-lg" aria-hidden="true"></i><a href="/" class="sidebar-text {$page.route.id === '/' ? 'active' : ''}"
-        ><p>Home</p></a
+      <i class="fa fa-home fa-lg" aria-hidden="true"></i><a
+        href="/"
+        class="sidebar-text {$page.route.id === '/' ? 'active' : ''}"
+      >
+        <p>Home</p></a
       >
     </div>
     <div class="option {$page.route.id.startsWith('/dashboard/myimages') ? 'active' : ''}">

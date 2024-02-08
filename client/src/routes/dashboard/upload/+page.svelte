@@ -78,31 +78,34 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content">
-    <h3>Upload an Image:</h3>
+  <div class="content pt-4">
+    <h3 class="pb-3">Upload an Image:</h3>
 
-    <div class="main-card">
-      <form class="card-form" on:submit|preventDefault={handleUpload}>
+    <div class="main-card px-4 py-3">
+      <form
+        class="text-white d-flex flex-column justify-content-center align-items-between pb-3"
+        on:submit|preventDefault={handleUpload}
+      >
         <span>
           <label for="title">Title*:</label>
           <br />
           <!-- svelte-ignore a11y-autofocus -->
-          <input autofocus type="text" name="title" class="normal-input" bind:value={title} required /></span
+          <input autofocus type="text" name="title" class="normal-input form-control" bind:value={title} required /></span
         >
         <span>
           <label for="title">Description:</label>
           <br />
-          <textarea rows="6" cols="35" class="normal-input" bind:value={description} name="description" /></span
+          <textarea class="normal-input form-control" bind:value={description} name="description" /></span
         >
         <span>
           <label for="title">Tags:</label>
           <br />
           <input type="text" name="tag" class="normal-input" bind:value={toAddTag} id="tag" />
-          <button class="submit-button tag-button" type="button" on:click={addTag}>Add tag</button>
+          <button class="btn tag-button text-white p-2" type="button" on:click={addTag}>Add tag</button>
           <br />
           {#each tags as tag}
             <span class="tag-container">
-              <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+              <button type="btn button" class="tag-toggle" on:click={() => removeTag(tag)}>
                 {tag}
                 <span class="remove-tag">
                   <i class="fa fa-times"></i>
@@ -114,10 +117,10 @@
           <br />
         </span>
         <br />
-        <div class="upload-options">
+        <div class="upload-options d-flex justify-content-around align-items-center">
           <div class="file-div">
-            <label for="file">Upload File:</label>
-            <input class="file-input" type="file" name="file" bind:value={uploadedFile} />
+            <!-- <label for="file">Upload File:</label> -->
+            <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
           </div>
           <div class="or-separator">OR</div>
           <div class="url-div">
@@ -127,8 +130,8 @@
         </div>
         <br />
 
-        <div class="confirm-div">
-          <button class="submit-button confirm" type="submit">Confirm</button>
+        <div class="d-flex justify-content-center align-items-center">
+          <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
         </div>
       </form>
     </div>
@@ -140,44 +143,25 @@
 {/if}
 
 <style>
-  .upload-options {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 15px;
-  }
-
-  .confirm-div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .main-card {
+    background-color: #1ca496;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
   }
 
   .confirm {
     background-color: #309329;
-    border-radius: 0.3rem;
-    font-size: 0.85rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
-    width: 50%;
   }
 
   .tag-button {
     background-color: #172740;
-    border-radius: 0.3rem;
     font-size: 0.85rem;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem 1rem;
   }
 
   .or-separator {
     color: #e5e0e0;
   }
+
   .tag-toggle {
     background-color: rgb(207, 59, 59);
     border-radius: 10px;
@@ -186,31 +170,12 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  .container {
-    display: flex;
-  }
 
   .content {
     flex: 1;
-    padding: 0px 2rem;
+    padding: 0px 0rem 0px 2rem;
     margin-left: 14vw;
     width: 75vw;
-  }
-
-  .main-card {
-    background-color: #1ca496;
-    border-radius: 0.8rem;
-    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .card-form {
-    display: flex;
-    justify-content: center;
-    align-items: space-between;
-    flex-direction: column;
-    color: white;
   }
 
   .normal-input {
@@ -219,26 +184,14 @@
     border: 1px solid #ccc;
     border-radius: 0.3rem;
   }
-  .url-input,
-  .file-input {
+  .url-input {
     border: 1px solid #ccc;
     border-radius: 0.3rem;
     padding: 0.5rem;
   }
 
-  .submit-button:hover {
+  .btn:hover {
     transform: scale(1.05);
-  }
-
-  textarea {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    max-width: 800px;
-    min-width: 150px;
-    max-height: 300px;
-    max-height: 300px;
-    border: 1px solid #ccc;
-    border-radius: 0.3rem;
   }
 
   @media screen and (max-width: 800px) {
