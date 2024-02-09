@@ -26,6 +26,11 @@
   let imageIdGiven
   let userIdGiven
 
+  let searchColumn = "id"
+  let searchQuery = ""
+  let columns = []
+  let filteredData = []
+
   const handleScroll = async (entity) => {
     console.log("🚀 ~ handleScroll ~ entity:", entity)
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 70) {
@@ -275,16 +280,42 @@
 
   onMount(async () => {
     await fetchUsersOrImages()
-
     await checkWhetherAdmin()
   })
+
+  $: {
+    if (clickedBox === "users" && users.length > 0) {
+      if (searchQuery) {
+        filteredData = users.filter((item) => {
+          const columnValue = item[searchColumn]?.toString().toLowerCase() ?? []
+          return columnValue.includes(searchQuery.toLowerCase())
+        })
+        columns = Object.keys(users[0])
+      } else {
+        filteredData = users
+        columns = Object.keys(users[0])
+      }
+    } else if (clickedBox === "images" && images.length > 0) {
+      if (searchQuery) {
+        filteredData = images.filter((item) => {
+          const columnValue = item[searchColumn]?.toString().toLowerCase() ?? []
+          return columnValue.includes(searchQuery.toLowerCase())
+        })
+        columns = Object.keys(images[0])
+      } else {
+        filteredData = images
+        columns = Object.keys(images[0])
+      }
+    }
+  }
 </script>
 
 <svelte:window on:scroll={handleScroll} />
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="d-flex align-items-center flex-column pt-2 pb-4">
+
+  <div class="d-flex align-items-center flex-column pt-2 pb-5">
     <div class="content my-3">
       <h3>Admin Panel</h3>
       <div class="main-card">
@@ -338,7 +369,7 @@
       </div>
     </div>
 
-    <div class="w-75 d-flex align-items-center justify-content-around my-4 gap-2">
+    <div class="d-flex align-items-center justify-content-around my-4 gap-2">
       <div class="d-flex align-items-center justify-content-between flex-column">
         <label for="custom" class="custom-label"
           >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
@@ -379,14 +410,52 @@
         <button on:click={changeResultsPerPage} class="custom-button mt-2">Go</button>
       </div>
     </div>
-    <h4>{clickedBox == "images" ? "Images" : "Users"}</h4>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div></div>
+      <h4>{clickedBox == "images" ? "Images" : "Users"}</h4>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center mb-3 gap-3">
+      <select bind:value={searchColumn} class="custom-select">
+        {#each columns as column}
+          <option value={column}>{column}</option>
+        {/each}
+      </select>
+      <input type="text" bind:value={searchQuery} placeholder="Search matching..." class="form-control" />
+    </div>
     <div class="content">
-      {#if clickedBox === "images"}
-        <div class="images-table">
+      {#if searchQuery}
+        {#if filteredData.length > 0}
           <table>
             <thead>
               <tr>
-                {#if images}
+                {#each Object.keys(filteredData[0]) as key}
+                  <th>{key}</th>
+                {/each}
+                <div>Nothing found!</div>
+              </tr>
+            </thead>
+            <tbody>
+              {#if filteredData.length > 0}
+                {#each filteredData as item, i}
+                  <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+                    {#each Object.values(item) as value}
+                      <td>{value}</td>
+                    {/each}
+                  </tr>
+                {/each}
+              {/if}
+            </tbody>
+          </table>
+        {:else}
+          <div class="d-flex justify-content-center align-items-center py-4">Nothing found!</div>
+        {/if}
+      {:else if clickedBox === "images"}
+        <div>
+          <table>
+            <thead>
+              <tr>
+                {#if images.length > 0}
                   {#each Object.keys(images[0]) as key}
                     <th>{key}</th>
                   {/each}
@@ -405,9 +474,10 @@
               {/if}
             </tbody>
           </table>
-        </div>{:else}
-        <div class="user-table">
-          <table class="table-head">
+        </div>
+      {:else}
+        <div>
+          <table>
             <thead>
               <tr>
                 {#if users.length > 0}
@@ -492,10 +562,6 @@
     color: white;
     font-family: "Source Sans Pro", sans-serif;
     text-transform: capitalize;
-  }
-
-  .images-table {
-    width: 100%;
   }
 
   .even-row {
