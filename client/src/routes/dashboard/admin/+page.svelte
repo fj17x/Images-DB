@@ -284,17 +284,23 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="d-flex align-items-center flex-column pt-2">
+  <div class="d-flex align-items-center flex-column pt-2 pb-4">
     <div class="content my-3">
       <h3>Admin Panel</h3>
       <div class="main-card">
         <div class="d-flex justify-content-around align-items-center gap-3">
-          <button class="box blue {clickedBox === 'users' ? 'selected' : ''}" on:click={() => handleClick("users")}>
+          <button
+            class="box d-flex justify-evenly align-items-center flex-column blue {clickedBox === 'users' ? 'selected' : ''}"
+            on:click={() => handleClick("users")}
+          >
             <i class="fa-solid fa-users icon"></i>
             <p class="total-info">Total users</p>
             <p class="total-num">{totalUsers || " "}</p>
           </button>
-          <button class="box green {clickedBox === 'images' ? 'selected' : ''}" on:click={() => handleClick("images")}>
+          <button
+            class="box d-flex justify-evenly align-items-center flex-column green {clickedBox === 'images' ? 'selected' : ''}"
+            on:click={() => handleClick("images")}
+          >
             <i class="fa-regular fa-images icon"></i>
             <p class="total-info">Total images</p>
             <p class="total-num">{totalImages || " "}</p>
@@ -302,10 +308,9 @@
           <div class="pl-1">
             <div class="small-box">
               <p class="total-info">Enter User ID:</p>
-              <div class="edit-div">
+              <div class="d-flex gap-2">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
                 <!-- <button class="edit-button">Edit</button> -->
-
                 <button class="btn edit-button delete-button text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
                 <button class="btn edit-button restore-button text-white" on:click={() => handleUserDeletion(false)}
                   >Restore</button
@@ -314,7 +319,7 @@
             </div>
             <div class="small-box">
               <p class="total-info">Enter Image ID:</p>
-              <div class="edit-div">
+              <div class="d-flex gap-2">
                 <input type="text" bind:value={imageIdGiven} class="edit-input" />
                 <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
                 <button class="btn edit-button flag-button text-white" on:click={() => handleImageFlagging(true)}>Flag</button>
@@ -381,36 +386,20 @@
           <table>
             <thead>
               <tr>
-                <th>Image ID</th>
-                <th>Title</th>
-                <th>URL</th>
-                <th>Description</th>
-                <th>Owner ID</th>
-                <th>Tags</th>
-                <th>isFlagged</th>
-                <th>createdAt</th>
-                <th>updatedAt</th>
-                <th>destroyTime</th>
+                {#if images}
+                  {#each Object.keys(images[0]) as key}
+                    <th>{key}</th>
+                  {/each}
+                {/if}
               </tr>
             </thead>
             <tbody>
-              {#if images}
+              {#if images.length > 0}
                 {#each images as image, i (image.id)}
                   <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
-                    <td>{image.id}</td>
-                    <td>{image.title}</td>
-                    <td>{image.url}</td>
-                    <td>{image.description}</td>
-                    <td>{image.ownerId}</td>
-                    <td>
-                      {#each image.tags as tag}
-                        {tag};
-                      {/each}
-                    </td>
-                    <td>{image.isFlagged}</td>
-                    <td>{image.createdAt}</td>
-                    <td>{image.updatedAt}</td>
-                    <td>{image.destroyTime}</td>
+                    {#each Object.values(image) as key}
+                      <td>{key}</td>
+                    {/each}
                   </tr>
                 {/each}
               {/if}
@@ -421,26 +410,20 @@
           <table class="table-head">
             <thead>
               <tr>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>isAdmin</th>
-                <th>createdAt</th>
-                <th>updatedAt</th>
-                <th>Password</th>
-                <th>destroyTime</th>
+                {#if users.length > 0}
+                  {#each Object.keys(users[0]) as key}
+                    <th>{key}</th>
+                  {/each}
+                {/if}
               </tr>
             </thead>
             <tbody>
               {#if users}
                 {#each users as user, i (user.id)}
                   <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
-                    <td>{user.id}</td>
-                    <td>{user.userName}</td>
-                    <td>{user.isAdmin}</td>
-                    <td>{user.createdAt}</td>
-                    <td>{user.updatedAt}</td>
-                    <td>{user.password}</td>
-                    <td>{user.destroyTime}</td>
+                    {#each Object.values(user) as key}
+                      <td>{key}</td>
+                    {/each}
                   </tr>
                 {/each}
               {/if}
@@ -494,6 +477,7 @@
   }
   th {
     padding: 1rem 0rem;
+    text-align: center;
   }
 
   table {
@@ -520,11 +504,6 @@
 
   .odd-row {
     background-color: #ffffff;
-  }
-
-  .edit-div {
-    display: flex;
-    gap: 10px;
   }
 
   .edit-input {
@@ -554,20 +533,6 @@
     color: #54697b;
   }
 
-  .box {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-direction: column;
-    height: 10rem;
-    width: 20rem;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border: none;
-  }
-
   .selected {
     box-shadow: 10px 10px 10px grey;
   }
@@ -582,7 +547,6 @@
 
   .content {
     flex: 1;
-    padding: 0px 0.5rem;
     margin-left: 11vw;
     width: 86vw;
   }
@@ -592,6 +556,16 @@
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
     padding: 2rem 0.5rem 3rem 0.5rem;
+  }
+
+  .box {
+    height: 10rem;
+    width: 20rem;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
   }
 
   .custom-button:hover {
