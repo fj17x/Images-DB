@@ -126,11 +126,11 @@
           <div class="grid">
             <div class="grid-item">
               <label for="limit">Limit:</label>
-              <input type="number" name="limit" class="form-control" bind:value={limit} required />
+              <input type="number" name="limit" class="form-control" bind:value={limit} min="1" required />
             </div>
             <div class="grid-item xx">
               <label for="sortby">Sort By:</label>
-              <select name="sortby" id="sortby" class="form-select" bind:value={sortBy}>
+              <select name="sortby" id="sortby" class="form-select" min="0" bind:value={sortBy}>
                 <option value="id">id</option>
                 <option value="url">url</option>
                 <option value="description">description</option>
