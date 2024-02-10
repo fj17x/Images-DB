@@ -8,23 +8,31 @@
   let alertModalOptions = {}
 
   const checkSignedIn = async () => {
-    const response = await fetch(`http://localhost:4000/me`, {
-      method: "GET",
-      credentials: "include",
-    })
+    try {
+      const response = await fetch(`http://localhost:4000/me`, {
+        method: "GET",
+        credentials: "include",
+      })
 
-    const reply = await response.json()
-    if (!response.ok) {
-      {
-        userDetails.set({})
-        alertModalOptions.header = "Cannot access page"
-        alertModalOptions.type = "failure"
-        alertModalOptions.message = "Please login to access."
-        showAlertModal = true
-        return
+      const reply = await response.json()
+      if (!response.ok) {
+        {
+          userDetails.set({})
+          alertModalOptions.header = "Cannot access page"
+          alertModalOptions.message = "Please login to access."
+          alertModalOptions.type = "failure"
+          showAlertModal = true
+          return
+        }
       }
+      userDetails.set(reply.data)
+    } catch (err) {
+      alertModalOptions.header = "Cannot access page"
+      alertModalOptions.message = "Server may be down!"
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+      return
     }
-    userDetails.set(reply.data)
   }
 
   const onAlertConfirm = () => {

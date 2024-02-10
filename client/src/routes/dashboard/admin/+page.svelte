@@ -27,62 +27,75 @@
   let userIdGiven
 
   let searchColumn = "id"
-  let searchQuery = ""
+  let searchQuery
   let columns = []
-  let filteredData = []
 
-  const handleScroll = async (entity) => {
-    console.log("🚀 ~ handleScroll ~ entity:", entity)
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 70) {
-      await fetchUsersOrImages()
+  const fetchUsersOrImages = async () => {
+    const queryParams = new URLSearchParams({
+      offset: ((clickedBox === "users" ? currentPageForUsers : currentPageForImages) - 1) * resultsPerPage,
+      limit: resultsPerPage,
+      sortBy: "id",
+      sortOrder: "asc",
+      showDeleted: true,
+      showFlagged: true,
+    })
+
+    if (searchQuery) {
+      queryParams.append("searchQuery", searchQuery)
+    }
+
+    if (searchColumn) {
+      queryParams.append("searchColumn", searchColumn)
+    }
+
+    if (first) {
+      const responseUsers = await fetch(`http://localhost:4000/users?${queryParams}`, {
+        method: "GET",
+        credentials: "include",
+      })
+
+      const responseImages = await fetch(`http://localhost:4000/images?${queryParams}`, {
+        method: "GET",
+        credentials: "include",
+      })
+
+      const dataUsers = await responseUsers.json()
+      const dataImages = await responseImages.json()
+
+      totalUsers = dataUsers.totalUsers || 0
+      users = dataUsers.data || []
+      totalImages = dataImages.totalImages || 0
+      images = dataImages.data || []
+
+      first = false
+      if (users.length > 0) {
+        columns = Object.keys(users[0])
+      }
+      return
+    }
+
+    const url = `http://localhost:4000/${clickedBox === "users" ? "users" : "images"}?${queryParams}`
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+    })
+    const data = await response.json()
+
+    if (clickedBox === "users") {
+      totalUsers = data.totalUsers || 0
+      users = data.data || []
+    } else {
+      totalImages = data.totalImages || 0
+      images = data.data || []
+      console.log("🚀 ~ fetchUsersOrImages ~ images:", images)
     }
   }
 
-  const fetchUsersOrImages = async (select) => {
-    let offset
-    if (first || select === "users" || clickedBox === "users") {
-      offset = (currentPageForUsers - 1) * resultsPerPage
-      const response = await fetch(
-        `http://localhost:4000/users?offset=${offset}&limit=${resultsPerPage}&sortBy=id&sortOrder=asc&showDeleted=true`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      )
-
-      const usersReply = await response.json()
-      totalUsers = usersReply.totalUsers
-
-      if (!usersReply.data || usersReply.data.length === 0) {
-        return
-      }
-
-      users = usersReply.data
-    }
-    if (first || select === "images" || clickedBox === "images") {
-      offset = (currentPageForImages - 1) * resultsPerPage
-      const response = await fetch(
-        `http://localhost:4000/images?offset=${offset}&limit=${resultsPerPage}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      )
-      const imagesReply = await response.json()
-      totalImages = imagesReply.totalImages
-
-      if (!imagesReply.data || imagesReply.data.length === 0) {
-        return
-      }
-      images = imagesReply.data
-    }
-
-    first = false
-    select = "none"
-  }
-
-  const handleClick = (box) => {
+  const handleClick = async (box) => {
     clickedBox = box
+    columns = Object.keys(clickedBox === "users" ? users[0] : images[0])
+    searchQuery = ""
+    await fetchUsersOrImages()
   }
 
   const nextPage = async () => {
@@ -268,6 +281,10 @@
     }
   }
 
+  // $: {
+  //   fetchUsersOrImages()
+  // }
+
   const checkWhetherAdmin = async () => {
     if (!$userDetails.isAdmin) {
       alertModalOptions.header = "Cannot access page"
@@ -278,45 +295,24 @@
     }
   }
 
+  const handleSearchChange = async () => {
+    console.log("🚀 ~ handleSearchChange ~ currentPageForUsers:", currentPageForUsers)
+    currentPageForUsers = 1
+    currentPageForImages = 1
+    await fetchUsersOrImages()
+  }
+
   onMount(async () => {
     await fetchUsersOrImages()
     await checkWhetherAdmin()
   })
-
-  $: {
-    if (clickedBox === "users" && users.length > 0) {
-      if (searchQuery) {
-        filteredData = users.filter((item) => {
-          const columnValue = item[searchColumn]?.toString().toLowerCase() ?? []
-          return columnValue.includes(searchQuery.toLowerCase())
-        })
-        columns = Object.keys(users[0])
-      } else {
-        filteredData = users
-        columns = Object.keys(users[0])
-      }
-    } else if (clickedBox === "images" && images.length > 0) {
-      if (searchQuery) {
-        filteredData = images.filter((item) => {
-          const columnValue = item[searchColumn]?.toString().toLowerCase() ?? []
-          return columnValue.includes(searchQuery.toLowerCase())
-        })
-        columns = Object.keys(images[0])
-      } else {
-        filteredData = images
-        columns = Object.keys(images[0])
-      }
-    }
-  }
 </script>
-
-<svelte:window on:scroll={handleScroll} />
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
 
-  <div class="d-flex align-items-center flex-column pt-2 pb-5">
-    <div class="content my-3">
+  <div class=" d-flex align-items-center flex-column pt-2 pb-5">
+    <div class="content statistics my-3">
       <h3>Admin Panel</h3>
       <div class="main-card">
         <div class="d-flex justify-content-around align-items-center gap-3">
@@ -369,75 +365,108 @@
       </div>
     </div>
 
-    <div class="d-flex align-items-center justify-content-around my-4 gap-2">
-      <div class="d-flex align-items-center justify-content-between flex-column">
-        <label for="custom" class="custom-label"
-          >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
-        </label>
-        <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
-        <button on:click={toCustomPage} class="btn custom-button mt-2">Go</button>
-      </div>
-
-      <div>
-        <button
-          on:click={toStartPage}
-          disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
-          class="btn custom-button"><i class="fa-solid fa-fast-backward"></i></button
-        >
-        <button
-          on:click={prevPage}
-          disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
-          class="btn custom-button"><i class="fa-solid fa-backward-step"></i></button
-        >
-        <span>Page {clickedBox === "images" ? currentPageForImages : currentPageForUsers}</span>
-        <button
-          on:click={nextPage}
-          disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-            totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
-          class="btn custom-button"
-          ><i class="fa-solid fa-forward-step"></i>
-        </button>
-        <button
-          on:click={toEndPage}
-          disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-            totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
-          class="btn custom-button"><i class="fa-solid fa-fast-forward"></i></button
-        >
-      </div>
-      <div class="d-flex align-items-center justify-content-between flex-column">
-        <label for="custom" class="custom-label">Results per page(CURRENT={resultsPerPage}):</label>
-        <input type="number" class="custom-input" name="custom" bind:value={customResultsPerPage} min="1" />
-        <button on:click={changeResultsPerPage} class="custom-button mt-2">Go</button>
-      </div>
-    </div>
-    <div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="d-flex justify-content-between align-items-center my-3">
       <div></div>
       <h4>{clickedBox == "images" ? "Images" : "Users"}</h4>
     </div>
 
-    <div class="d-flex justify-content-center align-items-center mb-3 gap-3">
-      <select bind:value={searchColumn} class="custom-select">
-        {#each columns as column}
-          <option value={column}>{column}</option>
-        {/each}
-      </select>
-      <input type="text" bind:value={searchQuery} placeholder="Search matching..." class="form-control" />
+    <div class="search-options">
+      <div class="d-flex justify-content-center align-items-center mb-3 gap-3">
+        <input
+          type="text"
+          bind:value={searchQuery}
+          placeholder="Search matching..."
+          class="form-control w-50"
+          on:input={handleSearchChange}
+        />
+        <select bind:value={searchColumn} on:change={handleSearchChange} class="custom-select form-select w-25">
+          {#each columns as column}
+            <option value={column}>{column}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="d-flex align-items-center justify-content-around my-4 gap-5">
+        <div class="d-flex align-items-center justify-content-between flex-column">
+          <label for="custom" class="custom-label"
+            >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
+          </label>
+          <div class="mt-1">
+            <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
+            <button on:click={toCustomPage} class="custom-button">Go</button>
+          </div>
+        </div>
+
+        <div>
+          <button
+            on:click={toStartPage}
+            disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
+            class="btn custom-button"><i class="fa-solid fa-fast-backward"></i></button
+          >
+          <button
+            on:click={prevPage}
+            disabled={clickedBox === "images" ? currentPageForImages === 1 : currentPageForUsers === 1}
+            class="btn custom-button"><i class="fa-solid fa-backward-step"></i></button
+          >
+          <span>Page {clickedBox === "images" ? currentPageForImages : currentPageForUsers}</span>
+          <button
+            on:click={nextPage}
+            disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
+              totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+            class="btn custom-button"
+            ><i class="fa-solid fa-forward-step"></i>
+          </button>
+          <button
+            on:click={toEndPage}
+            disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
+              totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+            class="btn custom-button"><i class="fa-solid fa-fast-forward"></i></button
+          >
+        </div>
+        <div class="d-flex align-items-center justify-content-between flex-column">
+          <label for="custom" class="custom-label">Results per page(CURRENT={resultsPerPage}):</label>
+          <div class="mt-1">
+            <input type="number" class="custom-input" name="custom" bind:value={customResultsPerPage} min="1" />
+            <button on:click={changeResultsPerPage} class="custom-button">Set</button>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="content">
       {#if searchQuery}
-        {#if filteredData.length > 0}
+        {#if clickedBox === "users" && users.length > 0}
           <table>
             <thead>
               <tr>
-                {#each Object.keys(filteredData[0]) as key}
+                {#each Object.keys(users[0]) as key}
                   <th>{key}</th>
                 {/each}
-                <div>Nothing found!</div>
               </tr>
             </thead>
             <tbody>
-              {#if filteredData.length > 0}
-                {#each filteredData as item, i}
+              {#if users.length > 0}
+                {#each users as item, i}
+                  <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+                    {#each Object.values(item) as value}
+                      <td>{value}</td>
+                    {/each}
+                  </tr>
+                {/each}
+              {/if}
+            </tbody>
+          </table>
+        {:else if clickedBox === "images" && images.length > 0}
+          <table>
+            <thead>
+              <tr>
+                {#each Object.keys(images[0]) as key}
+                  <th>{key}</th>
+                {/each}
+              </tr>
+            </thead>
+            <tbody>
+              {#if images.length > 0}
+                {#each images as item, i}
                   <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
                     {#each Object.values(item) as value}
                       <td>{value}</td>
@@ -512,19 +541,25 @@
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 
-  .custom-button,
-  .custom-input {
+  .search-options {
+    font-size: 0.7rem;
+  }
+
+  .custom-button {
     margin: 0 5px;
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    cursor: pointer;
   }
 
   .custom-input {
     width: 4rem;
-    text-align: center;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
   }
 
   .flag-button {
@@ -621,7 +656,7 @@
     background-color: #ebebeb;
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 2rem 0.5rem 3rem 0.5rem;
+    padding: 1rem 0.5rem 1.3rem 0.5rem;
   }
 
   .box {

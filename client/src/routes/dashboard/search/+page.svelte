@@ -82,7 +82,6 @@
 
     const response = await fetch(`http://localhost:4000/images?${params.toString()}`, {
       method: "GET",
-
       credentials: "include",
     })
     const reply = await response.json()

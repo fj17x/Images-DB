@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { QueryTypes } from "sequelize"
+import { QueryTypes, Op } from "sequelize"
 import sequelize from "../config/connection.js"
 import { User } from "../models/index.js"
 
@@ -96,7 +96,15 @@ const fetchBatchOfUsers = async (req, res) => {
     }
 
     //Get limit and offset.
-    let { limit = 50, offset = 0, sortBy = "id", sortOrder = "ASC", showDeleted = "false" } = req.query
+    let {
+      limit = 50,
+      offset = 0,
+      sortBy = "id",
+      sortOrder = "ASC",
+      showDeleted = "false",
+      searchQuery,
+      searchColumn = "id",
+    } = req.query
     limit = Number(limit)
     offset = Number(offset)
     sortOrder = sortOrder.toUpperCase()
@@ -107,12 +115,19 @@ const fetchBatchOfUsers = async (req, res) => {
       })
     }
 
+    const whereCondition = isAdmin
+      ? searchQuery
+        ? sequelize.literal(`CAST("${searchColumn}" AS TEXT) LIKE '%${searchQuery}%'`)
+        : {}
+      : {}
+
     const batchOfUsers = await User.findAll({
       limit,
       offset,
-      order: [[sortBy, sortOrder ?? "ASC"]],
+      order: [[sortBy, sortOrder]],
       paranoid: showDeleted === "false" ? true : false,
       raw: true,
+      where: whereCondition,
     })
 
     if (!batchOfUsers.length) {
