@@ -171,12 +171,12 @@ const partiallyUpdateUserById = async (req, res) => {
     }
     let { userId } = req.params
     userId = Number(userId)
-    const updatedData = req.body
 
     const foundUser = await User.findOne({
       where: {
         id: userId,
       },
+      paranoid: isAdmin ? false : true,
       raw: true,
     })
 
@@ -200,7 +200,8 @@ const partiallyUpdateUserById = async (req, res) => {
         }
       }
     }
-    await User.update(updatedData, { where: { id: userId } })
+    console.log("🚀 ~ partiallyUpdateUserById ~ fieldsToUpdate:", fieldsToUpdate)
+    await User.update(fieldsToUpdate, { where: { id: userId }, paranoid: isAdmin ? false : true })
 
     const response = {
       message: "User updated successfully.",
@@ -299,6 +300,7 @@ const updateUserById = async (req, res) => {
         id: userId,
       },
       raw: true,
+      paranoid: isAdmin ? false : true,
     })
 
     if (!foundUser) {
@@ -360,6 +362,7 @@ const createUser = async (req, res) => {
         userName,
       },
       raw: true,
+      paranoid: false,
     })
 
     if (foundUser) {

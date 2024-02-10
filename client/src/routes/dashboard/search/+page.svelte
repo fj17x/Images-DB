@@ -161,7 +161,7 @@
               <br />
               <span>
                 {#each tags as tag}
-                  <button type="button" class="btn tag-toggle" on:click={() => removeTag(tag)}>
+                  <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
                     {tag}
                     <span class="remove-tag">
                       <i class="fa fa-times"></i>
