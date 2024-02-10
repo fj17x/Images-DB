@@ -130,6 +130,13 @@ const fetchBatchOfUsers = async (req, res) => {
       where: whereCondition,
     })
 
+    const totalNeededUsers = await User.count({
+      paranoid: showDeleted === "false" ? true : false,
+      where: whereCondition,
+    })
+
+    const totalUsers = await User.count()
+
     if (!batchOfUsers.length) {
       return res.status(404).json({ error: "No users found." })
     }
@@ -143,14 +150,13 @@ const fetchBatchOfUsers = async (req, res) => {
       return { ...user }
     })
 
-    const totalUsers = await User.count()
-
     const response = {
       message: `Successfully fetched users!`,
       fetched: userData.length,
       data: userData,
       userLinks: userLinks,
       totalUsers,
+      totalNeededUsers,
     }
     res.status(200).json(response)
   } catch (err) {

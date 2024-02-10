@@ -13,6 +13,8 @@
   let images = []
   let totalUsers = 0
   let totalImages = 0
+  let totalUsersFound = 0
+  let totalImagesFound = 0
 
   let currentPageForUsers = 1
   let currentPageForImages = 1
@@ -63,8 +65,10 @@
       const dataImages = await responseImages.json()
 
       totalUsers = dataUsers.totalUsers || 0
+      totalUsersFound = totalUsers
       users = dataUsers.data || []
       totalImages = dataImages.totalImages || 0
+      totalImagesFound = totalImages
       images = dataImages.data || []
 
       first = false
@@ -83,11 +87,13 @@
 
     if (clickedBox === "users") {
       totalUsers = data.totalUsers || 0
+      totalUsersFound = data.totalNeededUsers
+
       users = data.data || []
     } else {
       totalImages = data.totalImages || 0
+      totalImagesFound = data.totalNeededImages
       images = data.data || []
-      console.log("🚀 ~ fetchUsersOrImages ~ images:", images)
     }
   }
 
@@ -134,10 +140,10 @@
   }
   const toEndPage = async () => {
     if (clickedBox === "users") {
-      currentPageForUsers = Math.ceil(totalUsers / resultsPerPage)
+      currentPageForUsers = Math.ceil(totalUsersFound / resultsPerPage)
       await fetchUsersOrImages()
     } else if (clickedBox === "images") {
-      currentPageForImages = Math.ceil(totalImages / resultsPerPage)
+      currentPageForImages = Math.ceil(totalImagesFound / resultsPerPage)
       await fetchUsersOrImages()
     }
   }
@@ -154,7 +160,7 @@
   const toCustomPage = async () => {
     let totalPages
     if (clickedBox === "users") {
-      totalPages = Math.ceil(totalUsers / resultsPerPage)
+      totalPages = Math.ceil(totalUsersFound / resultsPerPage)
       if (customPage >= 1 && customPage <= totalPages) {
         currentPageForUsers = customPage
         await fetchUsersOrImages()
@@ -165,7 +171,7 @@
         showAlertModal = true
       }
     } else if (clickedBox === "images") {
-      totalPages = Math.ceil(totalImages / resultsPerPage)
+      totalPages = Math.ceil(totalImagesFound / resultsPerPage)
       if (customPage >= 1 && customPage <= totalPages) {
         currentPageForImages = customPage
         await fetchUsersOrImages()
@@ -281,10 +287,6 @@
     }
   }
 
-  // $: {
-  //   fetchUsersOrImages()
-  // }
-
   const checkWhetherAdmin = async () => {
     if (!$userDetails.isAdmin) {
       alertModalOptions.header = "Cannot access page"
@@ -296,7 +298,6 @@
   }
 
   const handleSearchChange = async () => {
-    console.log("🚀 ~ handleSearchChange ~ currentPageForUsers:", currentPageForUsers)
     currentPageForUsers = 1
     currentPageForImages = 1
     await fetchUsersOrImages()
@@ -388,7 +389,7 @@
       <div class="d-flex align-items-center justify-content-around my-4 gap-5">
         <div class="d-flex align-items-center justify-content-between flex-column">
           <label for="custom" class="custom-label"
-            >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImages : totalUsers) / resultsPerPage)}):
+            >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImagesFound : totalUsersFound) / resultsPerPage)}):
           </label>
           <div class="mt-1">
             <input type="number" class="custom-input" name="custom" bind:value={customPage} min="1" />
@@ -411,14 +412,14 @@
           <button
             on:click={nextPage}
             disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-              totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+              totalImagesFound <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
             class="btn custom-button"
             ><i class="fa-solid fa-forward-step"></i>
           </button>
           <button
             on:click={toEndPage}
             disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-              totalImages <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+              totalUsersFound <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
             class="btn custom-button"><i class="fa-solid fa-fast-forward"></i></button
           >
         </div>

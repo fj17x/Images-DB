@@ -220,6 +220,13 @@ const getBatchOfImages = async (req, res) => {
       raw: true,
     })
 
+    const totalNeededImages = await User.count({
+      paranoid: showDeleted === "false" ? true : false,
+      where: whereCondition,
+    })
+
+    let totalImages = await Image.count()
+
     if (!batchOfImages.length) {
       return res.status(404).json({ error: "No images found. " })
     }
@@ -233,14 +240,13 @@ const getBatchOfImages = async (req, res) => {
       return { ...image }
     })
 
-    let totalImages = await Image.count()
-
     const response = {
       message: `Successfully fetched images!`,
       fetched: batchOfImages.length,
       data: imageData,
       links: imageLinks,
       totalImages,
+      totalNeededImages,
     }
 
     res.status(200).json(response)
