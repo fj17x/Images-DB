@@ -220,9 +220,15 @@ const getBatchOfImages = async (req, res) => {
       raw: true,
     })
 
-    const totalNeededImages = await User.count({
-      paranoid: showDeleted === "false" ? true : false,
-      where: whereCondition,
+    const totalNeededImages = await Image.count({
+      where: {
+        tags: {
+          [Op.contains]: tagList,
+        },
+        isFlagged: showFlagged === "true" ? { [Op.or]: [true, false] } : false,
+        [Op.and]: [searchQuery ? sequelize.literal(`CAST("Image"."${searchColumn}" AS TEXT) LIKE '%${searchQuery}%'`) : {}],
+      },
+      paranoid: paranoidCondition,
     })
 
     let totalImages = await Image.count()
@@ -246,7 +252,7 @@ const getBatchOfImages = async (req, res) => {
       data: imageData,
       links: imageLinks,
       totalImages,
-      totalNeededImages,
+      totalNeededImages: totalNeededImages,
     }
 
     res.status(200).json(response)

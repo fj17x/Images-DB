@@ -411,15 +411,17 @@
           <span>Page {clickedBox === "images" ? currentPageForImages : currentPageForUsers}</span>
           <button
             on:click={nextPage}
-            disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-              totalImagesFound <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+            disabled={clickedBox === "images"
+              ? totalImagesFound <= currentPageForImages * resultsPerPage
+              : totalUsersFound <= currentPageForUsers * resultsPerPage}
             class="btn custom-button"
             ><i class="fa-solid fa-forward-step"></i>
           </button>
           <button
             on:click={toEndPage}
-            disabled={totalUsers <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage &&
-              totalUsersFound <= (clickedBox === "images" ? currentPageForImages : currentPageForUsers) * resultsPerPage}
+            disabled={clickedBox === "images"
+              ? totalImagesFound <= currentPageForImages * resultsPerPage
+              : totalUsersFound <= currentPageForUsers * resultsPerPage}
             class="btn custom-button"><i class="fa-solid fa-fast-forward"></i></button
           >
         </div>
