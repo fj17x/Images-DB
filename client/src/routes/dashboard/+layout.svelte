@@ -8,7 +8,7 @@
   let alertModalOptions = {}
 
   const checkSignedIn = async () => {
-    if ($userDetails) {
+    if ($userDetails.userName) {
       return
     }
     try {

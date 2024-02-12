@@ -206,7 +206,6 @@ const partiallyUpdateUserById = async (req, res) => {
         }
       }
     }
-    console.log("🚀 ~ partiallyUpdateUserById ~ fieldsToUpdate:", fieldsToUpdate)
     await User.update(fieldsToUpdate, { where: { id: userId }, paranoid: isAdmin ? false : true })
 
     const response = {

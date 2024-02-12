@@ -109,12 +109,14 @@
           on:submit|preventDefault={handleSearchSingle}
         >
           <span class="input-normal">
-            <span>
+            <div>
               <label for="id">Image ID*:</label>
               <!-- svelte-ignore a11y-autofocus -->
               <input autofocus type="number" class="form-control" name="id" bind:value={idForSimple} required />
+            </div>
+            <span class="d-flex justify-content-center align-items-end">
+              <button class="btn text-white confirm-button" type="submit">Search</button>
             </span>
-            <button class="btn text-white confirm-button" type="submit">Search</button>
           </span>
         </form>
       </div>

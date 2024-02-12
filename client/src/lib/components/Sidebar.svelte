@@ -32,6 +32,8 @@
       showAlertModal = true
     }
   }
+
+  $: console.log($userDetails)
 </script>
 
 <div class="sidebar">
@@ -90,7 +92,8 @@
       <i class="fa fa-user fa-xl mb-2" aria-hidden="true"></i><a
         href="/dashboard/myprofile"
         class="sidebar-text text-white d-flex justify-content-center align-items-center"
-        ><p>My Profile</p>
+      >
+        <p>My Profile <br />({$userDetails.userName ?? ""})</p>
       </a>
     </div>
 
