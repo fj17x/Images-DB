@@ -13,7 +13,6 @@
     <h1 class="error-title fs-9">Error: {$page.status}</h1>
     <h4 class="error-message">{$page.error.message}</h4>
     <hr />
-    <br />
     <div class="button-container d-flex flex-column align-items-center">
       <button on:click={goBack} class="btn back-button text-white">Go Back</button>
       <p class="or-text mt-2">Or</p>

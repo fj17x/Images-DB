@@ -318,7 +318,7 @@
       <div class="main-card">
         <div class="d-flex justify-content-around align-items-center gap-3">
           <button
-            class="box d-flex justify-evenly align-items-center flex-column blue {clickedBox === 'users' ? 'selected' : ''}"
+            class="box d-flex justify-evenly align-items-center flex-column {clickedBox === 'users' ? 'selected' : ''}"
             on:click={() => handleClick("users")}
           >
             <i class="fa-solid fa-users icon"></i>
@@ -326,7 +326,7 @@
             <p class="total-num">{totalUsers || " "}</p>
           </button>
           <button
-            class="box d-flex justify-evenly align-items-center flex-column green {clickedBox === 'images' ? 'selected' : ''}"
+            class="box d-flex justify-evenly align-items-center flex-column {clickedBox === 'images' ? 'selected' : ''}"
             on:click={() => handleClick("images")}
           >
             <i class="fa-regular fa-images icon"></i>
@@ -339,26 +339,29 @@
               <div class="d-flex gap-2">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
                 <!-- <button class="edit-button">Edit</button> -->
-                <button class="btn edit-button delete-button text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
-                <button class="btn edit-button restore-button text-white" on:click={() => handleUserDeletion(false)}
-                  >Restore</button
-                >
+                <button class="btn red text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
+                <button class="btn green text-white" on:click={() => handleUserDeletion(false)}>Restore</button>
               </div>
             </div>
             <div class="small-box">
               <p class="total-info">Enter Image ID:</p>
               <div class="d-flex gap-2">
-                <input type="text" bind:value={imageIdGiven} class="edit-input" />
+                <input type="text" bind:value={imageIdGiven} class="edit-input form-control" />
                 <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
-                <button class="btn edit-button flag-button text-white" on:click={() => handleImageFlagging(true)}>Flag</button>
-                <button class="btn edit-button unflag-button text-white" on:click={() => handleImageFlagging(false)}
-                  >Unflag</button
-                >
-                <button class="btn edit-button delete-button text-white" on:click={() => handleImageDeletion(true)}>Delete</button
-                >
-                <button class="btn edit-button restore-button text-white" on:click={() => handleImageDeletion(false)}
-                  >Restore</button
-                >
+                <div>
+                  <button class="btn images-option-button red text-white" on:click={() => handleImageFlagging(true)}>Flag</button>
+                  <button class="btn images-option-button green text-white" on:click={() => handleImageFlagging(false)}
+                    >Unflag</button
+                  >
+                </div>
+                <div>
+                  <button class="btn images-option-button red text-white" on:click={() => handleImageDeletion(true)}
+                    >Delete</button
+                  >
+                  <button class="btn images-option-button green text-white" on:click={() => handleImageDeletion(false)}
+                    >Restore</button
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -565,18 +568,19 @@
     background-color: #f9f9f9;
   }
 
-  .flag-button {
-    background-color: red;
-  }
-  .unflag-button {
-    background-color: green;
-  }
-
-  .delete-button {
-    background-color: red;
+  .images-option-button {
+    width: 90%;
+    font-size: 0.6rem;
+    font-size: 0.9rem;
+    padding: 0.3rem;
+    margin: 0.1rem;
   }
 
-  .restore-button {
+  .red {
+    background-color: red;
+  }
+
+  .green {
     background-color: green;
   }
 
@@ -639,14 +643,6 @@
 
   .selected {
     box-shadow: 10px 10px 10px grey;
-  }
-
-  .blue {
-    background-color: white;
-  }
-
-  .green {
-    background-color: white;
   }
 
   .content {

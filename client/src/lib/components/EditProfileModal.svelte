@@ -23,20 +23,17 @@
     <h2>Edit your details</h2>
     <hr />
     <div class="card-form">
-      <span>
-        <span class="check">
+      <div class="mb-2">
+        <div class="check">
           <label for="title">Change username:</label>
-        </span>
-        <br />
+        </div>
 
         <input type="text" class="full" name="userName" bind:value={userName} />
-      </span>
-      <br /><br />
-      <span>
-        <span class="check">
+      </div>
+      <div class="mb-1">
+        <div class="check">
           <label for="title">Change password:</label>
-        </span>
-        <br />
+        </div>
         <input
           type="password"
           class="full"
@@ -44,9 +41,8 @@
           placeholder="Leave empty for current password."
           bind:value={password}
         />
-      </span>
+      </div>
 
-      <br />
       <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
       <button class="close-button green" type="button" on:click={onEditConfirm(true, { userName, password })}>Confirm</button>
     </div>

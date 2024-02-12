@@ -121,7 +121,7 @@
     </div>
     <div class="container content">
       <h4>Advanced search:</h4>
-      <div class="card main-card">
+      <div class="card main-card text-white">
         <form on:submit|preventDefault={handleSearchAdvanced}>
           <!-- Grid layout using Bootstrap classes -->
           <div class="row mb-3">

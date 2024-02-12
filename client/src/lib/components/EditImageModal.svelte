@@ -51,32 +51,28 @@
     <h2>Edit Image</h2>
     <hr />
     <div class="card-form">
-      <span>
+      <div>
         <label for="title">Change title:</label>
-        <br />
-        <input type="text" class="full" name="title" bind:value={title} /></span
-      ><br /><br />
-      <span>
-        <span>
-          <label for="title">Change description:</label>
-          <br />
-          <textarea type="text" class="full" rows="4" name="description" bind:value={description} /></span
-        > <br />
 
-        <span>
+        <input type="text" class="full" name="title" bind:value={title} />
+      </div>
+      <div>
+        <div>
+          <label for="title">Change description:</label>
+          <textarea type="text" class="full" rows="4" name="description" bind:value={description} />
+        </div>
+
+        <div>
           <label for="title">Change URL:</label>
-          <br />
-          <input type="text" class="full" name="url" bind:value={url} /></span
-        >
-        <span
-          ><br /><br />
+          <input type="text" class="full" name="url" bind:value={url} />
+        </div>
+
+        <div>
           <label for="title">Modify tags:</label>
-          <br />
-          <span>
+          <div>
             <input type="text" name="tag" id="tag" bind:value={toAddTag} />
             <button type="button" class="btn tag-button" on:click={addTag}>Add</button>
-          </span>
-          <br />
+          </div>
           {#each tags as tag}
             <span class="tag-container">
               <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
@@ -87,12 +83,12 @@
               </button>
             </span>
           {/each}
-        </span> <br />
+        </div>
         <button class="btn text-white mt-3 red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
         <button class="btn text-white mt-3 green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}>
           Confirm
         </button>
-      </span>
+      </div>
     </div>
   </div>
 </dialog>

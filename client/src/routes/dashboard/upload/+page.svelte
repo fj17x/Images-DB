@@ -17,7 +17,6 @@
 
   const addTag = () => {
     const tagValue = toAddTag.trim()
-
     if (tagValue) {
       if (!tags.includes(tagValue)) {
         tags = [...tags, tagValue]
@@ -88,19 +87,25 @@
       >
         <span>
           <label for="title">Title*:</label>
-          <br />
           <!-- svelte-ignore a11y-autofocus -->
-          <input autofocus type="text" name="title" class="normal-input form-control" bind:value={title} required /></span
+          <input
+            autofocus
+            type="text"
+            name="title"
+            class="normal-input form-control mb-3 p-2"
+            bind:value={title}
+            required
+          /></span
         >
         <span>
           <label for="title">Description:</label>
-          <br />
-          <textarea class="normal-input form-control" bind:value={description} name="description" /></span
+          <textarea class="normal-input form-control mb-3 p-2" bind:value={description} name="description" /></span
         >
-        <span>
-          <label for="title">Tags:</label>
-          <br />
-          <input type="text" name="tag" class="normal-input" bind:value={toAddTag} id="tag" />
+        <div>
+          <div>
+            <label for="title">Tags:</label>
+          </div>
+          <input type="text" name="tag" class="normal-input mb-1 p-2" bind:value={toAddTag} id="tag" />
           <button class="btn tag-button text-white p-2" type="button" on:click={addTag}>Add tag</button>
           <br />
           {#each tags as tag}
@@ -114,10 +119,8 @@
               &nbsp;
             </span>
           {/each}
-          <br />
-        </span>
-        <br />
-        <div class="upload-options d-flex justify-content-around align-items-center">
+        </div>
+        <div class="upload-options d-flex justify-content-around align-items-center my-3">
           <div class="file-div">
             <!-- <label for="file">Upload File:</label> -->
             <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
@@ -128,7 +131,6 @@
             <input type="url" name="imageUrl" class="url-input" bind:value={url} />
           </div>
         </div>
-        <br />
 
         <div class="d-flex justify-content-center align-items-center">
           <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
@@ -179,8 +181,6 @@
   }
 
   .normal-input {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
   }
@@ -194,7 +194,7 @@
     transform: scale(1.05);
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1100px) {
     .upload-options {
       flex-direction: column;
       gap: 15px;

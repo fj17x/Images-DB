@@ -160,9 +160,8 @@
         </div>
       {/if}
     </div>
-    <br />
-    <br />
-    <div class="options d-flex justify-content-around align-items-center gap-2">
+
+    <div class="options d-flex justify-content-around align-items-center gap-3 mt-3">
       <button class="btn delete text-white" on:click={handleDeleteAccount}>Delete account</button>
       <button class="btn delete text-white" on:click={handleDeleteAllImages}>Delete all your images </button>
       <button class="btn edit text-white" on:click={() => (showEditProfileModal = true)}>Update profile </button>

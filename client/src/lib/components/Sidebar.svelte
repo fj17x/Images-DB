@@ -91,7 +91,6 @@
         href="/dashboard/myprofile"
         class="sidebar-text text-white d-flex justify-content-center align-items-center"
         ><p>My Profile</p>
-        <br />
       </a>
     </div>
 
@@ -107,7 +106,6 @@
           href="/dashboard/admin"
           class="sidebar-text text-white d-flex justify-content-center align-items-center"
           ><p class="admin-text">Admin Panel</p>
-          <br />
         </a>
       </div>
     {/if}
