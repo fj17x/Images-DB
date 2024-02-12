@@ -32,12 +32,17 @@
   let searchQuery
   let columns = []
 
+  let sortByQuery = "id",
+    sortOrderQuery = "ASC"
+
+  $: console.log(sortByQuery)
+
   const fetchUsersOrImages = async () => {
     const queryParams = new URLSearchParams({
       offset: ((clickedBox === "users" ? currentPageForUsers : currentPageForImages) - 1) * resultsPerPage,
       limit: resultsPerPage,
-      sortBy: "id",
-      sortOrder: "asc",
+      sortBy: sortByQuery,
+      sortOrder: sortOrderQuery,
       showDeleted: true,
       showFlagged: true,
     })
@@ -374,21 +379,41 @@
     </div>
 
     <div class="search-options">
-      <div class="d-flex justify-content-center align-items-center mb-3 gap-3">
-        <input
-          type="text"
-          bind:value={searchQuery}
-          placeholder="Search matching..."
-          class="form-control w-50"
-          on:input={handleSearchChange}
-        />
-        <select bind:value={searchColumn} on:change={handleSearchChange} class="custom-select form-select w-25">
-          {#each columns as column}
-            <option value={column}>{column}</option>
-          {/each}
-        </select>
+      <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
+        <div>
+          <span>Sort by:</span>
+          <select bind:value={sortByQuery} on:change={handleSearchChange} class="form-select w-100">
+            {#each columns as column}
+              <option value={column}>{column}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+          <input
+            type="text"
+            bind:value={searchQuery}
+            placeholder="Search matching..."
+            class="form-control w-100"
+            on:input={handleSearchChange}
+          />
+          <select bind:value={searchColumn} on:change={handleSearchChange} class="form-select w-50 margin-auto">
+            {#each columns as column}
+              <option value={column}>{column}</option>
+            {/each}
+          </select>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center">
+          <div>
+            <span>Sort Order:</span>
+            <select bind:value={sortOrderQuery} on:change={handleSearchChange} class="form-select w-100">
+              <option>ASC</option>
+              <option>DESC</option>
+            </select>
+          </div>
+        </div>
       </div>
-      <div class="d-flex align-items-center justify-content-around my-4 gap-5">
+      <div class="d-flex align-items-cen ter justify-content-around my-4 gap-5">
         <div class="d-flex align-items-center justify-content-between flex-column">
           <label for="custom" class="custom-label"
             >Search page number(MAX={Math.ceil((clickedBox === "images" ? totalImagesFound : totalUsersFound) / resultsPerPage)}):
