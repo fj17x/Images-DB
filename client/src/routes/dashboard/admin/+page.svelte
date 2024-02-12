@@ -380,7 +380,7 @@
 
     <div class="search-options">
       <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
-        <div>
+        <div class="sort-option">
           <span>Sort by:</span>
           <select bind:value={sortByQuery} on:change={handleSearchChange} class="form-select w-100">
             {#each columns as column}
@@ -404,7 +404,7 @@
         </div>
 
         <div class="d-flex align-items-center justify-content-center">
-          <div>
+          <div class="sort-option">
             <span>Sort Order:</span>
             <select bind:value={sortOrderQuery} on:change={handleSearchChange} class="form-select w-100">
               <option>ASC</option>
@@ -570,6 +570,10 @@
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
+
+  .sort-option {
+    width: 150px;
+  }
 
   .search-options {
     font-size: 0.7rem;
