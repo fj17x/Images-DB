@@ -36,7 +36,7 @@
   $: console.log($userDetails)
 </script>
 
-<div class="sidebar">
+<div class="sidebar d-flex flex-column align-items-center justify-content-evenly">
   {#if $userDetails}
     <div class="d-flex text-white justify-content-center align-items-center flex-column text-center">
       <i class="fa fa-home fa-xl mb-2" aria-hidden="true"></i><a
@@ -132,21 +132,17 @@
 </div>
 
 <style>
-  .my-profile-info {
-    text-transform: capitalize;
-  }
-
   .sidebar {
     width: 15rem;
     background-color: #172740;
     height: 100vh;
     width: 10vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
     min-width: 100px;
     position: fixed;
+  }
+
+  .my-profile-info {
+    text-transform: capitalize;
   }
 
   .sidebar-text {

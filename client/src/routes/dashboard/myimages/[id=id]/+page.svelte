@@ -108,13 +108,13 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content pt-4 {image === undefined ? 'none-found' : ''}">
+  <div class="content pt-4 {image === undefined ? 'none-found d-flex align-items-center justify-content-center' : ''}">
     {#await fetchImageWithId()}
-      <div class="loading-spinner">
+      <div class="loading-spinner d-flex justify-content-center align-items-center w-100">
         <i class="fas fa-spinner fa-spin"></i>
       </div>
     {:then}
-      <div class="header pb-3">
+      <div class="d-flex align-items-center justify-content-between pb-3">
         <h2>Image ID: {image.id}</h2>
         <div>
           <button class="btn top-button delete text-white" on:click={handleDelete}>Delete</button>
@@ -166,19 +166,13 @@
 
   .none-found {
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
+
   .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
   }
 
   .edit {
@@ -186,12 +180,6 @@
   }
   .delete {
     background-color: #d72335;
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 
   .content {

@@ -40,7 +40,7 @@
   }
 </script>
 
-<div class="hero text-white vh-100">
+<div class="hero text-center d-flex justify-content-center align-items-center text-white vh-100">
   <div class="overlay"></div>
   <div class="container position-relative z-index-1">
     <h2 class="hero-text"><span class="title-light fw-light">Images</span><span class="title-strong fw-bold">DB</span></h2>
@@ -71,16 +71,6 @@
     transition: transform 0.25s ease-in-out;
   }
 
-  .hero {
-    position: relative;
-    text-align: center;
-    background: url("/background.jpg") center/cover no-repeat;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   .overlay {
     position: absolute;
     top: 0;
@@ -88,6 +78,12 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
+  }
+
+  .hero {
+    position: relative;
+    background: url("/background.jpg") center/cover no-repeat;
+    overflow: hidden;
   }
 
   .hero-text {

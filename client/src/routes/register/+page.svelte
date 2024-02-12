@@ -66,7 +66,7 @@
       <p class="title mt-0 fw-semibold">Register</p>
       <form on:submit|preventDefault={handleRegister}>
         <div class="input-boxes">
-          <div class="input-box">
+          <div class="d-flex align-items-center my-3 mx-1">
             <i class="fas fa-user"></i>
             <!-- svelte-ignore a11y-autofocus -->
             <input
@@ -79,7 +79,7 @@
               required
             />
           </div>
-          <div class="input-box">
+          <div class="d-flex align-items-center my-3 mx-1">
             <i class="fas fa-lock"></i>
             <input
               class="input-field"
@@ -90,7 +90,7 @@
               required
             />
           </div>
-          <div class="input-box">
+          <div class="d-flex align-items-center my-3 mx-1">
             <i class="fas fa-lock"></i>
             <input
               class="input-field"
@@ -139,12 +139,6 @@
     width: 100%;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     border-radius: 1%;
-  }
-
-  .input-box {
-    display: flex;
-    align-items: center;
-    margin: 1.5rem 1rem;
   }
 
   .input-field {

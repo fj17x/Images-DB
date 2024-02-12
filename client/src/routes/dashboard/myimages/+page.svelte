@@ -39,9 +39,9 @@
 <div class="container-fluid p-0 m-0">
   <Sidebar />
   <div class="d-flex align-items-center flex-column pt-2">
-    <div class="content pt-4 {images.length < 1 ? 'none-found' : ''}">
+    <div class="content pt-4 {images.length < 1 ? 'none-found d-flex align-items-center justify-content-center ' : ''}">
       {#await fetchNextImages()}
-        <div class="loading-spinner">
+        <div class="loading-spinner d-flex justify-content-center align-items-center w-100">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
       {:then}
@@ -79,20 +79,13 @@
 
   .none-found {
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
   }
 
   .content {

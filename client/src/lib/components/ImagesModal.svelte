@@ -20,25 +20,19 @@
         {/each}
       </div>
     {:else if images.length == 1}
-      <div class="single">
+      <div class="d-flex justify-content-center align-items-center">
         <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} isSingleImage={true} />
       </div>
     {/if}
-    <button class="close-button" on:click={() => dialog.close()}>Close</button>
+    <button class="btn close-button m-auto px-4 text-white" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>
 
 <style>
-  .single {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   dialog {
     width: 90%;
     max-width: 800px;
-    border-radius: 0.2em;
+    border-radius: 10px;
     border: none;
     padding: 0;
   }
@@ -77,21 +71,9 @@
     }
   }
 
-  button {
-    display: block;
-  }
-
   .close-button {
-    display: block;
-    margin: auto;
-    padding: 0.5em 1em;
-    margin-top: 1em;
     background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 0.2em;
-    cursor: pointer;
-    font-size: 1em;
+    display: block;
     transition: background-color 0.3s ease;
   }
 

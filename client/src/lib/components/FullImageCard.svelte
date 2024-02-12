@@ -19,7 +19,7 @@
 </script>
 
 <div class="full-image-card">
-  <div class="image-box">
+  <div class="d-flex justify-content-center align-items-center mb-4">
     <a class="anchor" target="_blank" href={url}>
       <img src={url} alt={title} />
     </a>
@@ -35,7 +35,7 @@
       <hr />
     {/if}
 
-    <div class="tags">
+    <div class="tags d-flex align-items-center">
       <span>Tags:&nbsp;</span>
       {#if tags.length > 0}
         {#each tags as tag}
@@ -77,13 +77,6 @@
     overflow: hidden;
   }
 
-  .image-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
   img {
     max-width: 100%;
     min-height: 400px;
@@ -110,8 +103,6 @@
 
   .tags {
     margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
     flex-wrap: wrap;
   }
 

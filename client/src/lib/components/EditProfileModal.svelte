@@ -17,22 +17,27 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showModal = false)}>
+
+<!-- dialog {
+    border: none;
+    padding: 0;
+  } -->
+<dialog bind:this={dialog} on:close={() => (showModal = false)} class="border-0 p-1 rounded">
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div on:click|stopPropagation>
+  <div on:click|stopPropagation class="p-3">
     <h2>Edit your details</h2>
     <hr />
-    <div class="card-form">
+    <div class="card-form d-flex justify-content-center flex-column">
       <div class="mb-2">
-        <div class="check">
-          <label for="title">Change username:</label>
+        <div class="d-flex justify-content-center">
+          <label for="title" class="fw-bold">Change username:</label>
         </div>
 
         <input type="text" class="full" name="userName" bind:value={userName} />
       </div>
       <div class="mb-1">
-        <div class="check">
-          <label for="title">Change password:</label>
+        <div class="d-flex justify-content-center">
+          <label for="title" class="fw-bold">Change password:</label>
         </div>
         <input
           type="password"
@@ -42,9 +47,14 @@
           bind:value={password}
         />
       </div>
-
-      <button class="close-button red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
-      <button class="close-button green" type="button" on:click={onEditConfirm(true, { userName, password })}>Confirm</button>
+      <div class="d-flex justify-content-around">
+        <button class="btn close-button text-white red mt-2" type="button" on:click={onEditConfirm(false)}>Cancel</button>
+        <button
+          class="btn close-button text-white green mt-2"
+          type="button"
+          on:click={onEditConfirm(true, { userName, password })}>Confirm</button
+        >
+      </div>
     </div>
   </div>
 </dialog>
@@ -54,28 +64,10 @@
 {/if}
 
 <style>
-  .check {
-    display: flex;
-  }
-
-  label {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  }
-
-  dialog {
-    max-width: 32em;
-    border-radius: 0.2em;
-    border: none;
-    padding: 0;
-  }
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.3);
   }
-  dialog > div {
-    padding: 1em;
-  }
+
   dialog[open] {
     animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -99,34 +91,22 @@
     }
   }
 
-  label {
-    font-weight: bold;
-  }
-
   .full {
-    width: 90%;
+    width: 100%;
     padding: 0.5em;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
 
-  button.close-button {
-    display: inline-block;
-    padding: 0.5em 1em;
-    margin-top: 1em;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
+  .close-button {
     transition: background-color 0.3s ease;
   }
 
-  button.green {
+  .green {
     background-color: rgb(62, 175, 58);
   }
 
-  button.red {
+  .red {
     background-color: rgb(165, 26, 26);
   }
 

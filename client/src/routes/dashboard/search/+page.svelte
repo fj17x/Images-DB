@@ -108,7 +108,7 @@
           class="card-form d-flex justify-content-center align-items-between flex-column text-white"
           on:submit|preventDefault={handleSearchSingle}
         >
-          <span class="input-normal">
+          <span class="d-flex justify-content-evenly align-items-center">
             <div>
               <label for="id">Image ID*:</label>
               <!-- svelte-ignore a11y-autofocus -->
@@ -238,12 +238,6 @@
     padding: 0px 2rem;
     margin-left: 14vw;
     width: 75vw;
-  }
-
-  .input-normal {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
   }
 
   .main-card {
