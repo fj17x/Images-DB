@@ -93,7 +93,7 @@
         href="/dashboard/myprofile"
         class="sidebar-text text-white d-flex justify-content-center align-items-center"
       >
-        <p>My Profile <br />({$userDetails.userName ?? ""})</p>
+        <p class="my-profile-info">My Profile <br />({$userDetails.userName ?? ""})</p>
       </a>
     </div>
 
@@ -132,6 +132,10 @@
 </div>
 
 <style>
+  .my-profile-info {
+    text-transform: capitalize;
+  }
+
   .sidebar {
     width: 15rem;
     background-color: #172740;
