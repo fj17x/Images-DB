@@ -100,7 +100,7 @@
 <div class="container-fluid p-0 m-0">
   <Sidebar />
   <div class="d-flex align-items-center flex-column pt-2">
-    <div class="content my-3">
+    <div class="container content my-3">
       <h4>Search for an image using ID:</h4>
 
       <div class="main-card">
@@ -119,60 +119,78 @@
         </form>
       </div>
     </div>
-    <div class="content">
+    <div class="container content">
       <h4>Advanced search:</h4>
-      <div class="main-card">
+      <div class="card main-card">
         <form on:submit|preventDefault={handleSearchAdvanced}>
-          <div class="grid">
-            <div class="grid-item">
-              <label for="limit">Limit:</label>
-              <input type="number" name="limit" class="form-control" bind:value={limit} min="1" required />
-            </div>
-            <div class="grid-item xx">
-              <label for="sortby">Sort By:</label>
-              <select name="sortby" id="sortby" class="form-select" min="0" bind:value={sortBy}>
-                <option value="id">id</option>
-                <option value="url">url</option>
-                <option value="description">description</option>
-                <option value="createdAt">createdAt</option>
-                <option value="updatedAt">updatedAt</option>
-              </select>
-            </div>
-            <div class="grid-item">
-              <label for="offset">Offset:</label>
-              <input type="number" name="offset" class="form-control" bind:value={offset} required />
-            </div>
-            <div class="grid-item">
-              <label for="sortorder">Sort Order:</label>
-              <select name="sortorder" id="sortorder" class="form-select" bind:value={sortOrder}>
-                <option value="ASC">ASC</option>
-                <option value="DESC">DESC</option>
-              </select>
-            </div>
-            <div class="grid-item">
-              <label for="tag">Tags:</label>
-
-              <div class="tag-input">
-                <p class="left"></p>
-                <input type="text" name="tag" id="tag" class="form-control" bind:value={toAddTag} />
-                <p class="right"></p>
-                <button type="button" class="btn tag-button text-white" on:click={addTag}>Add</button>
+          <!-- Grid layout using Bootstrap classes -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="limit">Limit:</label>
+                <input type="number" class="form-control" id="limit" name="limit" bind:value={limit} min="1" required />
               </div>
-              <br />
-              <span>
-                {#each tags as tag}
-                  <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
-                    {tag}
-                    <span class="remove-tag">
-                      <i class="fa fa-times"></i>
-                    </span>
-                  </button>
-                  &nbsp;
-                {/each}</span
-              >
             </div>
-            <div class="grid-item">
-              <button class="btn text-white confirm-button" type="submit">Search</button>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="sortby">Sort By:</label>
+                <select class="form-select" id="sortby" name="sortby" bind:value={sortBy}>
+                  <option value="id">id</option>
+                  <option value="url">url</option>
+                  <option value="description">description</option>
+                  <option value="createdAt">createdAt</option>
+                  <option value="updatedAt">updatedAt</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="offset">Offset:</label>
+                <input type="number" class="form-control" id="offset" name="offset" bind:value={offset} required />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="sortorder">Sort Order:</label>
+                <select class="form-select" id="sortorder" name="sortorder" bind:value={sortOrder}>
+                  <option value="ASC">ASC</option>
+                  <option value="DESC">DESC</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="tag">Tags:</label>
+                <div class="input-group gap-2">
+                  <input type="text" class="form-control" id="tag" name="tag" bind:value={toAddTag} />
+                  <button type="button" class="btn tag-button text-white" on:click={addTag}>Add</button>
+                </div>
+                <div class="tag-list-container">
+                  <div class="tag-list">
+                    {#each tags as tag}
+                      <button type="button" class="tag-toggle mt-2" on:click={() => removeTag(tag)}>
+                        {tag}
+                        <span class="remove-tag">&times;</span>
+                      </button>
+                    {/each}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-9"></div>
+              <div class="col-sm-3">
+                <button class="btn confirm-button text-white" type="submit">Search</button>
+              </div>
             </div>
           </div>
         </form>
@@ -192,6 +210,10 @@
 {/if}
 
 <style>
+  .tag-list-container {
+    height: 40px;
+  }
+
   .tag-toggle {
     background-color: rgb(207, 59, 59);
     border-radius: 10px;
@@ -226,57 +248,7 @@
     background-color: #1ca496;
     border-radius: 0.8rem;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-    padding: 2rem 2rem 1rem 2rem;
-  }
-
-  .grid {
-    display: grid;
-    color: white;
-    grid-template-columns: repeat(2, 1fr);
-    place-items: center;
-    text-align: center;
-  }
-
-  .grid-item {
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-
-  .input-normal input {
-    width: 50%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.3rem;
-  }
-
-  .grid-item > input {
-    width: 50%;
-    padding: 0;
-    border: 0;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.3rem;
-  }
-
-  .tag-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    width: 100%;
-    padding: 0;
-  }
-  .tag-input > input {
-    width: 30%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.3rem;
-  }
-  .tag-input > .right {
-    min-width: 3%;
-  }
-  .tag-input > .left {
-    max-width: 10%;
+    padding: 2rem 2rem 1.8rem 2rem;
   }
 
   .tag-button {

@@ -8,6 +8,9 @@
   let alertModalOptions = {}
 
   const checkSignedIn = async () => {
+    if ($userDetails) {
+      return
+    }
     try {
       const response = await fetch(`http://localhost:4000/me`, {
         method: "GET",
