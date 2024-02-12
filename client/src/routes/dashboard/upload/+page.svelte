@@ -108,32 +108,32 @@
           <input type="text" name="tag" class="normal-input mb-1 p-2" bind:value={toAddTag} id="tag" />
           <button class="btn tag-button text-white p-2" type="button" on:click={addTag}>Add tag</button>
           <br />
-          {#each tags as tag}
-            <span class="tag-container">
-              <button type="btn button" class="tag-toggle" on:click={() => removeTag(tag)}>
-                {tag}
-                <span class="remove-tag">
-                  <i class="fa fa-times"></i>
-                </span>
-              </button>
-              &nbsp;
-            </span>
-          {/each}
-        </div>
-        <div class="upload-options d-flex justify-content-around align-items-center my-3">
-          <div class="file-div">
-            <!-- <label for="file">Upload File:</label> -->
-            <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
+          <div class="tag-list-container">
+            <div class="tag-list">
+              {#each tags as tag}
+                <button type="button" class="tag-toggle mt-2" on:click={() => removeTag(tag)}>
+                  {tag}
+                  <span class="remove-tag">&times;</span>
+                </button>
+                <span>&nbsp</span>
+              {/each}
+            </div>
           </div>
-          <div class="or-separator">OR</div>
-          <div class="url-div">
-            <label for="imageUrl">Image URL:</label>
-            <input type="url" name="imageUrl" class="url-input" bind:value={url} />
+          <div class="upload-options d-flex justify-content-around align-items-center my-3">
+            <div class="file-div">
+              <!-- <label for="file">Upload File:</label> -->
+              <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
+            </div>
+            <div class="or-separator">OR</div>
+            <div class="url-div">
+              <label for="imageUrl">Image URL:</label>
+              <input type="url" name="imageUrl" class="url-input" bind:value={url} />
+            </div>
           </div>
-        </div>
 
-        <div class="d-flex justify-content-center align-items-center">
-          <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
+          <div class="d-flex justify-content-center align-items-center">
+            <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
+          </div>
         </div>
       </form>
     </div>
@@ -145,6 +145,9 @@
 {/if}
 
 <style>
+  .tag-list-container {
+    height: 30px;
+  }
   .main-card {
     background-color: #1ca496;
     border-radius: 0.8rem;

@@ -621,10 +621,6 @@
     border-radius: 4px;
   }
 
-  .edit-button:hover {
-    transform: scale(1.05);
-  }
-
   .total-num {
     font-size: 1.2rem;
     margin: 0px 0px 1rem 0px;

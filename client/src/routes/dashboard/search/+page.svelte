@@ -180,6 +180,7 @@
                         {tag}
                         <span class="remove-tag">&times;</span>
                       </button>
+                      <span>&nbsp</span>
                     {/each}
                   </div>
                 </div>
