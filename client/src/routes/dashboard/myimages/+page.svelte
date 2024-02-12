@@ -38,29 +38,39 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content pt-4 {images.length < 1 ? 'none-found' : ''}">
-    {#await fetchNextImages()}
-      <div class="loading-spinner">
-        <i class="fas fa-spinner fa-spin"></i>
-      </div>
-    {:then}
-      {#if images.length > 0}
-        <h2 class="pb-4">Your images:</h2>
-        <div class="main-card mb-3 pt-4 px-2">
-          {#each images as { id, url, title, destroyTime, isFlagged }}
-            <ImageCard {id} {url} {title} {destroyTime} {isFlagged} />
-          {/each}
+  <div class="d-flex align-items-center flex-column pt-2">
+    <div class="content pt-4 {images.length < 1 ? 'none-found' : ''}">
+      {#await fetchNextImages()}
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i>
         </div>
-      {:else}
-        <div class="no-images-message">
-          <p>
-            You haven't uploaded any images yet. Start by uploading your favorite images by <a href="/dashboard/upload"
-              >clicking here!</a
-            >
-          </p>
-        </div>
-      {/if}
-    {/await}
+      {:then}
+        {#if images.length > 0}
+          <h2 class="pb-4">Your images:</h2>
+          <div class="container">
+            <div class="row">
+              {#each images as { id, url, title, destroyTime, isFlagged }}
+                <div class="col-md-6 col-xl-4 mb-3">
+                  <div class="card border-0">
+                    <div class="card-body">
+                      <ImageCard {id} {url} {title} {destroyTime} {isFlagged} />
+                    </div>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          <div class="no-images-message">
+            <p>
+              You haven't uploaded any images yet. Start by uploading your favorite images by <a href="/dashboard/upload"
+                >clicking here!</a
+              >
+            </p>
+          </div>
+        {/if}
+      {/await}
+    </div>
   </div>
 </div>
 
@@ -89,19 +99,6 @@
     margin-left: 14vw;
     flex: 1;
     padding: 0px 0.7rem 0px 2rem;
-  }
-
-  .main-card {
-    background-color: #ffffff;
-    font-family: "Poppins", sans-serif;
-    font-weight: 300;
-    border-radius: 0.8rem;
-    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    place-items: center;
-    align-items: start;
   }
 
   .no-images-message {

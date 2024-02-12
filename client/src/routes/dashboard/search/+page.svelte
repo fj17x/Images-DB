@@ -125,7 +125,6 @@
       <h4>Advanced search:</h4>
       <div class="card main-card text-white">
         <form on:submit|preventDefault={handleSearchAdvanced}>
-          <!-- Grid layout using Bootstrap classes -->
           <div class="row mb-3">
             <div class="col-md-6">
               <div class="form-group">
@@ -152,7 +151,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="offset">Offset:</label>
-                <input type="number" class="form-control" id="offset" name="offset" bind:value={offset} required />
+                <input type="number" class="form-control" id="offset" name="offset" min="0" bind:value={offset} required />
               </div>
             </div>
 

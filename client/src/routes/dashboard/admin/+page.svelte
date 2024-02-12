@@ -311,7 +311,6 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-
   <div class=" d-flex align-items-center flex-column pt-2 pb-5">
     <div class="content statistics my-3">
       <h3>Admin Panel</h3>

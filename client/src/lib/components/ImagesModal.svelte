@@ -11,15 +11,19 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
-    <div class="{images.length == 1 ? 'single' : 'image-grid '} ">
-      {#if images.length > 1}
+    {#if images.length > 1}
+      <div class="row">
         {#each images as { id, url, title, destroyTime, isFlagged }}
-          <ImageCard {url} {title} {id} {destroyTime} {isFlagged} />
+          <div class="col-md-6 mb-3">
+            <ImageCard {url} {title} {id} {destroyTime} {isFlagged} />
+          </div>
         {/each}
-      {:else if images.length == 1}
+      </div>
+    {:else if images.length == 1}
+      <div class="single">
         <ImageCard url={images[0].url} title={images[0].title} id={images[0].id} isSingleImage={true} />
-      {/if}
-    </div>
+      </div>
+    {/if}
     <button class="close-button" on:click={() => dialog.close()}>Close</button>
   </div>
 </dialog>
@@ -37,12 +41,6 @@
     border-radius: 0.2em;
     border: none;
     padding: 0;
-  }
-
-  .image-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
-    gap: 1em;
   }
 
   dialog::backdrop {

@@ -77,65 +77,67 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content pt-4">
-    <h3 class="pb-3">Upload an Image:</h3>
+  <div class="d-flex align-items-center flex-column pt-2">
+    <div class="container content pt-4">
+      <h3 class="pb-3">Upload an Image:</h3>
 
-    <div class="main-card px-4 py-3">
-      <form
-        class="text-white d-flex flex-column justify-content-center align-items-between pb-3"
-        on:submit|preventDefault={handleUpload}
-      >
-        <span>
-          <label for="title">Title*:</label>
-          <!-- svelte-ignore a11y-autofocus -->
-          <input
-            autofocus
-            type="text"
-            name="title"
-            class="normal-input form-control mb-3 p-2"
-            bind:value={title}
-            required
-          /></span
+      <div class="main-card px-4 py-3">
+        <form
+          class="text-white d-flex flex-column justify-content-center align-items-between pb-3"
+          on:submit|preventDefault={handleUpload}
         >
-        <span>
-          <label for="title">Description:</label>
-          <textarea class="normal-input form-control mb-3 p-2" bind:value={description} name="description" /></span
-        >
-        <div>
+          <span>
+            <label for="title">Title*:</label>
+            <!-- svelte-ignore a11y-autofocus -->
+            <input
+              autofocus
+              type="text"
+              name="title"
+              class="normal-input form-control mb-3 p-2"
+              bind:value={title}
+              required
+            /></span
+          >
+          <span>
+            <label for="title">Description:</label>
+            <textarea class="normal-input form-control mb-3 p-2" bind:value={description} name="description" /></span
+          >
           <div>
-            <label for="title">Tags:</label>
-          </div>
-          <input type="text" name="tag" class="normal-input mb-1 p-2" bind:value={toAddTag} id="tag" />
-          <button class="btn tag-button text-white p-2" type="button" on:click={addTag}>Add tag</button>
-          <br />
-          <div class="tag-list-container">
-            <div class="tag-list">
-              {#each tags as tag}
-                <button type="button" class="tag-toggle mt-2" on:click={() => removeTag(tag)}>
-                  {tag}
-                  <span class="remove-tag">&times;</span>
-                </button>
-                <span>&nbsp</span>
-              {/each}
+            <div>
+              <label for="title">Tags:</label>
             </div>
-          </div>
-          <div class="upload-options d-flex justify-content-around align-items-center my-3">
-            <div class="file-div">
-              <!-- <label for="file">Upload File:</label> -->
-              <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
+            <input type="text" name="tag" class="normal-input mb-1 p-2" bind:value={toAddTag} id="tag" />
+            <button class="btn tag-button text-white p-2" type="button" on:click={addTag}>Add tag</button>
+            <br />
+            <div class="tag-list-container">
+              <div class="tag-list">
+                {#each tags as tag}
+                  <button type="button" class="tag-toggle mt-2" on:click={() => removeTag(tag)}>
+                    {tag}
+                    <span class="remove-tag">&times;</span>
+                  </button>
+                  <span>&nbsp</span>
+                {/each}
+              </div>
             </div>
-            <div class="or-separator">OR</div>
-            <div class="url-div">
-              <label for="imageUrl">Image URL:</label>
-              <input type="url" name="imageUrl" class="url-input" bind:value={url} />
+            <div class="upload-options d-flex justify-content-around align-items-center my-3">
+              <div class="file-div">
+                <!-- <label for="file">Upload File:</label> -->
+                <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
+              </div>
+              <div class="or-separator">OR</div>
+              <div class="url-div">
+                <label for="imageUrl">Image URL:</label>
+                <input type="url" name="imageUrl" class="url-input" bind:value={url} />
+              </div>
             </div>
-          </div>
 
-          <div class="d-flex justify-content-center align-items-center">
-            <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
+            <div class="d-flex justify-content-center align-items-center">
+              <button class="btn confirm text-white p-2 w-50" type="submit">Confirm</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </div>

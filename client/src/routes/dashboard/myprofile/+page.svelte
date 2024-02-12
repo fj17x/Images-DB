@@ -118,53 +118,77 @@
 
 <div class="container-fluid p-0 m-0">
   <Sidebar />
-  <div class="content d-flex align-items-center flex-column pt-5">
-    <h3>Your Profile:</h3>
-    <div class="main-card p-4 mt-2">
-      {#if $userDetails.id}
-        <div class="d-flex flex-column">
-          <div class="bar">
-            <p class="fw-bold m-0">User ID:</p>
-            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">{$userDetails.id}</p>
+  <div class="d-flex align-items-center flex-column pt-2">
+    <div class="container content d-flex align-items-center flex-column pt-5">
+      <h3>Your Profile:</h3>
+      <div class="main-card p-4 mt-2 w-75">
+        {#if $userDetails.id}
+          <div class="d-flex flex-column">
+            <div class="row">
+              <div class="col-7">
+                <p class="fw-bold m-0">User ID:</p>
+              </div>
+              <div class="col-5">
+                <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">{$userDetails.id}</p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-7">
+                <p class="fw-bold m-0">Username:</p>
+              </div>
+              <div class="col-5">
+                <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+                  {$userDetails.userName}
+                </p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-7">
+                <p class="fw-bold m-0">Profile created on:</p>
+              </div>
+              <div class="col-5">
+                <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+                  {formatDate($userDetails.createdAt)}
+                </p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-7">
+                <p class="fw-bold m-0">Profile last modified on :</p>
+              </div>
+              <div class="col-5">
+                <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+                  {formatDate($userDetails.updatedAt)}
+                </p>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-7">
+                <p class="fw-bold m-0">Images uploaded:</p>
+              </div>
+              <div class="col-5">
+                <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
+                  {$userDetails?.imagesUploaded?.length}
+                </p>
+              </div>
+            </div>
           </div>
-          <hr />
-          <div class="bar">
-            <p class="fw-bold m-0">Username:</p>
-            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">{$userDetails.userName}</p>
+        {:else}
+          <div class="loading-spinner d-flex justify-content-center align-items-center text-dark">
+            <i class="fas fa-spinner fa-spin"></i>
           </div>
-          <hr />
-          <div class="bar">
-            <p class="fw-bold m-0">Profile created on:</p>
-            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
-              {formatDate($userDetails.createdAt)}
-            </p>
-          </div>
-          <hr />
-          <div class="bar">
-            <p class="fw-bold m-0">Profile last modified on:</p>
-            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
-              {formatDate($userDetails.updatedAt)}
-            </p>
-          </div>
-          <hr />
-          <div class="bar">
-            <p class="fw-bold m-0">Images uploaded:</p>
-            <p class="fw-bold m-0 result d-flex align-items-center justify-content-center fw-semibold">
-              {$userDetails?.imagesUploaded?.length}
-            </p>
-          </div>
-        </div>
-      {:else}
-        <div class="loading-spinner d-flex justify-content-center align-items-center text-dark">
-          <i class="fas fa-spinner fa-spin"></i>
-        </div>
-      {/if}
-    </div>
+        {/if}
+      </div>
 
-    <div class="options d-flex justify-content-around align-items-center gap-3 mt-3">
-      <button class="btn delete text-white" on:click={handleDeleteAccount}>Delete account</button>
-      <button class="btn delete text-white" on:click={handleDeleteAllImages}>Delete all your images </button>
-      <button class="btn edit text-white" on:click={() => (showEditProfileModal = true)}>Update profile </button>
+      <div class="options d-flex justify-content-around align-items-center gap-3 mt-3">
+        <button class="btn delete text-white" on:click={handleDeleteAccount}>Delete account</button>
+        <button class="btn delete text-white" on:click={handleDeleteAllImages}>Delete all your images </button>
+        <button class="btn edit text-white" on:click={() => (showEditProfileModal = true)}>Update profile </button>
+      </div>
     </div>
   </div>
 </div>
