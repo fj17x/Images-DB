@@ -12,7 +12,7 @@
   updatedDetails.description = oldDescription
   updatedDetails.tags = oldTags
   updatedDetails.url = oldUrl
-  updatedDetails.id = oldId
+  updatedDetails.id = Number(oldId)
   updatedDetails.ownerId = oldOwnerId
   updatedDetails.toAddTag
 

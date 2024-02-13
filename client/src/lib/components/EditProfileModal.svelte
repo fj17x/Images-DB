@@ -11,7 +11,7 @@
   let updatedDetails = {}
 
   updatedDetails.userName = oldUser.userName
-  updatedDetails.id = oldUser.id
+  updatedDetails.id = Number(oldUser.id)
   updatedDetails.isAdmin = oldUser.isAdmin
 
   let showAlertModal = false
