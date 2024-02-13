@@ -193,23 +193,10 @@ const partiallyUpdateUserById = async (req, res) => {
     for (const key in fieldsToUpdate) {
       const value = fieldsToUpdate[key]
       if (value !== undefined) {
-        if (key === "id") {
-          if (typeof value !== "number") {
-            return res.status(400).json({
-              error: "Id should be a number.",
-            })
-          }
-          const userAlreadyExists = await User.findOne({
-            where: {
-              id: value,
-            },
+        if (key === "id" && typeof value !== "number") {
+          return res.status(400).json({
+            error: "Id should be a number.",
           })
-
-          if (userAlreadyExists) {
-            return res.status(409).json({
-              error: "User with given ID already exists!",
-            })
-          }
         }
         if ((key === "userName" || key === "password") && typeof value !== "string") {
           return res.status(400).json({ error: `${key} should be a string!` })
@@ -258,21 +245,15 @@ const updateUserById = async (req, res) => {
       return res.status(400).json({ error: "ID should be provided as an number." })
     }
 
-    const UserAlreadyExists = await User.findOne({
-      where: {
-        id,
-      },
-    })
-
-    if (UserAlreadyExists) {
-      return res.status(409).json({
-        error: "User with given ID already exists!",
-      })
-    }
-
     if (!userName) {
       return res.status(400).json({
         error: "Request must include userName!",
+      })
+    }
+
+    if (typeof userName !== "string") {
+      return res.status(400).json({
+        error: "Invalid data type for userName.Please provide a string..",
       })
     }
 
@@ -290,6 +271,11 @@ const updateUserById = async (req, res) => {
       })
     }
 
+    if (typeof password !== "string") {
+      return res.status(400).json({
+        error: "Invalid data type for password. Please provide a string.",
+      })
+    }
     if (!createdAt) {
       return res.status(400).json({
         error: "Request must include createdAt!",
@@ -299,18 +285,6 @@ const updateUserById = async (req, res) => {
     if (!updatedAt) {
       return res.status(400).json({
         error: "Request must include updatedAt!",
-      })
-    }
-
-    if (typeof userName !== "string") {
-      return res.status(400).json({
-        error: "Invalid data type for userName.Please provide a string..",
-      })
-    }
-
-    if (typeof password !== "string") {
-      return res.status(400).json({
-        error: "Invalid data type for password. Please provide a string.",
       })
     }
 
@@ -324,6 +298,7 @@ const updateUserById = async (req, res) => {
     if (isNaN(updatedAtDate.getTime())) {
       return res.status(400).json({ error: "Invalid date format for updatedAt." })
     }
+
     const formattedcreatedAt = createdAtDate.toISOString()
     const formattedupdatedAt = updatedAtDate.toISOString()
 

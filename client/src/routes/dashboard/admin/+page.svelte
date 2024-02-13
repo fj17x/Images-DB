@@ -84,7 +84,7 @@
       showAlertModal = true
     } else {
       alertModalOptions.header = "Could not update"
-      alertModalOptions.message = reply.error
+      alertModalOptions.message = reply.details ?? reply.error
       alertModalOptions.type = "failure"
       showAlertModal = true
     }
@@ -437,7 +437,6 @@
               <p class="total-info">Enter User ID:</p>
               <div class="d-flex gap-2">
                 <input type="number" bind:value={userIdGiven} class="edit-input" />
-                <!-- <button class="edit-button">Edit</button> -->
                 <button class="btn orange text-white" on:click={handleUserEdit}>Edit</button>
                 <button class="btn red text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
                 <button class="btn green text-white" on:click={() => handleUserDeletion(false)}>Restore</button>
@@ -447,7 +446,6 @@
               <p class="total-info">Enter Image ID:</p>
               <div class="d-flex gap-2">
                 <input type="number" bind:value={imageIdGiven} class="edit-input form-control" />
-                <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
                 <div class="d-flex flex-column justify-content-center align-items-center w-25">
                   <button class="btn images-option-button orange text-white" on:click={handleImageEdit}>Edit</button>
                 </div>
