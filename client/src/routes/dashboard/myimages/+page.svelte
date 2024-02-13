@@ -47,7 +47,7 @@
       {:then}
         {#if images.length > 0}
           <h2 class="pb-4">Your images:</h2>
-          <div class="container">
+          <div class="main-container container p-2">
             <div class="row">
               {#each images as { id, url, title, destroyTime, isFlagged }}
                 <div class="col-md-6 col-xl-4 mb-3">
@@ -76,6 +76,11 @@
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins:400,700,900");
+
+  .main-container {
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.8rem;
+  }
 
   .none-found {
     height: 100vh;
