@@ -194,7 +194,7 @@ const getBatchOfImages = async (req, res) => {
             [Op.contains]: tagList,
           },
           isFlagged: showFlagged === "true" ? { [Op.or]: [true, false] } : false,
-          [Op.and]: [searchQuery ? sequelize.literal(`CAST("Image"."${searchColumn}" AS TEXT) LIKE '%${searchQuery}%'`) : {}],
+          [Op.and]: [searchQuery ? sequelize.literal(`CAST("Image"."${searchColumn}" AS TEXT) ILIKE '%${searchQuery}%'`) : {}],
         }
       : {
           tags: {

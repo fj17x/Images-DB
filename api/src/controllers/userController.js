@@ -117,7 +117,7 @@ const fetchBatchOfUsers = async (req, res) => {
 
     const whereCondition = isAdmin
       ? searchQuery
-        ? sequelize.literal(`CAST("${searchColumn}" AS TEXT) LIKE '%${searchQuery}%'`)
+        ? sequelize.literal(`CAST("${searchColumn}" AS TEXT) ILIKE '%${searchQuery}%'`)
         : {}
       : {}
 
