@@ -193,10 +193,23 @@ const partiallyUpdateUserById = async (req, res) => {
     for (const key in fieldsToUpdate) {
       const value = fieldsToUpdate[key]
       if (value !== undefined) {
-        if (key === "id" && typeof value !== "number") {
-          return res.status(400).json({
-            error: "Id should be a number.",
+        if (key === "id") {
+          if (typeof value !== "number") {
+            return res.status(400).json({
+              error: "Id should be a number.",
+            })
+          }
+          const userAlreadyExists = await User.findOne({
+            where: {
+              id: value,
+            },
           })
+
+          if (userAlreadyExists) {
+            return res.status(409).json({
+              error: "User with given ID already exists!",
+            })
+          }
         }
         if ((key === "userName" || key === "password") && typeof value !== "string") {
           return res.status(400).json({ error: `${key} should be a string!` })
@@ -238,7 +251,22 @@ const updateUserById = async (req, res) => {
 
     if (!id) {
       return res.status(400).json({
-        error: "Request must include id!",
+        error: "Request must include ID!",
+      })
+    }
+    if (typeof id !== "number") {
+      return res.status(400).json({ error: "ID should be provided as an number." })
+    }
+
+    const UserAlreadyExists = await User.findOne({
+      where: {
+        id,
+      },
+    })
+
+    if (UserAlreadyExists) {
+      return res.status(409).json({
+        error: "User with given ID already exists!",
       })
     }
 
@@ -271,12 +299,6 @@ const updateUserById = async (req, res) => {
     if (!updatedAt) {
       return res.status(400).json({
         error: "Request must include updatedAt!",
-      })
-    }
-
-    if (typeof id !== "number") {
-      return res.status(400).json({
-        error: "Invalid data type for id. Please provide a number.",
       })
     }
 
@@ -376,7 +398,7 @@ const createUser = async (req, res) => {
     })
 
     if (foundUser) {
-      return res.status(400).json({ error: "userName already exists!" })
+      return res.status(409).json({ error: "userName already exists!" })
     }
 
     const passwordToString = password.toString()

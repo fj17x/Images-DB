@@ -52,7 +52,7 @@ const register = async (req, res) => {
     })
 
     if (foundUser) {
-      return res.status(400).json({ error: "userName already exists!" })
+      return res.status(409).json({ error: "userName already exists!" })
     }
 
     const passwordToString = password.toString()
