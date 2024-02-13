@@ -114,9 +114,9 @@
               <!-- svelte-ignore a11y-autofocus -->
               <input autofocus type="number" class="form-control" name="id" bind:value={idForSimple} required />
             </div>
-            <span class="d-flex justify-content-center align-items-end">
+            <div>
               <button class="btn text-white confirm-button" type="submit">Search</button>
-            </span>
+            </div>
           </span>
         </form>
       </div>

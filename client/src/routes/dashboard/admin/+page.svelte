@@ -396,7 +396,7 @@
             class="form-control w-100"
             on:input={handleSearchChange}
           />
-          <select bind:value={searchColumn} on:change={handleSearchChange} class="form-select w-50 margin-auto">
+          <select bind:value={searchColumn} on:change={handleSearchChange} class="form-select w-75 margin-auto">
             {#each columns as column}
               <option value={column}>{column}</option>
             {/each}
