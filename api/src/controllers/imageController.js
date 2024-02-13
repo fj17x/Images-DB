@@ -342,22 +342,8 @@ const partiallyUpdateImage = async (req, res) => {
     const allowedFieldsByUsers = ["title", "description", "tags", "url"]
     const titleMaxLength = 65
 
-    if (id) {
-      if (typeof id !== "number") {
-        return res.status(400).json({ error: "Id should be provided as an number." })
-      }
-
-      const ImageAlreadyExists = await Image.findOne({
-        where: {
-          id,
-        },
-      })
-
-      if (ImageAlreadyExists) {
-        return res.status(409).json({
-          error: "Image with given ID already exists!",
-        })
-      }
+    if (id && typeof id !== "number") {
+      return res.status(400).json({ error: "Id should be provided as an number." })
     }
 
     if (url && typeof url !== "string") {
@@ -493,18 +479,6 @@ const updateImage = async (req, res) => {
 
     if (typeof id !== "number") {
       return res.status(400).json({ error: "ID should be provided as an number." })
-    }
-
-    const ImageAlreadyExists = await Image.findOne({
-      where: {
-        id,
-      },
-    })
-
-    if (ImageAlreadyExists) {
-      return res.status(409).json({
-        error: "Image with given ID already exists!",
-      })
     }
 
     if (!url) {
