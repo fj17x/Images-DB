@@ -1,30 +1,35 @@
 <script>
   export let showModal
   export let onEditConfirm
-  export let oldTitle, oldDescription, oldTags, oldUrl
+  export let oldTitle, oldDescription, oldTags, oldUrl, oldId, oldOwnerId
   import AlertModal from "$lib/components/AlertModal.svelte"
 
   let dialog
 
-  let title = oldTitle
-  let description = oldDescription
-  let tags = oldTags
-  let url = oldUrl
+  let updatedDetails = {}
+
+  updatedDetails.title = oldTitle
+  updatedDetails.description = oldDescription
+  updatedDetails.tags = oldTags
+  updatedDetails.url = oldUrl
+  updatedDetails.id = oldId
+  updatedDetails.ownerId = oldOwnerId
+  updatedDetails.toAddTag
 
   let showAlertModal = false
   let alertModalOptions = {}
 
-  let toAddTag
+  export let isfullEdit = false
 
   $: if (dialog && showModal) dialog.showModal()
 
   const addTag = () => {
-    const tagValue = toAddTag.trim()
+    const tagValue = updatedDetails.toAddTag.trim()
 
     if (tagValue) {
-      if (!tags.includes(tagValue)) {
-        tags = [...tags, tagValue]
-        toAddTag = ""
+      if (!updatedDetails.tags.includes(tagValue)) {
+        updatedDetails.tags = [...updatedDetails.tags, tagValue]
+        updatedDetails.toAddTag = ""
       } else {
         alertModalOptions.header = "Could not add tag"
         alertModalOptions.message = "Tag already exists!"
@@ -40,7 +45,7 @@
   }
 
   const removeTag = (toRemoveTag) => {
-    tags = tags.filter((tag) => tag !== toRemoveTag)
+    updatedDetails.tags = updatedDetails.tags.filter((tag) => tag !== toRemoveTag)
   }
 </script>
 
@@ -51,30 +56,43 @@
     <h2>Edit Image</h2>
     <hr />
     <div class="card-form">
-      <div>
+      {#if isfullEdit}
+        <div class="mb-2">
+          <div>
+            <label for="title">Change id:</label>
+            <input type="number" class="full" name="title" bind:value={updatedDetails.id} />
+          </div>
+        </div>
+        <div class="mb-2">
+          <div>
+            <label for="title">Change owner id:</label>
+            <input type="text" class="full" name="title" bind:value={updatedDetails.ownerId} />
+          </div>
+        </div>
+      {/if}
+      <div class="mb-2">
         <label for="title">Change title:</label>
-
-        <input type="text" class="full" name="title" bind:value={title} />
+        <input type="text" class="full" name="title" bind:value={updatedDetails.title} />
       </div>
       <div>
-        <div>
+        <div class="mb-2">
           <label for="title">Change description:</label>
-          <textarea type="text" class="full" rows="4" name="description" bind:value={description} />
+          <textarea type="text" class="full" rows="4" name="description" bind:value={updatedDetails.description} />
         </div>
 
-        <div>
+        <div class="mb-2">
           <label for="title">Change URL:</label>
-          <input type="text" class="full" name="url" bind:value={url} />
+          <input type="text" class="full" name="url" bind:value={updatedDetails.url} />
         </div>
 
-        <div>
+        <div class="mb-2">
           <label for="title">Modify tags:</label>
           <div>
-            <input type="text" name="tag" id="tag" bind:value={toAddTag} />
+            <input type="text" name="tag" id="tag" bind:value={updatedDetails.toAddTag} />
             <button type="button" class="btn tag-button" on:click={addTag}>Add</button>
           </div>
-          {#if tags}
-            {#each tags as tag}
+          {#if updatedDetails.tags}
+            {#each updatedDetails.tags as tag}
               <span class="tag-container">
                 <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
                   {tag}
@@ -87,7 +105,7 @@
           {/if}
         </div>
         <button class="btn text-white mt-3 red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
-        <button class="btn text-white mt-3 green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}>
+        <button class="btn text-white mt-3 green" type="button" on:click={onEditConfirm(true, updatedDetails, "images")}>
           Confirm
         </button>
       </div>

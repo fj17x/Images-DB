@@ -193,6 +193,11 @@ const partiallyUpdateUserById = async (req, res) => {
     for (const key in fieldsToUpdate) {
       const value = fieldsToUpdate[key]
       if (value !== undefined) {
+        if (key === "id" && typeof value !== "number") {
+          return res.status(400).json({
+            error: "Id should be a number.",
+          })
+        }
         if ((key === "userName" || key === "password") && typeof value !== "string") {
           return res.status(400).json({ error: `${key} should be a string!` })
         }

@@ -42,25 +42,39 @@
   let showEditProfileModal = false
   let showEditImageModal = false
 
-  const onEditConfirm = async (status, data) => {
+  const onEditConfirm = async (status, data, forEntity) => {
     if (!status) {
       showEditProfileModal = false
+      showEditImageModal = false
       return
     }
     if (data) {
       Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
     }
 
-    showEditProfileModal = false
+    let response
 
-    const response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    if (forEntity === "users") {
+      response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+        method: "PATCH",
+        credentials: "include",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      showEditProfileModal = false
+    } else if (forEntity === "images") {
+      response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+        method: "PATCH",
+        credentials: "include",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      showEditImageModal = false
+    }
 
     const reply = await response.json()
     if (response.ok) {
@@ -331,27 +345,6 @@
     }
   }
 
-  const handleImageEdit = async () => {
-    let response
-
-    response = await fetch(`http://localhost:4000/users/${imageIdGiven}`, {
-      method: "GET",
-      credentials: "include",
-    })
-
-    const reply = await response.json()
-    imageToEdit = reply.data
-
-    if (response.ok) {
-      showEditImageModal = true
-    } else {
-      alertModalOptions.header = "Operation failed"
-      alertModalOptions.message = reply.error
-      alertModalOptions.type = "failure"
-      showAlertModal = true
-    }
-  }
-
   const handleUserEdit = async () => {
     let response
 
@@ -365,6 +358,27 @@
 
     if (response.ok) {
       showEditProfileModal = true
+    } else {
+      alertModalOptions.header = "Operation failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
+
+  const handleImageEdit = async () => {
+    let response
+
+    response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+      method: "GET",
+      credentials: "include",
+    })
+
+    const reply = await response.json()
+    imageToEdit = reply.data
+
+    if (response.ok) {
+      showEditImageModal = true
     } else {
       alertModalOptions.header = "Operation failed"
       alertModalOptions.message = reply.error
@@ -422,7 +436,7 @@
             <div class="small-box">
               <p class="total-info">Enter User ID:</p>
               <div class="d-flex gap-2">
-                <input type="text" bind:value={userIdGiven} class="edit-input" />
+                <input type="number" bind:value={userIdGiven} class="edit-input" />
                 <!-- <button class="edit-button">Edit</button> -->
                 <button class="btn orange text-white" on:click={handleUserEdit}>Edit</button>
                 <button class="btn red text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
@@ -432,7 +446,7 @@
             <div class="small-box">
               <p class="total-info">Enter Image ID:</p>
               <div class="d-flex gap-2">
-                <input type="text" bind:value={imageIdGiven} class="edit-input form-control" />
+                <input type="number" bind:value={imageIdGiven} class="edit-input form-control" />
                 <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
                 <div class="d-flex flex-column justify-content-center align-items-center w-25">
                   <button class="btn images-option-button orange text-white" on:click={handleImageEdit}>Edit</button>
@@ -660,10 +674,13 @@
 {#if showEditImageModal}
   <EditImageModal
     bind:showModal={showEditImageModal}
+    oldId={imageIdGiven}
     oldTitle={imageToEdit.title}
     oldDescription={imageToEdit.description}
     oldTags={imageToEdit.tags}
     oldUrl={imageToEdit.url}
+    oldOwnerId={imageToEdit.ownerId}
+    isfullEdit={true}
     {onEditConfirm}
   ></EditImageModal>
 {/if}

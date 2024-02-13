@@ -34,7 +34,8 @@
             <label for="title" class="fw-bold">Change id:</label>
           </div>
           <input type="number" class="full" name="id" bind:value={updatedDetails.id} />
-        </div>{/if}
+        </div>
+      {/if}
       <div class="mb-2">
         <div class="d-flex justify-content-center">
           <label for="title" class="fw-bold">Change username:</label>
@@ -74,8 +75,10 @@
       {/if}
       <div class="d-flex justify-content-around">
         <button class="btn close-button text-white red mt-2" type="button" on:click={onEditConfirm(false)}>Cancel</button>
-        <button class="btn close-button text-white green mt-2" type="button" on:click={onEditConfirm(true, updatedDetails)}
-          >Confirm</button
+        <button
+          class="btn close-button text-white green mt-2"
+          type="button"
+          on:click={onEditConfirm(true, updatedDetails, "users")}>Confirm</button
         >
       </div>
     </div>
