@@ -73,16 +73,18 @@
             <input type="text" name="tag" id="tag" bind:value={toAddTag} />
             <button type="button" class="btn tag-button" on:click={addTag}>Add</button>
           </div>
-          {#each tags as tag}
-            <span class="tag-container">
-              <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
-                {tag}
-                <span class="remove-tag">
-                  <i class="fa fa-times"></i>
-                </span>
-              </button>
-            </span>
-          {/each}
+          {#if tags}
+            {#each tags as tag}
+              <span class="tag-container">
+                <button type="button" class="tag-toggle" on:click={() => removeTag(tag)}>
+                  {tag}
+                  <span class="remove-tag">
+                    <i class="fa fa-times"></i>
+                  </span>
+                </button>
+              </span>
+            {/each}
+          {/if}
         </div>
         <button class="btn text-white mt-3 red" type="button" on:click={onEditConfirm(false)}>Cancel</button>
         <button class="btn text-white mt-3 green" type="button" on:click={onEditConfirm(true, { title, description, tags, url })}>

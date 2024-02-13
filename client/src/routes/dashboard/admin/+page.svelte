@@ -2,6 +2,8 @@
   import Sidebar from "$lib/components/Sidebar.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
   import { userDetails } from "../../../stores/userDetails.js"
+  import EditProfileModal from "$lib/components/EditProfileModal.svelte"
+  import EditImageModal from "$lib/components/EditImageModal.svelte"
   import { goto } from "$app/navigation"
   import { onMount } from "svelte"
 
@@ -25,8 +27,10 @@
   let clickedBox = "users"
   let first = true
 
-  let imageIdGiven
+  let userToEdit = {}
+  let imageToEdit = {}
   let userIdGiven
+  let imageIdGiven
 
   let searchColumn = "id"
   let searchQuery
@@ -35,7 +39,42 @@
   let sortByQuery = "id",
     sortOrderQuery = "ASC"
 
-  $: console.log(sortByQuery)
+  let showEditProfileModal = false
+  let showEditImageModal = false
+
+  const onEditConfirm = async (status, data) => {
+    if (!status) {
+      showEditProfileModal = false
+      return
+    }
+    if (data) {
+      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+    }
+
+    showEditProfileModal = false
+
+    const response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const reply = await response.json()
+    if (response.ok) {
+      alertModalOptions.header = "Successfully updated"
+      alertModalOptions.message = reply.message
+      alertModalOptions.type = "success"
+      showAlertModal = true
+    } else {
+      alertModalOptions.header = "Could not update"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
 
   const fetchUsersOrImages = async () => {
     const queryParams = new URLSearchParams({
@@ -292,6 +331,48 @@
     }
   }
 
+  const handleImageEdit = async () => {
+    let response
+
+    response = await fetch(`http://localhost:4000/users/${imageIdGiven}`, {
+      method: "GET",
+      credentials: "include",
+    })
+
+    const reply = await response.json()
+    imageToEdit = reply.data
+
+    if (response.ok) {
+      showEditImageModal = true
+    } else {
+      alertModalOptions.header = "Operation failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
+
+  const handleUserEdit = async () => {
+    let response
+
+    response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+      method: "GET",
+      credentials: "include",
+    })
+
+    const reply = await response.json()
+    userToEdit = reply.data
+
+    if (response.ok) {
+      showEditProfileModal = true
+    } else {
+      alertModalOptions.header = "Operation failed"
+      alertModalOptions.message = reply.error
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+    }
+  }
+
   const checkWhetherAdmin = async () => {
     if (!$userDetails.isAdmin) {
       alertModalOptions.header = "Cannot access page"
@@ -343,6 +424,7 @@
               <div class="d-flex gap-2">
                 <input type="text" bind:value={userIdGiven} class="edit-input" />
                 <!-- <button class="edit-button">Edit</button> -->
+                <button class="btn orange text-white" on:click={handleUserEdit}>Edit</button>
                 <button class="btn red text-white" on:click={() => handleUserDeletion(true)}>Delete</button>
                 <button class="btn green text-white" on:click={() => handleUserDeletion(false)}>Restore</button>
               </div>
@@ -352,6 +434,9 @@
               <div class="d-flex gap-2">
                 <input type="text" bind:value={imageIdGiven} class="edit-input form-control" />
                 <!-- <button class="edit-button" on:click={handleImageEdit}>Edit</button> -->
+                <div class="d-flex flex-column justify-content-center align-items-center w-25">
+                  <button class="btn images-option-button orange text-white" on:click={handleImageEdit}>Edit</button>
+                </div>
                 <div>
                   <button class="btn images-option-button red text-white" on:click={() => handleImageFlagging(true)}>Flag</button>
                   <button class="btn images-option-button green text-white" on:click={() => handleImageFlagging(false)}
@@ -567,6 +652,21 @@
 {#if showAlertModal}
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
+{#if showEditProfileModal}
+  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUser={userToEdit} isfullEdit={true}
+  ></EditProfileModal>
+{/if}
+
+{#if showEditImageModal}
+  <EditImageModal
+    bind:showModal={showEditImageModal}
+    oldTitle={imageToEdit.title}
+    oldDescription={imageToEdit.description}
+    oldTags={imageToEdit.tags}
+    oldUrl={imageToEdit.url}
+    {onEditConfirm}
+  ></EditImageModal>
+{/if}
 
 <style>
   @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
@@ -610,6 +710,10 @@
 
   .green {
     background-color: green;
+  }
+
+  .orange {
+    background-color: orange;
   }
 
   td {

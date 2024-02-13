@@ -144,6 +144,12 @@
   </div>
 </div>
 
+{#if showChoiceModal}
+  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
+{/if}
+{#if showAlertModal}
+  <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
+{/if}
 {#if showEditImageModal}
   <EditImageModal
     bind:showModal={showEditImageModal}
@@ -153,12 +159,6 @@
     oldUrl={image.url}
     {onEditConfirm}
   ></EditImageModal>
-{/if}
-{#if showChoiceModal}
-  <ChoiceModal bind:showModal={showChoiceModal} {onChoiceConfirm} {...choiceModalOptions}></ChoiceModal>
-{/if}
-{#if showAlertModal}
-  <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 
 <style>

@@ -3,12 +3,16 @@
 
   export let showModal
   export let onEditConfirm
-  export let oldUserName
+  export let oldUser
+  export let isfullEdit = false
 
   let dialog
 
-  let userName = oldUserName
-  let password
+  let updatedDetails = {}
+
+  updatedDetails.userName = oldUser.userName
+  updatedDetails.id = oldUser.id
+  updatedDetails.isAdmin = oldUser.isAdmin
 
   let showAlertModal = false
   let alertModalOptions = {}
@@ -18,24 +22,27 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 
-<!-- dialog {
-    border: none;
-    padding: 0;
-  } -->
 <dialog bind:this={dialog} on:close={() => (showModal = false)} class="border-0 p-1 rounded">
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation class="p-3">
-    <h2>Edit your details</h2>
+    <h2>{isfullEdit ? "Edit details" : "Edit your details"}</h2>
     <hr />
     <div class="card-form d-flex justify-content-center flex-column">
+      {#if isfullEdit}
+        <div class="mb-2">
+          <div class="d-flex justify-content-center">
+            <label for="title" class="fw-bold">Change id:</label>
+          </div>
+          <input type="number" class="full" name="id" bind:value={updatedDetails.id} />
+        </div>{/if}
       <div class="mb-2">
         <div class="d-flex justify-content-center">
           <label for="title" class="fw-bold">Change username:</label>
         </div>
 
-        <input type="text" class="full" name="userName" bind:value={userName} />
+        <input type="text" class="full" name="userName" bind:value={updatedDetails.userName} />
       </div>
-      <div class="mb-1">
+      <div class="mb-2">
         <div class="d-flex justify-content-center">
           <label for="title" class="fw-bold">Change password:</label>
         </div>
@@ -44,15 +51,31 @@
           class="full"
           name="password"
           placeholder="Leave empty for current password."
-          bind:value={password}
+          bind:value={updatedDetails.password}
         />
       </div>
+
+      {#if isfullEdit}
+        <div class="mb-2">
+          <div class="d-flex justify-content-center">
+            <label for="title" class="fw-bold">Is Admin?</label>
+          </div>
+          <div class="d-flex justify-content-around">
+            <div>
+              <input type="radio" id="isAdminTrue" name="isAdmin" value="true" bind:group={updatedDetails.isAdmin} />
+              <label for="isAdminTrue">Yes</label>
+            </div>
+            <div>
+              <input type="radio" id="isAdminFalse" name="isAdmin" value="false" bind:group={updatedDetails.isAdmin} />
+              <label for="isAdminFalse">No</label>
+            </div>
+          </div>
+        </div>
+      {/if}
       <div class="d-flex justify-content-around">
         <button class="btn close-button text-white red mt-2" type="button" on:click={onEditConfirm(false)}>Cancel</button>
-        <button
-          class="btn close-button text-white green mt-2"
-          type="button"
-          on:click={onEditConfirm(true, { userName, password })}>Confirm</button
+        <button class="btn close-button text-white green mt-2" type="button" on:click={onEditConfirm(true, updatedDetails)}
+          >Confirm</button
         >
       </div>
     </div>

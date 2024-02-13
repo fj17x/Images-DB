@@ -32,8 +32,6 @@
       showAlertModal = true
     }
   }
-
-  $: console.log($userDetails)
 </script>
 
 <div class="sidebar d-flex flex-column align-items-center justify-content-evenly">

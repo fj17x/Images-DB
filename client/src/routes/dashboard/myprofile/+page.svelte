@@ -200,7 +200,7 @@
   <AlertModal bind:showModal={showAlertModal} {onAlertConfirm} {...alertModalOptions}></AlertModal>
 {/if}
 {#if showEditProfileModal}
-  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUserName={$userDetails.userName}></EditProfileModal>
+  <EditProfileModal bind:showModal={showEditProfileModal} {onEditConfirm} oldUser={$userDetails}></EditProfileModal>
 {/if}
 
 <style>
@@ -229,14 +229,6 @@
 
   .result {
     color: rgb(53, 67, 37);
-  }
-
-  .bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
   }
 
   .content {
