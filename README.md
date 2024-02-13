@@ -29,5 +29,6 @@ npm run dev
 ```
 
 You can now view the application at http://localhost:5173/
+
 NOTE: Admin's username is 'admin'. Password for every user is '1234'. 
 
