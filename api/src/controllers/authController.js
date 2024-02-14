@@ -17,6 +17,12 @@ const authLinks = [
     href: "/signin",
     description: "Sign in with userName and password.",
   },
+  {
+    rel: "logout in",
+    method: "GET",
+    href: "/logout",
+    description: "Log out from current account.",
+  },
 ]
 
 const register = async (req, res) => {
