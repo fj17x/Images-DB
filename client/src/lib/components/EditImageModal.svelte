@@ -14,7 +14,7 @@
   updatedDetails.url = oldUrl
   updatedDetails.id = Number(oldId)
   updatedDetails.ownerId = oldOwnerId
-  updatedDetails.toAddTag
+  let toAddTag
 
   let showAlertModal = false
   let alertModalOptions = {}
@@ -24,12 +24,12 @@
   $: if (dialog && showModal) dialog.showModal()
 
   const addTag = () => {
-    const tagValue = updatedDetails.toAddTag.trim()
+    const tagValue = toAddTag.trim()
 
     if (tagValue) {
       if (!updatedDetails.tags.includes(tagValue)) {
         updatedDetails.tags = [...updatedDetails.tags, tagValue]
-        updatedDetails.toAddTag = ""
+        toAddTag = ""
       } else {
         alertModalOptions.header = "Could not add tag"
         alertModalOptions.message = "Tag already exists!"
@@ -88,7 +88,7 @@
         <div class="mb-2">
           <label for="title">Modify tags:</label>
           <div>
-            <input type="text" name="tag" id="tag" bind:value={updatedDetails.toAddTag} />
+            <input type="text" name="tag" id="tag" bind:value={toAddTag} />
             <button type="button" class="btn tag-button" on:click={addTag}>Add</button>
           </div>
           {#if updatedDetails.tags}

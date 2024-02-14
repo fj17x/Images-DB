@@ -94,7 +94,7 @@
   }
 
   .content {
-    margin-left: 14vw;
+    margin-left: 12.2vw;
     flex: 1;
     padding: 0px 0.7rem 0px 2rem;
   }

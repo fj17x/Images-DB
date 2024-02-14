@@ -34,8 +34,13 @@
       showEditImageModal = false
       return
     }
-    if (data) {
-      Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+    if (!data) {
+      return
+    }
+    Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
+
+    if (data["id"] && data["id"] === imageId) {
+      delete data["id"]
     }
 
     showEditImageModal = false

@@ -410,6 +410,11 @@ const partiallyUpdateImage = async (req, res) => {
       fieldsToUpdate.destroyTime = formattedDestroyTime
     }
 
+    if (id === imageId || id === null) {
+      delete fieldsToUpdate.id
+    }
+    console.log("🚀 ~ partiallyUpdateImage ~ fieldsToUpdate:", fieldsToUpdate)
+
     const foundImage = await Image.findOne({
       where: {
         id: imageId,
