@@ -105,7 +105,7 @@
     border: 2px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
-    margin: 2rem;
+    margin: 20% 10% 20% 5%;
     max-width: 400px;
   }
 
