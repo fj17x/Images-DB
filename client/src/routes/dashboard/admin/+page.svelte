@@ -81,6 +81,7 @@
       alertModalOptions.header = "Successfully updated"
       alertModalOptions.message = reply.message
       alertModalOptions.type = "success"
+      await fetchUsersOrImages()
       showAlertModal = true
     } else {
       alertModalOptions.header = "Could not update"
@@ -170,7 +171,7 @@
       currentPageForImages++
       await fetchUsersOrImages()
     }
-    fetchUsersOrImages()
+    await fetchUsersOrImages()
   }
 
   const prevPage = async () => {
