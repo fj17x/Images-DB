@@ -190,27 +190,26 @@ const partiallyUpdateUserById = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
 
-    for (const key in fieldsToUpdate) {
-      const value = fieldsToUpdate[key]
-      if (value !== undefined) {
-        if (key === "id" && typeof value !== "number") {
-          return res.status(400).json({
-            error: "Id should be a number.",
-          })
-        }
-        if ((key === "userName" || key === "password") && typeof value !== "string") {
-          return res.status(400).json({ error: `${key} should be a string!` })
-        }
-        if (key === "userName") {
-          const userNameMaxLength = 15
-          if (value.length > userNameMaxLength) {
-            return res.status(400).json({
-              error: "userName exceeds maximum length(65).",
-            })
-          }
-        }
+    if (fieldsToUpdate.id !== undefined && typeof fieldsToUpdate.id !== "number") {
+      return res.status(400).json({ error: "Id should be a number." })
+    }
+
+    if (fieldsToUpdate.userName !== undefined) {
+      if (typeof fieldsToUpdate.userName !== "string") {
+        return res.status(400).json({ error: "userName should be a string!" })
+      }
+      const userNameMaxLength = 15
+      if (fieldsToUpdate.userName.length > userNameMaxLength) {
+        return res.status(400).json({
+          error: "userName exceeds maximum length(65).",
+        })
       }
     }
+
+    if (fieldsToUpdate.password !== undefined && typeof fieldsToUpdate.password !== "string") {
+      return res.status(400).json({ error: "Password should be a string!" })
+    }
+
     await User.update(fieldsToUpdate, { where: { id: userId }, paranoid: isAdmin ? false : true })
 
     const response = {
