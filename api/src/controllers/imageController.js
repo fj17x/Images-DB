@@ -97,7 +97,7 @@ const createImage = async (req, res) => {
   } catch (err) {
     console.error("Error during uploading: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
-    res.status(500).json({ error: "Failed to upload. Must provide url and title.", details: errorMessage })
+    res.status(500).json({ error: "Failed to upload.", details: errorMessage })
   }
 }
 
