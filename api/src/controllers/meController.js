@@ -47,7 +47,7 @@ const getCurrentUserDetails = async (req, res) => {
     }
     const userPlainObject = foundUser.get({ plain: true })
     const { password, images, ...userDataToSend } = userPlainObject
-    const imagesUploaded = images.map((image) => image.id)
+    const imagesUploaded = images.map((image) => Number(image.id))
 
     //Return details of user.
     const response = {
