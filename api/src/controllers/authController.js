@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { User } from "../models/index.js"
 
-//For HATEOS
+//For HATEOAS
 const authLinks = [
   {
     rel: "register",

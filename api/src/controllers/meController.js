@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
 import { User, Image } from "../models/index.js"
 
-//Function to create HATEOS links.
+//Function to create HATEOAS links.
 const createMeLinks = () => {
   const meLinks = []
   meLinks.push(

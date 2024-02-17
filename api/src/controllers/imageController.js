@@ -2,7 +2,7 @@ import { QueryTypes, Op } from "sequelize"
 import sequelize from "../config/connection.js"
 import { Image, User } from "../models/index.js"
 
-//Function to create HATEOS links.
+//Function to create HATEOAS links.
 const createImageLinks = (imageId) => {
   const links = [
     {
@@ -101,54 +101,6 @@ const createImage = async (req, res) => {
   }
 }
 
-const getImageById = async (req, res) => {
-  try {
-    //Get ID of image needed to be searched for.
-    let { imageId } = req.params
-    imageId = Number(imageId)
-    const userId = req.userId
-    let isAdmin = req.isAdmin
-    if (!imageId) {
-      return res.status(400).json({ error: "Please provide imageId." })
-    }
-
-    const foundImage = await Image.findByPk(imageId, {
-      include: {
-        model: User,
-        as: "owner",
-        attributes: ["userName"],
-      },
-      raw: true,
-      paranoid: isAdmin ? false : true,
-      isFlagged: isAdmin ? { [Op.or]: [true, false] } : false,
-    })
-
-    if (!foundImage) {
-      return res.status(404).json({ error: "Image not found." })
-    }
-
-    if (!isAdmin && foundImage.isFlagged) {
-      return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
-    }
-
-    if (!isAdmin && foundImage.ownerId !== userId) {
-      return res.status(403).json({ error: "You can only access images you have uploaded." })
-    }
-
-    const response = {
-      message: "Successfully found image!",
-      data: { ...foundImage },
-      links: createImageLinks(imageId),
-    }
-    //Return details of image.
-    res.status(200).json(response)
-  } catch (err) {
-    console.error("Error while fetching.", err)
-    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
-    res.status(500).json({ error: "Failed to fetch.", details: errorMessage })
-  }
-}
-
 const getBatchOfImages = async (req, res) => {
   try {
     const userId = req.userId
@@ -160,7 +112,7 @@ const getBatchOfImages = async (req, res) => {
       limit = 50,
       offset = 0,
       sortBy = "id",
-      sortOrder = "asc",
+      sortOrder = "ASC",
       showDeleted = "false",
       showFlagged = "true",
       tags,
@@ -260,6 +212,54 @@ const getBatchOfImages = async (req, res) => {
     console.error("Error during fetching of images.: ", err)
     const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
     res.status(500).json({ error: "Failed to fetch images.", details: errorMessage })
+  }
+}
+
+const getImageById = async (req, res) => {
+  try {
+    //Get ID of image needed to be searched for.
+    let { imageId } = req.params
+    imageId = Number(imageId)
+    const userId = req.userId
+    let isAdmin = req.isAdmin
+    if (!imageId) {
+      return res.status(400).json({ error: "Please provide imageId." })
+    }
+
+    const foundImage = await Image.findByPk(imageId, {
+      include: {
+        model: User,
+        as: "owner",
+        attributes: ["userName"],
+      },
+      raw: true,
+      paranoid: isAdmin ? false : true,
+      isFlagged: isAdmin ? { [Op.or]: [true, false] } : false,
+    })
+
+    if (!foundImage) {
+      return res.status(404).json({ error: "Image not found." })
+    }
+
+    if (!isAdmin && foundImage.isFlagged) {
+      return res.status(403).json({ error: "This image has been flagged by the admin and cannot be accessed." })
+    }
+
+    if (!isAdmin && foundImage.ownerId !== userId) {
+      return res.status(403).json({ error: "You can only access images you have uploaded." })
+    }
+
+    const response = {
+      message: "Successfully found image!",
+      data: { ...foundImage },
+      links: createImageLinks(imageId),
+    }
+    //Return details of image.
+    res.status(200).json(response)
+  } catch (err) {
+    console.error("Error while fetching.", err)
+    const errorMessage = err?.errors?.[0]?.message || "Unknown error occurred."
+    res.status(500).json({ error: "Failed to fetch image.", details: errorMessage })
   }
 }
 
