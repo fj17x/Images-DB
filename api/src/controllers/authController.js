@@ -112,7 +112,7 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ where: { userName: userName }, raw: true, attributes: ["password", "id"] })
     if (!user) {
-      return res.status(400).json({ error: "Such a user does not exist. Please register first." })
+      return res.status(404).json({ error: "Such a user does not exist. Please register first." })
     }
 
     const passwordMatches = await bcrypt.compare(passwordToString, user.password)
