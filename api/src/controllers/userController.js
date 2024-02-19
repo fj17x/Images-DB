@@ -148,7 +148,10 @@ const fetchBatchOfUsers = async (req, res) => {
     }
 
     const userLinks = batchOfUsers.map((user) => createUsersLinks(user.id))
-    const userData = batchOfUsers.map((user) => ({ ...user }))
+    const userData = batchOfUsers.map((user) => {
+      const { password, ...userDataToSend } = user
+      return userDataToSend
+    })
 
     const response = {
       message: `Successfully fetched users!`,
@@ -184,9 +187,11 @@ const getUserById = async (req, res) => {
       return res.status(404).json({ error: "User not found." })
     }
 
+    const { password, ...userDataToSend } = foundUser
+
     const response = {
       message: "Found user!",
-      data: { ...foundUser },
+      data: { ...userDataToSend },
       links: createUsersLinks(userId),
     }
     res.status(200).json(response)
