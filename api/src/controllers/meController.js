@@ -78,7 +78,7 @@ const updateCurrentUserDetails = async (req, res) => {
 
     if (userName && userName.length > userNameMaxLength) {
       return res.status(400).json({
-        error: "userName exceeds maximum length(65).",
+        error: "userName exceeds maximum length(15).",
       })
     }
     if (password && password.length > passwordMaxLength) {
