@@ -61,7 +61,7 @@
     tags = []
     if (response.ok) {
       alertModalOptions.header = "Uploaded successfully"
-      alertModalOptions.message = reply.message
+      alertModalOptions.message = reply.message + " Image ID: " + reply.imageId
       alertModalOptions.type = "success"
       showAlertModal = true
     } else {
