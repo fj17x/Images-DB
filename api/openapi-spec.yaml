@@ -59,10 +59,9 @@ paths:
                   message:
                     type: string
                   userId:
-                    type: number
+                    type: integer
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
-
         "400":
           $ref: "#/components/responses/InvalidInputError"
         "409":
@@ -152,6 +151,7 @@ paths:
                     type: string
                   details:
                     type: string
+
   /images:
     post:
       security:
@@ -189,7 +189,7 @@ paths:
                   message:
                     type: string
                   imageId:
-                    type: number
+                    type: integer
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -404,7 +404,7 @@ paths:
               type: object
               properties:
                 id:
-                  type: number
+                  type: integer
                 url:
                   type: string
                 title:
@@ -412,7 +412,7 @@ paths:
                 description:
                   type: string
                 ownerId:
-                  type: string
+                  type: integer
                 tags:
                   type: array
                   items:
@@ -421,13 +421,21 @@ paths:
                   type: boolean
                 createdAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 updatedAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 destroyTime:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
+                  nullable: true
+
       responses:
         "200":
           description: Successful operation
@@ -490,13 +498,20 @@ paths:
                   type: boolean
                 createdAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 updatedAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 destroyTime:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
+                  nullable: true
       responses:
         "200":
           description: Successful operation
@@ -527,7 +542,7 @@ paths:
       tags:
         - users
       summary: Retrieve a batch of users
-      description: Retrieve a batch of users with pagination and sorting
+      description: Retrieve a batch of users with pagination and sorting (For admin)
       operationId: fetchBatchOfUsers
       parameters:
         - in: query
@@ -597,13 +612,59 @@ paths:
           description: No users found
         "500":
           description: Failed to fetch users
+    post:
+      security:
+        - jwt_auth: []
+      tags:
+        - users
+      summary: Create a new user
+      description: Create a new user (For admin)
+      operationId: createUser
+      requestBody:
+        description: Create a new user
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userName
+                - password
+              properties:
+                userName:
+                  type: string
+                  maxLength: 15
+                password:
+                  type: string
+                  maxLength: 30
+      responses:
+        "201":
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: integer
+                  links:
+                    $ref: "#/components/schemas/HATEOASLinkArray"
+        "400":
+          $ref: "#/components/responses/InvalidInputError"
+        "403":
+          description: Only the admin can create users using this route!
+        "409":
+          description: Username already exists
+        "500":
+          description: Failed to create user.
 
   /users/{userId}:
     get:
       tags:
         - users
       summary: Retrieve user by ID
-      description: Retrieve a user by their ID
+      description: Retrieve a user by their ID (For admin)
       operationId: getUserById
       parameters:
         - in: path
@@ -645,7 +706,7 @@ paths:
       tags:
         - users
       summary: Partially update a user by ID
-      description: Partially update a user's information by specifying the fields to update
+      description: Partially update a user's information by specifying the fields to update (For admin)
       operationId: partiallyUpdateUserById
       parameters:
         - in: path
@@ -668,17 +729,25 @@ paths:
                   maxLength: 15
                 password:
                   type: string
+                  maxLength: 30
                 isAdmin:
                   type: boolean
                 createdAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 updatedAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 destroyTime:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
+                  nullable: true
       responses:
         "200":
           description: User updated successfully
@@ -701,14 +770,13 @@ paths:
           description: User not found
         "500":
           description: Failed to update user
-
     put:
       security:
         - jwt_auth: []
       tags:
         - users
       summary: Update a user by ID
-      description: Update a user's information by providing all fields
+      description: Update a user's information by providing all fields (For admin)
       operationId: updateUserById
       parameters:
         - in: path
@@ -732,17 +800,23 @@ paths:
                   maxLength: 15
                 password:
                   type: string
+                  maxLength: 30
                 isAdmin:
                   type: boolean
                 createdAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 updatedAt:
                   type: string
-                  format: date-time
+                  oneOf:
+                    - format: date
+                    - format: date-time
                 destroyTime:
                   type: string
-                  format: date-time
+
+                  nullable: true
       responses:
         "200":
           description: User updated successfully
@@ -765,12 +839,11 @@ paths:
           description: User not found
         "500":
           description: Failed to update user
-
     delete:
       tags:
         - users
       summary: Delete a user by ID
-      description: Delete a user by providing their ID
+      description: Delete a user by providing their ID (For admin)
       operationId: deleteUserById
       parameters:
         - in: path
@@ -797,6 +870,7 @@ paths:
           description: User not found
         "500":
           description: Failed to delete user
+
   /me:
     get:
       tags:
@@ -828,29 +902,18 @@ paths:
                         description: Whether the user is an admin
                       createdAt:
                         type: string
-                        format: date-time
                         description: The date and time when the user account was created
                       modifiedAt:
                         type: string
-                        format: date-time
                         description: The date and time when the user account was last modified
                       destroyTime:
                         type: string
-                        format: date-time
                         description: The date and time if the account was deleted
                       imagesUploaded:
                         type: array
                         items:
                           type: integer
                         description: An array of the id's of the images the user has uploaded
-                    required:
-                      - id
-                      - userName
-                      - isAdmin
-                      - createdAt
-                      - modifiedAt
-                      - destroyTime
-                      - imagesUploaded
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "401":
@@ -935,13 +998,20 @@ components:
           type: boolean
         createdAt:
           type: string
-          format: date-time
+          oneOf:
+            - format: date
+            - format: date-time
         updatedAt:
           type: string
-          format: date-time
+          oneOf:
+            - format: date
+            - format: date-time
         destroyTime:
           type: string
-          format: date-time
+          oneOf:
+            - format: date
+            - format: date-time
+          nullable: true
       required:
         - id
         - userName
@@ -965,6 +1035,22 @@ components:
             type: string
         isFlagged:
           type: boolean
+        createdAt:
+          type: string
+          oneOf:
+            - format: date
+            - format: date-time
+        updatedAt:
+          type: string
+          oneOf:
+            - format: date
+            - format: date-time
+        destroyTime:
+          type: string
+          oneOf:
+            - format: date
+            - format: date-time
+          nullable: true
       required:
         - url
         - title
@@ -994,7 +1080,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/HATEOASLink"
-
   responses:
     UnauthorizedError:
       description: Token not provided or invalid

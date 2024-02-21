@@ -98,8 +98,11 @@
       sortBy: sortByQuery,
       sortOrder: sortOrderQuery,
       showDeleted: true,
-      showFlagged: true,
     })
+
+    if (clickedBox === "images") {
+      queryParams.append("showFlagged", true)
+    }
 
     if (searchQuery) {
       queryParams.append("searchQuery", searchQuery)
