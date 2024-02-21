@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import * as OpenApiValidator from "express-openapi-validator"
 import imageRouter from "./routes/imageRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
@@ -15,9 +16,13 @@ const corsOptions = {
 
 const app = express()
 const PORT = process.env.APP_PORT ?? 4000
+const apiSpec = "./openapi-spec.yaml"
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors(corsOptions))
+
+app.use(OpenApiValidator.middleware({ apiSpec }))
 
 app.use("/auth", authRouter)
 app.use("/images", imageRouter)

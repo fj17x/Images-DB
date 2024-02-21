@@ -81,7 +81,7 @@ const register = async (req, res) => {
   }
 }
 
-const login = async (req, res) => {
+const signIn = async (req, res) => {
   try {
     const secretKey = process.env.SECRET_KEY ?? "THISISFUN"
     const { userName, password } = req.body
@@ -124,7 +124,7 @@ const login = async (req, res) => {
     const userId = user.id
     const jwtToken = jwt.sign({ userId }, secretKey, { expiresIn })
     const response = {
-      message: "Successfully logged in!",
+      message: "Successfully signed in!",
       jwtToken,
       links: authLinks,
     }
@@ -152,4 +152,4 @@ const logout = async (req, res) => {
   }
 }
 
-export { register, login, logout }
+export { register, signIn, logout }
