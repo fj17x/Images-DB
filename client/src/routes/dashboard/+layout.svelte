@@ -12,7 +12,7 @@
       return
     }
     try {
-      const response = await fetch(`http://localhost:4000/me`, {
+      const response = await fetch(`http://localhost:4000/v1/me`, {
         method: "GET",
         credentials: "include",
       })

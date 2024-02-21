@@ -13,7 +13,7 @@
     try {
       isLoading = true
       const data = { userName: userName.trim(), password: password.trim() }
-      const response = await fetch(`http://localhost:4000/auth/signin`, {
+      const response = await fetch(`http://localhost:4000/v1/auth/signin`, {
         method: "POST",
         body: JSON.stringify(data),
         credentials: "include",

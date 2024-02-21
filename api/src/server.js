@@ -24,10 +24,10 @@ app.use(cors(corsOptions))
 
 app.use(OpenApiValidator.middleware({ apiSpec }))
 
-app.use("/auth", authRouter)
-app.use("/images", imageRouter)
-app.use("/users", userRouter)
-app.use("/me", meRouter)
+app.use(`/${process.env.API_VERSION}/auth`, authRouter)
+app.use(`/${process.env.API_VERSION}/images`, imageRouter)
+app.use(`/${process.env.API_VERSION}/users`, userRouter)
+app.use(`/${process.env.API_VERSION}/me`, meRouter)
 
 app.listen(PORT, () => {
   console.info(`App running on Port: ${PORT}`)

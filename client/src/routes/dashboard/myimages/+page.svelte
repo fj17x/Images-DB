@@ -7,7 +7,7 @@
 
   const fetchNextImages = async () => {
     const response = await fetch(
-      `http://localhost:4000/images?offset=${currentOffset}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
+      `http://localhost:4000/v1/images?offset=${currentOffset}&sortBy=id&sortOrder=asc&showDeleted=true&showFlagged=true`,
       {
         method: "GET",
         credentials: "include",

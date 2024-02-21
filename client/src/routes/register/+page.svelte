@@ -23,7 +23,7 @@
         return
       }
       const data = { userName: userName.trim(), password: password.trim() }
-      const response = await fetch(`http://localhost:4000/auth/register`, {
+      const response = await fetch(`http://localhost:4000/v1/auth/register`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

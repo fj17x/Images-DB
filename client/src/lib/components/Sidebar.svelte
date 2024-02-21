@@ -18,7 +18,7 @@
     if (!confirmed) {
       return
     }
-    const response = await fetch(`http://localhost:4000/auth/logout`, {
+    const response = await fetch(`http://localhost:4000/v1/auth/logout`, {
       method: "GET",
       credentials: "include",
     })

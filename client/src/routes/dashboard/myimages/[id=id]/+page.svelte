@@ -20,7 +20,7 @@
   let showEditImageModal = false
 
   const fetchImageWithId = async () => {
-    const response = await fetch(`http://localhost:4000/images/${imageId}`, {
+    const response = await fetch(`http://localhost:4000/v1/images/${imageId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -45,7 +45,7 @@
 
     showEditImageModal = false
 
-    const response = await fetch(`http://localhost:4000/images/${$page.params.id}`, {
+    const response = await fetch(`http://localhost:4000/v1/images/${$page.params.id}`, {
       method: "PATCH",
       credentials: "include",
       body: JSON.stringify(data),
@@ -83,7 +83,7 @@
     }
     let response
 
-    response = await fetch(`http://localhost:4000/images/${imageId}`, {
+    response = await fetch(`http://localhost:4000/v1/images/${imageId}`, {
       method: "DELETE",
       credentials: "include",
     })

@@ -49,7 +49,7 @@
     }
 
     const data = { title, description, tags, url }
-    const response = await fetch(`http://localhost:4000/images`, {
+    const response = await fetch(`http://localhost:4000/v1/images`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

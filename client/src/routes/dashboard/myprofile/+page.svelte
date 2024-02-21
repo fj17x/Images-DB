@@ -43,12 +43,12 @@
     }
     let response
     if (currentOperation === "deleteAccount") {
-      response = await fetch(`http://localhost:4000/me`, {
+      response = await fetch(`http://localhost:4000/v1/me`, {
         method: "DELETE",
         credentials: "include",
       })
     } else if (currentOperation === "deleteAllImages") {
-      response = await fetch(`http://localhost:4000/images`, {
+      response = await fetch(`http://localhost:4000/v1/images`, {
         method: "DELETE",
         credentials: "include",
       })
@@ -89,7 +89,7 @@
 
     showEditProfileModal = false
 
-    const response = await fetch(`http://localhost:4000/me`, {
+    const response = await fetch(`http://localhost:4000/v1/me`, {
       method: "PATCH",
       credentials: "include",
       body: JSON.stringify(data),

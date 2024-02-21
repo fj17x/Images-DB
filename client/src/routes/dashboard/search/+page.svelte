@@ -48,7 +48,7 @@
 
   const handleSearchSingle = async () => {
     const searchId = idForSimple
-    const response = await fetch(`http://localhost:4000/images/${searchId}`, {
+    const response = await fetch(`http://localhost:4000/v1/images/${searchId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -80,7 +80,7 @@
       params.append("tags", tagsWithCommas)
     }
 
-    const response = await fetch(`http://localhost:4000/images?${params.toString()}`, {
+    const response = await fetch(`http://localhost:4000/v1/images?${params.toString()}`, {
       method: "GET",
       credentials: "include",
     })

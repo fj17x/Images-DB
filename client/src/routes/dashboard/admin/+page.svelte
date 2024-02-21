@@ -55,7 +55,7 @@
     let response
 
     if (forEntity === "users") {
-      response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/users/${userIdGiven}`, {
         method: "PATCH",
         credentials: "include",
         body: JSON.stringify(data),
@@ -65,7 +65,7 @@
       })
       showEditProfileModal = false
     } else if (forEntity === "images") {
-      response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/images/${imageIdGiven}`, {
         method: "PATCH",
         credentials: "include",
         body: JSON.stringify(data),
@@ -110,12 +110,12 @@
     }
 
     if (first) {
-      const responseUsers = await fetch(`http://localhost:4000/users?${queryParams}`, {
+      const responseUsers = await fetch(`http://localhost:4000/v1/users?${queryParams}`, {
         method: "GET",
         credentials: "include",
       })
 
-      const responseImages = await fetch(`http://localhost:4000/images?${queryParams}`, {
+      const responseImages = await fetch(`http://localhost:4000/v1/images?${queryParams}`, {
         method: "GET",
         credentials: "include",
       })
@@ -137,7 +137,7 @@
       return
     }
 
-    const url = `http://localhost:4000/${clickedBox === "users" ? "users" : "images"}?${queryParams}`
+    const url = `http://localhost:4000/v1/${clickedBox === "users" ? "users" : "images"}?${queryParams}`
     const response = await fetch(url, {
       method: "GET",
       credentials: "include",
@@ -251,7 +251,7 @@
   }
 
   const handleImageFlagging = async (flag) => {
-    const response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+    const response = await fetch(`http://localhost:4000/v1/images/${imageIdGiven}`, {
       method: "PATCH",
       credentials: "include",
       body: JSON.stringify({ isFlagged: flag }),
@@ -279,12 +279,12 @@
   const handleImageDeletion = async (del) => {
     let response
     if (del) {
-      response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/images/${imageIdGiven}`, {
         method: "DELETE",
         credentials: "include",
       })
     } else {
-      response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/images/${imageIdGiven}`, {
         method: "PATCH",
         credentials: "include",
         body: JSON.stringify({ destroyTime: null }),
@@ -314,12 +314,12 @@
   const handleUserDeletion = async (del) => {
     let response
     if (del) {
-      response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/users/${userIdGiven}`, {
         method: "DELETE",
         credentials: "include",
       })
     } else {
-      response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+      response = await fetch(`http://localhost:4000/v1/users/${userIdGiven}`, {
         method: "PATCH",
         credentials: "include",
         body: JSON.stringify({ destroyTime: null }),
@@ -349,7 +349,7 @@
   const handleUserEdit = async () => {
     let response
 
-    response = await fetch(`http://localhost:4000/users/${userIdGiven}`, {
+    response = await fetch(`http://localhost:4000/v1/users/${userIdGiven}`, {
       method: "GET",
       credentials: "include",
     })
@@ -370,7 +370,7 @@
   const handleImageEdit = async () => {
     let response
 
-    response = await fetch(`http://localhost:4000/images/${imageIdGiven}`, {
+    response = await fetch(`http://localhost:4000/v1/images/${imageIdGiven}`, {
       method: "GET",
       credentials: "include",
     })
