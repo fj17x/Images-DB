@@ -120,7 +120,7 @@ const getBatchOfImages = async (req, res) => {
       searchColumn = "id",
     } = req.query
 
-    if (tags && typeof tags !== "string") {
+    if (tags && !Array.isArray(tags)) {
       return res.status(400).json({ error: "Provide tags as comma seperated values!" })
     }
 
