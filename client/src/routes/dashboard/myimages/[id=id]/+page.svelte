@@ -37,11 +37,21 @@
     if (!data) {
       return
     }
-    Object.keys(data).forEach((key) => (data[key] === undefined ? delete data[key] : {}))
-
+    Object.keys(data).forEach((key) => {
+      return data[key] === undefined ? delete data[key] : {}
+    })
     if (data["id"] && data["id"] === imageId) {
-      delete data["id"]
+      data["id"] = Number(data["id"])
     }
+
+    if (!data["url"]) {
+      alertModalOptions.header = "Could not update"
+      alertModalOptions.message = "Please provide the URL"
+      alertModalOptions.type = "failure"
+      showAlertModal = true
+      return
+    }
+    console.log(data["description"])
 
     showEditImageModal = false
 
@@ -162,6 +172,7 @@
     oldDescription={image.description}
     oldTags={image.tags}
     oldUrl={image.url}
+    oldId={image.id}
     {onEditConfirm}
   ></EditImageModal>
 {/if}

@@ -411,14 +411,18 @@ paths:
                   type: string
                 description:
                   type: string
+                  nullable: true
                 ownerId:
                   type: integer
+                  nullable: true
                 tags:
                   type: array
                   items:
                     type: string
+                  nullable: true
                 isFlagged:
                   type: boolean
+                  nullable: true
                 createdAt:
                   type: string
                   oneOf:
@@ -488,14 +492,18 @@ paths:
                   type: string
                 description:
                   type: string
+                  nullable: true
                 ownerId:
                   type: integer
+                  nullable: true
                 tags:
                   type: array
                   items:
                     type: string
+                  nullable: true
                 isFlagged:
                   type: boolean
+                  nullable: true
                 createdAt:
                   type: string
                   oneOf:
@@ -732,6 +740,7 @@ paths:
                   maxLength: 30
                 isAdmin:
                   type: boolean
+                  nullable: true
                 createdAt:
                   type: string
                   oneOf:
@@ -803,6 +812,7 @@ paths:
                   maxLength: 30
                 isAdmin:
                   type: boolean
+                  nullable: true
                 createdAt:
                   type: string
                   oneOf:
@@ -815,7 +825,6 @@ paths:
                     - format: date-time
                 destroyTime:
                   type: string
-
                   nullable: true
       responses:
         "200":

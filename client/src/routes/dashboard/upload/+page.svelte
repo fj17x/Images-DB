@@ -40,12 +40,16 @@
   }
 
   const handleUpload = async () => {
-    if (uploadedFile === undefined && url === undefined) {
+    if (uploadedFile === undefined && (url === undefined || url === "https://")) {
       alertModalOptions.header = "Could not upload"
-      alertModalOptions.message = "Please upload the image or enter URL."
+      alertModalOptions.message = "Please upload an image or enter a URL."
       alertModalOptions.type = "other"
       showAlertModal = true
       return
+    }
+
+    if (uploadedFile) {
+      url = "https://picsum.photos/200/300"
     }
 
     const data = { title, description, tags, url }
@@ -122,13 +126,12 @@
             </div>
             <div class="upload-options d-flex justify-content-around align-items-center my-3">
               <div class="file-div">
-                <!-- <label for="file">Upload File:</label> -->
                 <input class="form-control-file" type="file" name="file" bind:value={uploadedFile} />
               </div>
               <div class="or-separator">OR</div>
               <div class="url-div">
                 <label for="imageUrl">Image URL:</label>
-                <input type="url" name="imageUrl" class="url-input" bind:value={url} />
+                <input name="imageUrl" class="url-input" bind:value={url} />
               </div>
             </div>
 

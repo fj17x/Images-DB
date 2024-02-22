@@ -125,7 +125,7 @@ const getBatchOfImages = async (req, res) => {
     }
 
     if (tags) {
-      tagList = tags.split(",")
+      tagList = tags[0].split(",")
     }
 
     //Filter images based on tags.
