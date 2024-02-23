@@ -129,7 +129,7 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   /auth/logout:
-    get:
+    post:
       security: []
       tags:
         - auth
