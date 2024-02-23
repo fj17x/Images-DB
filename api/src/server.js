@@ -9,7 +9,7 @@ import userRouter from "./routes/userRoutes.js"
 import meRouter from "./routes/meRoutes.js"
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:3200"],
+  origin: ["http://localhost:5173", "http://localhost:3200", "https://editor-next.swagger.io"],
   optionsSuccessStatus: 200,
   credentials: true,
 }

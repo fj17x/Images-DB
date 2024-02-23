@@ -1,7 +1,6 @@
 <script>
   import Sidebar from "$lib/components/Sidebar.svelte"
   import AlertModal from "$lib/components/AlertModal.svelte"
-  import { onMount } from "svelte"
 
   let tags = []
 
@@ -75,8 +74,6 @@
       showAlertModal = true
     }
   }
-
-  onMount(async () => {})
 </script>
 
 <div class="container-fluid p-0 m-0">
