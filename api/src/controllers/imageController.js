@@ -204,7 +204,7 @@ const getBatchOfImages = async (req, res) => {
       data: imageData,
       links: imageLinks,
       totalImages,
-      totalNeededImages: totalNeededImages,
+      totalNeededImages,
     }
 
     res.status(200).json(response)
@@ -271,7 +271,7 @@ const deleteImageById = async (req, res) => {
     const isAdmin = req.isAdmin
     if (!imageId) {
       return res.status(400).json({ error: "Please provide imageId." })
-    }
+    } 
 
     const foundImage = await Image.findOne({
       where: {

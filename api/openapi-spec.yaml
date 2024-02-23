@@ -33,7 +33,6 @@ paths:
       description: Create a new user with a username and password
       operationId: register
       requestBody:
-        description: Create a new user
         content:
           application/json:
             schema:
@@ -45,9 +44,11 @@ paths:
                 userName:
                   type: string
                   maxLength: 15
+                  example: thomas
                 password:
                   type: string
                   maxLength: 30
+                  example: 1234
       responses:
         "201":
           description: Successfully created
@@ -58,8 +59,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Successfully registered!
                   userId:
                     type: integer
+                    example: 301
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -67,7 +70,7 @@ paths:
         "409":
           description: Username already exists
         "500":
-          description: Failed to register.
+          $ref: "#/components/responses/ServerError"
 
   /auth/signin:
     post:
@@ -78,7 +81,6 @@ paths:
       description: Sign in with a username and password
       operationId: signIn
       requestBody:
-        description: Create a new user
         content:
           application/json:
             schema:
@@ -90,17 +92,20 @@ paths:
                 userName:
                   type: string
                   maxLength: 15
+                  example: thomas
                 password:
                   type: string
                   maxLength: 30
+                  example: 1234
       responses:
         "200":
           description: Successfully logged in
           headers:
             Set-Cookie:
-              description: The JWT is set in a cookie 'jwt'
+              description: Set JWT in cookie named 'jwt' for future requests
               schema:
                 type: string
+              example: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzIiwiaWF0IjoxNzA4NjY3OTE2LCJleHAiOjE3NDAyMDM5MTZ9.ehqM2551Ai5-T3BJFDn-AcpeRmtPRisYy2IhrpPyEhM; Path=/; HttpOnly; SameSite=Strict
           content:
             application/json:
               schema:
@@ -108,8 +113,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Successfully signed in!
                   jwtToken:
                     type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzIiwiaWF0IjoxNzA4NjY3MTg3LCJleHAiOjE3NDAyMDMxODd9.lVSgfqx1-ZRuF6ylA04PU6gc085XBWsxi-ATlKtzpDs
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -119,7 +126,7 @@ paths:
         "404":
           description: Such a user does not exist
         "500":
-          description: Error during logging in
+          $ref: "#/components/responses/ServerError"
 
   /auth/logout:
     get:
@@ -132,6 +139,12 @@ paths:
       responses:
         "200":
           description: Successfully logged out
+          headers:
+            Set-Cookie:
+              description: The 'jwt' cookie is set as empty and with an expiry date in the past
+              schema:
+                type: string
+              example: jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT
           content:
             application/json:
               schema:
@@ -139,18 +152,9 @@ paths:
                 properties:
                   message:
                     type: string
-
+                    example: Successfully logged out.
         "500":
-          description: Failed to logout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  details:
-                    type: string
+          $ref: "#/components/responses/ServerError"
 
   /images:
     post:
@@ -170,14 +174,18 @@ paths:
               properties:
                 url:
                   type: string
+                  example: https://picsum.photos/id/407/1000/600
                 title:
                   type: string
+                  example: Delightful image
                 description:
                   type: string
+                  example: Taken in 2001
                 tags:
                   type: array
                   items:
                     type: string
+                  example: [red, green]
       responses:
         "201":
           description: Successful operation
@@ -188,8 +196,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Successfully uploaded image!
                   imageId:
                     type: integer
+                    example: 301
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -197,7 +207,8 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "500":
-          description: Failed to upload
+          $ref: "#/components/responses/ServerError"
+
     get:
       security:
         - jwt_auth: []
@@ -213,32 +224,38 @@ paths:
             type: integer
             minimum: 1
           description: Number of items to return
+          example: 10
         - in: query
           name: offset
           schema:
             type: integer
             minimum: 0
           description: Number of items to skip
+          example: 0
         - in: query
           name: sortBy
           schema:
             type: string
           description: Field to sort by
+          example: id
         - in: query
           name: sortOrder
           schema:
             type: string
           description: Sort order (ASC or DESC)
+          example: ASC
         - in: query
           name: showDeleted
           schema:
             type: string
-          description: Whether to include deleted items
+          description: Whether to include deleted items (For admin)
+          example: true
         - in: query
           name: showFlagged
           schema:
             type: string
-          description: Whether to include flagged items
+          description: Whether to include flagged items (For admin)
+          example: true
         - in: query
           name: tags
           schema:
@@ -246,16 +263,19 @@ paths:
             items:
               type: string
           description: Comma-separated list of tags
+          example: [nature]
         - in: query
           name: searchQuery
           schema:
             type: string
           description: Search query
+          example: this
         - in: query
           name: searchColumn
           schema:
             type: string
           description: Column to search in
+          example: title
       responses:
         "200":
           description: Successful operation
@@ -266,16 +286,20 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Successfully fetched images!
                   fetched:
                     type: integer
+                    example: 1
                   data:
                     $ref: "#/components/schemas/ImageArray"
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
                   totalImages:
                     type: integer
+                    example: 1
                   totalNeededImages:
                     type: integer
+                    example: 1
         "400":
           $ref: "#/components/responses/InvalidInputError"
         "401":
@@ -283,7 +307,8 @@ paths:
         "404":
           description: No images found
         "500":
-          description: Failed to fetch images
+          $ref: "#/components/responses/ServerError"
+
     delete:
       security:
         - jwt_auth: []
@@ -302,54 +327,54 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: All of your images deleted successfully.
                   deletedCount:
                     type: integer
+                    example: 5
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
           description: No images found to delete
         "500":
-          description: Failed to delete all images
+          $ref: "#/components/responses/ServerError"
 
   /images/{imageId}:
     get:
+      security:
+        - jwt_auth: []
       tags:
         - images
       summary: Retrieve image by ID
-      description: Retrieve an image by its ID
       operationId: getImageById
       parameters:
-        - in: path
-          name: imageId
+        - name: imageId
+          in: path
           required: true
+          description: ID of the image to retrieve
           schema:
             type: integer
-          description: ID of the image to retrieve
+            format: int64
       responses:
         "200":
-          description: Successful operation
+          description: OK
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  imageId:
+                    type: integer
+                    example: 123
+                  imageUrl:
                     type: string
-                  data:
-                    $ref: "#/components/schemas/Image"
-                  links:
-                    $ref: "#/components/schemas/HATEOASLinkArray"
-        "400":
-          $ref: "#/components/responses/InvalidInputError"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
-        "403":
-          description: Unauthorized to view this image
+                    example: http://example.com/image.jpg
         "404":
           description: Image not found
         "500":
-          description: Failed to fetch image
+          $ref: "#/components/responses/ServerError"
     delete:
+      security:
+        - jwt_auth: []
       tags:
         - images
       summary: Delete image by ID
@@ -363,6 +388,7 @@ paths:
             type: integer
             format: int64
           description: ID of the image to delete
+          example: 1
       responses:
         "200":
           description: Successful operation
@@ -373,6 +399,7 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Image deleted
         "400":
           $ref: "#/components/responses/InvalidInputError"
         "401":
@@ -382,8 +409,11 @@ paths:
         "404":
           description: Image not found
         "500":
-          description: Failed to delete the image
+          $ref: "#/components/responses/ServerError"
+
     patch:
+      security:
+        - jwt_auth: []
       tags:
         - images
       summary: Partially update image
@@ -396,6 +426,7 @@ paths:
           schema:
             type: integer
           description: ID of the image to update
+          example: 1
       requestBody:
         required: true
         content:
@@ -405,40 +436,50 @@ paths:
               properties:
                 id:
                   type: integer
+                  example: 1
                 url:
                   type: string
+                  example: https://picsum.photos/id/401/1000/600
                 title:
                   type: string
+                  example: A beautiful air balloon
                 description:
                   type: string
                   nullable: true
+                  example: This is quite a pic!
                 ownerId:
                   type: integer
                   nullable: true
+                  example: 1
                 tags:
                   type: array
                   items:
                     type: string
                   nullable: true
+                  example: [red, blue]
                 isFlagged:
                   type: boolean
                   nullable: true
+                  example: false
                 createdAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-05-04
                 updatedAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-05-04
                 destroyTime:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
                   nullable: true
+                  example: null
 
       responses:
         "200":
@@ -450,6 +491,7 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Image details updated successfully.
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -461,7 +503,8 @@ paths:
         "404":
           description: Image not found
         "500":
-          description: Failed to update the image
+          $ref: "#/components/responses/ServerError"
+
     put:
       security:
         - jwt_auth: []
@@ -486,40 +529,50 @@ paths:
               properties:
                 id:
                   type: integer
+                  example: 1
                 url:
                   type: string
+                  example: https://picsum.photos/id/401/1000/600
                 title:
                   type: string
+                  example: A beautiful air balloon
                 description:
                   type: string
                   nullable: true
+                  example: This is quite a pic!
                 ownerId:
                   type: integer
                   nullable: true
+                  example: 1
                 tags:
                   type: array
                   items:
                     type: string
                   nullable: true
+                  example: [red, blue]
                 isFlagged:
                   type: boolean
                   nullable: true
+                  example: false
                 createdAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-05-04
                 updatedAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-05-04
                 destroyTime:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
                   nullable: true
+                  example: null
       responses:
         "200":
           description: Successful operation
@@ -530,6 +583,7 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Image details updated successfully
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -541,7 +595,7 @@ paths:
         "404":
           description: Image not found
         "500":
-          description: Failed to update the image
+          $ref: "#/components/responses/ServerError"
 
   /users:
     get:
@@ -559,37 +613,44 @@ paths:
             type: integer
             minimum: 1
           description: Number of users to return
+          example: 10
         - in: query
           name: offset
           schema:
             type: integer
             minimum: 0
           description: Number of users to skip
+          example: 0
         - in: query
           name: sortBy
           schema:
             type: string
           description: Field to sort by
+          example: id
         - in: query
           name: sortOrder
           schema:
             type: string
           description: Sort order (ASC or DESC)
+          example: ASC
         - in: query
           name: showDeleted
           schema:
             type: string
           description: Whether to include deleted items
+          example: true
         - in: query
           name: searchQuery
           schema:
             type: string
           description: Search query
+          example: thomas
         - in: query
           name: searchColumn
           schema:
             type: string
           description: Column to search in
+          example: userName
       responses:
         "200":
           description: Successful operation
@@ -600,16 +661,20 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Successfully fetched users
                   fetched:
                     type: integer
+                    example: 10
                   data:
                     $ref: "#/components/schemas/UserArray"
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
                   totalUsers:
                     type: integer
+                    example: 10
                   totalNeededUsers:
                     type: integer
+                    example: 10
         "400":
           $ref: "#/components/responses/InvalidInputError"
         "401":
@@ -619,7 +684,8 @@ paths:
         "404":
           description: No users found
         "500":
-          description: Failed to fetch users
+          $ref: "#/components/responses/ServerError"
+
     post:
       security:
         - jwt_auth: []
@@ -654,8 +720,10 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: User created successfully
                   userId:
                     type: integer
+                    example: 301
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "400":
@@ -665,10 +733,12 @@ paths:
         "409":
           description: Username already exists
         "500":
-          description: Failed to create user.
+          $ref: "#/components/responses/ServerError"
 
   /users/{userId}:
     get:
+      security:
+        - jwt_auth: []
       tags:
         - users
       summary: Retrieve user by ID
@@ -681,11 +751,8 @@ paths:
           schema:
             type: integer
           description: ID of the user to retrieve
-        - in: query
-          name: showDeleted
-          schema:
-            type: string
-          description: Whether to include deleted items
+          example: 10
+
       responses:
         "200":
           description: Successful operation
@@ -696,6 +763,7 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Found user!
                   data:
                     $ref: "#/components/schemas/User"
                   links:
@@ -709,8 +777,11 @@ paths:
         "404":
           description: User not found
         "500":
-          description: Failed to fetch
+          $ref: "#/components/responses/ServerError"
+
     patch:
+      security:
+        - jwt_auth: []
       tags:
         - users
       summary: Partially update a user by ID
@@ -723,6 +794,7 @@ paths:
           schema:
             type: integer
           description: ID of the user to update
+          example: 10
       requestBody:
         required: true
         content:
@@ -732,31 +804,32 @@ paths:
               properties:
                 id:
                   type: integer
+                  example: 10
                 userName:
                   type: string
-                  maxLength: 15
-                password:
-                  type: string
-                  maxLength: 30
+                  example: katie
                 isAdmin:
                   type: boolean
-                  nullable: true
+                  example: false
                 createdAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-06-19
                 updatedAt:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
+                  example: 2023-06-19
                 destroyTime:
                   type: string
                   oneOf:
                     - format: date
                     - format: date-time
                   nullable: true
+                  example: null
       responses:
         "200":
           description: User updated successfully
@@ -778,7 +851,8 @@ paths:
         "404":
           description: User not found
         "500":
-          description: Failed to update user
+          $ref: "#/components/responses/ServerError"
+
     put:
       security:
         - jwt_auth: []
@@ -797,35 +871,7 @@ paths:
 
       requestBody:
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                userName:
-                  type: string
-                  maxLength: 15
-                password:
-                  type: string
-                  maxLength: 30
-                isAdmin:
-                  type: boolean
-                  nullable: true
-                createdAt:
-                  type: string
-                  oneOf:
-                    - format: date
-                    - format: date-time
-                updatedAt:
-                  type: string
-                  oneOf:
-                    - format: date
-                    - format: date-time
-                destroyTime:
-                  type: string
-                  nullable: true
+        $ref: "#/components/schemas/User"
       responses:
         "200":
           description: User updated successfully
@@ -847,8 +893,11 @@ paths:
         "404":
           description: User not found
         "500":
-          description: Failed to update user
+          $ref: "#/components/responses/ServerError"
+
     delete:
+      security:
+        - jwt_auth: []
       tags:
         - users
       summary: Delete a user by ID
@@ -861,6 +910,7 @@ paths:
           schema:
             type: integer
           description: ID of the user to delete
+          example: 10
       responses:
         "200":
           description: User deleted successfully
@@ -871,6 +921,7 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: User deleted successfully!
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "403":
@@ -878,10 +929,12 @@ paths:
         "404":
           description: User not found
         "500":
-          description: Failed to delete user
+          $ref: "#/components/responses/ServerError"
 
   /me:
     get:
+      security:
+        - jwt_auth: []
       tags:
         - me
       summary: Get your details
@@ -897,32 +950,40 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Here are your details!
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
                         description: The unique identifier of the user
+                        example: 10
                       userName:
                         type: string
                         description: The username of the user
+                        example: katie
                       isAdmin:
                         type: boolean
                         description: Whether the user is an admin
+                        example: false
                       createdAt:
                         type: string
                         description: The date and time when the user account was created
+                        example: 2023-05-04
                       modifiedAt:
                         type: string
                         description: The date and time when the user account was last modified
+                        example: 2023-05-04
                       destroyTime:
                         type: string
                         description: The date and time if the account was deleted
+                        example: null
                       imagesUploaded:
                         type: array
                         items:
                           type: integer
                         description: An array of the id's of the images the user has uploaded
+                        example: [10, 20, 22, 44]
                   links:
                     $ref: "#/components/schemas/HATEOASLinkArray"
         "401":
@@ -930,13 +991,17 @@ paths:
         "404":
           description: User not found
         "500":
-          description: Failed to fetch
+          $ref: "#/components/responses/ServerError"
+
     patch:
+      security:
+        - jwt_auth: []
       tags:
         - me
       summary: Update user details
       description: |
-        Update the account details of the currently signed-in user i.e. their username and password. Ensure to provide either a new username or password in the request body.
+        Update the account details of the currently signed-in user i.e. their username and password. 
+        Ensure to provide either a new username or password in the request body.
       operationId: updateUserDetails
       requestBody:
         required: true
@@ -947,8 +1012,10 @@ paths:
               properties:
                 userName:
                   type: string
+                  example: thomas
                 password:
                   type: string
+                  example: 1234
       responses:
         "200":
           description: Successful operation
@@ -970,8 +1037,11 @@ paths:
         "409":
           description: This username already exists!
         "500":
-          description: Failed to fetch
+          $ref: "#/components/responses/ServerError"
+
     delete:
+      security:
+        - jwt_auth: []
       tags:
         - me
       summary: Delete your account
@@ -992,7 +1062,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "500":
-          description: Failed to delete
+          $ref: "#/components/responses/ServerError"
 
 components:
   schemas:
@@ -1001,26 +1071,32 @@ components:
       properties:
         id:
           type: integer
+          example: 10
         userName:
           type: string
+          example: katie
         isAdmin:
           type: boolean
+          example: false
         createdAt:
           type: string
           oneOf:
             - format: date
             - format: date-time
+          example: 2023-06-19
         updatedAt:
           type: string
           oneOf:
             - format: date
             - format: date-time
+          example: 2023-06-19
         destroyTime:
           type: string
           oneOf:
             - format: date
             - format: date-time
           nullable: true
+          example: null
       required:
         - id
         - userName
@@ -1029,37 +1105,47 @@ components:
       properties:
         id:
           type: integer
+          example: 1
         url:
           type: string
+          example: https://picsum.photos/id/401/1000/600
         title:
           type: string
           maxLength: 65
+          example: A beautiful air balloon
         description:
           type: string
+          example: This is quite a pic!
         ownerId:
           type: integer
+          example: 1
         tags:
           type: array
           items:
             type: string
+          example: [red, blue]
         isFlagged:
           type: boolean
+          example: false
         createdAt:
           type: string
           oneOf:
             - format: date
             - format: date-time
+          example: 2023-05-04
         updatedAt:
           type: string
           oneOf:
             - format: date
             - format: date-time
+          example: 2023-05-04
         destroyTime:
           type: string
           oneOf:
             - format: date
             - format: date-time
           nullable: true
+          example: null
       required:
         - url
         - title
@@ -1094,6 +1180,17 @@ components:
       description: Token not provided or invalid
     InvalidInputError:
       description: Invalid input
+    ServerError:
+      description: Internal server error occurred.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: string
   securitySchemes:
     jwt_auth:
       type: apiKey

@@ -82,6 +82,7 @@ const createUser = async (req, res) => {
     console.info(`New user registered with ID: ${newUserId} and username: '${userName}'`)
     const response = {
       message: "User created successfully!",
+      userId: newUserId,
       links: createUsersLinks(newUserId),
     }
     res.status(201).json(response)
@@ -179,10 +180,9 @@ const getUserById = async (req, res) => {
     }
 
     let { userId } = req.params
-    let { showDeleted = "false" } = req.query
     userId = Number(userId)
 
-    const foundUser = await User.findOne({ where: { id: userId }, paranoid: showDeleted === "false" ? true : false, raw: true })
+    const foundUser = await User.findOne({ where: { id: userId }, paranoid: false, raw: true })
     if (!foundUser) {
       return res.status(404).json({ error: "User not found." })
     }
