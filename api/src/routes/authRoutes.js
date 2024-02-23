@@ -12,6 +12,6 @@ authRouter.post("/register", authController.register)
 authRouter.post("/signin", authController.signIn)
 
 // GET method to log out. (Clears client cookie)
-authRouter.get("/logout", authController.logout)
+authRouter.post("/logout", authController.logout)
 
 export default authRouter
