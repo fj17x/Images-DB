@@ -13,7 +13,7 @@
     showChoiceModal = false
     if (confirmed) {
       const response = await fetch(`http://localhost:4000/v1/auth/logout`, {
-        method: "GET",
+        method: "POST",
         credentials: "include",
       })
 
