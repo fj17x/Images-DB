@@ -66,6 +66,7 @@
       alertModalOptions.header = "Uploaded successfully"
       alertModalOptions.message = reply.message + " Image ID: " + reply.imageId
       alertModalOptions.type = "success"
+      url = "https://"
       showAlertModal = true
     } else {
       alertModalOptions.header = "Could not upload"
