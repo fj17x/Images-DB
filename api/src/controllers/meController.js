@@ -140,7 +140,6 @@ const deleteCurrentUser = async (req, res) => {
     //Return response.
     const response = {
       message: "Your profile has been deleted!",
-      links: createMeLinks(),
     }
     res.status(200).json(response)
   } catch (err) {
