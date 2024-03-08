@@ -17,7 +17,10 @@ const verifyToken = async (req, res, next) => {
     //Check whether user is an admin. If yes, make req.isAdmin true.
     const user = await User.findByPk(userId, { raw: true, attributes: ["userName", "isAdmin"] })
     if (!user) {
-      return res.status(400).json({ error: `Such a user does not exist(Access token). Please create an account.` })
+      return res.status(400).json({
+        error:
+          "The provided access token is invalid. Please ensure you are using the correct token or log in again to generate a new one.",
+      })
     }
     req.userName = user.userName
     req.isAdmin = user.isAdmin ? true : false
