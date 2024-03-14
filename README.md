@@ -18,6 +18,16 @@ cd api
 npm start
 ```
 
+## Initiating GraphQL layer
+
+```bash
+# Go to graphql directory.
+cd graphql
+
+# Start server.
+npm start
+```
+
 ## Initiating client
 
 ```bash
@@ -25,7 +35,7 @@ npm start
 cd client
 
 # Start client.
-npm run dev
+npm start
 ```
 
 You can now view the application at http://localhost:5173/
