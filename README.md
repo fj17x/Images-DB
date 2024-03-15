@@ -18,15 +18,6 @@ cd api
 npm start
 ```
 
-## Initiating GraphQL layer
-
-```bash
-# Go to graphql directory.
-cd graphql
-
-# Start server.
-npm start
-```
 
 ## Initiating client
 
